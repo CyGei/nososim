@@ -1,0 +1,4 @@
+/Users/cyrilgeismar/Documents/Projects/nososim/.github/workflows/R-CMD-check.yaml
+/Users/cyrilgeismar/Documents/Projects/nososim/AGENTS.md
+/Users/cyrilgeismar/Documents/Projects/nososim/LICENSE.md
+/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md

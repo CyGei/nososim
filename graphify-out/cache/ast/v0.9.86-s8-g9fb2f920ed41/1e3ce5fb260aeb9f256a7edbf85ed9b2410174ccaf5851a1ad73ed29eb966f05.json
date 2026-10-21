@@ -1,0 +1,1 @@
+{"nodes": [{"id": "$graphify-root$_r_globals_r", "label": "globals.R", "file_type": "code", "source_location": "L1", "metadata": {"language": "r", "kind": "file"}, "source_file": "R/globals.R"}], "edges": [], "raw_calls": []}

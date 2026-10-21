@@ -1,0 +1,140 @@
+{
+  ".codex/hooks.json": {
+    "mtime": 1792604167.5079777,
+    "seen": 1792604387.7653708,
+    "ast_hash": "dc4b2409b20a8b257ebbab77d59c6c9f",
+    "semantic_hash": "dc4b2409b20a8b257ebbab77d59c6c9f"
+  },
+  "R/autoplot.R": {
+    "mtime": 1792601706.414169,
+    "seen": 1792604387.765373,
+    "ast_hash": "1a8b4965b9b429b4ca9d4b064fdcbea6",
+    "semantic_hash": "1a8b4965b9b429b4ca9d4b064fdcbea6"
+  },
+  "R/globals.R": {
+    "mtime": 1792597869.3628664,
+    "seen": 1792604387.765374,
+    "ast_hash": "1fe7e359213e07c559d0dda0dc35ecb6",
+    "semantic_hash": "1fe7e359213e07c559d0dda0dc35ecb6"
+  },
+  "R/make_outbreak.R": {
+    "mtime": 1792606307.5950894,
+    "seen": 1792609295.862756,
+    "ast_hash": "928c0c9db465a01ffcbade86aa08a53e",
+    "semantic_hash": ""
+  },
+  "R/nososim-package.R": {
+    "mtime": 1792602659.7814736,
+    "seen": 1792604387.765375,
+    "ast_hash": "401b5c46fccc3422d72ee034e40dd8d8",
+    "semantic_hash": "401b5c46fccc3422d72ee034e40dd8d8"
+  },
+  "R/summary.R": {
+    "mtime": 1792602135.889589,
+    "seen": 1792604387.765376,
+    "ast_hash": "21c79ebda2839055bb4ff3054548369b",
+    "semantic_hash": "21c79ebda2839055bb4ff3054548369b"
+  },
+  "R/timeline.R": {
+    "mtime": 1792602715.2715409,
+    "seen": 1792604387.765376,
+    "ast_hash": "417882ba19564473816feee63b6ea84e",
+    "semantic_hash": "417882ba19564473816feee63b6ea84e"
+  },
+  "dev/draft.R": {
+    "mtime": 1792606644.6074045,
+    "seen": 1792609295.862758,
+    "ast_hash": "72cc5bbd5b3d52c2f86f34e0ab5a6875",
+    "semantic_hash": ""
+  },
+  "inst/examples/outbreak.R": {
+    "mtime": 1792605220.5772958,
+    "seen": 1792605778.1523478,
+    "ast_hash": "e44ffaf98b58219dbcbef7f1a5638839",
+    "semantic_hash": ""
+  },
+  "tests/testthat.R": {
+    "mtime": 1792597845.9623392,
+    "seen": 1792604387.765377,
+    "ast_hash": "19a0d66ee9268cb98f2071d86b640f30",
+    "semantic_hash": "19a0d66ee9268cb98f2071d86b640f30"
+  },
+  "tests/testthat/test-autoplot.R": {
+    "mtime": 1792609451.530285,
+    "seen": 1792609459.137374,
+    "ast_hash": "ea815095038d620d134e9ed53a449374",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-make_outbreak.R": {
+    "mtime": 1792609451.5304608,
+    "seen": 1792609459.1373749,
+    "ast_hash": "d3d9314ebf28d225983fec1b9379a085",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-summary.R": {
+    "mtime": 1792609451.530369,
+    "seen": 1792609459.1373749,
+    "ast_hash": "d902c3bb47ea9f3957c1b28f9061d229",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-timeline.R": {
+    "mtime": 1792609451.5307088,
+    "seen": 1792609459.137376,
+    "ast_hash": "464c6e51cfc8e50bffc236e57f5fb8dc",
+    "semantic_hash": ""
+  },
+  ".github/workflows/R-CMD-check.yaml": {
+    "mtime": 1792597845.9626887,
+    "seen": 1792604387.7653792,
+    "ast_hash": "e76caab1380510dcff125fd9a4d6c7ef",
+    "semantic_hash": "e76caab1380510dcff125fd9a4d6c7ef"
+  },
+  "AGENTS.md": {
+    "mtime": 1792604167.5077941,
+    "seen": 1792604387.7653801,
+    "ast_hash": "779a7496aaa43bf2e76d3da3ac754544",
+    "semantic_hash": "779a7496aaa43bf2e76d3da3ac754544"
+  },
+  "LICENSE.md": {
+    "mtime": 1792601147.1625445,
+    "seen": 1792604387.7653801,
+    "ast_hash": "5fae70e49e4ea78f63a9afb887d1a55e",
+    "semantic_hash": "5fae70e49e4ea78f63a9afb887d1a55e"
+  },
+  "METHODS.md": {
+    "mtime": 1792605655.1659827,
+    "seen": 1792605778.152352,
+    "ast_hash": "12dfb54149c84d5a28096f1f9227e470",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261021_174241_26ab279b_explain_the_link_between_reduction_and_interventio.md": {
+    "mtime": 1792604561.7017832,
+    "seen": 1792604802.947307,
+    "ast_hash": "6352bc6279c036ab42133c85b31c326b",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1792609098.9043174,
+    "seen": 1792609295.8627641,
+    "ast_hash": "a74e066db7f375d81b87400cb3bc3893",
+    "semantic_hash": ""
+  },
+  "man/figures/README-unnamed-chunk-2-1.png": {
+    "mtime": 1792609098.8660183,
+    "seen": 1792609295.862765,
+    "ast_hash": "362b8725dce3660ea11292bc890687a9",
+    "semantic_hash": ""
+  },
+  "man/figures/README-unnamed-chunk-2-2.png": {
+    "mtime": 1792609098.8834329,
+    "seen": 1792609295.862765,
+    "ast_hash": "4399ace00fbd6d4ebdfd07e0c4daf95f",
+    "semantic_hash": ""
+  },
+  "tests/testthat/helper-outbreak.R": {
+    "mtime": 1792609451.5301077,
+    "seen": 1792609459.137374,
+    "ast_hash": "38d01b88bfdd479b1cc460d987d7aec5",
+    "semantic_hash": ""
+  }
+}

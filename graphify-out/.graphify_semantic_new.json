@@ -1,0 +1,471 @@
+{
+  "nodes": [
+    {
+      "id": "_github_workflows_r_cmd_check_r_cmd_check",
+      "label": "R-CMD-check workflow",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/.github/workflows/R-CMD-check.yaml",
+      "source_location": "jobs.R-CMD-check",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Checks the R package on pushes and pull requests on ubuntu-latest using --no-manual and --as-cran."
+    },
+    {
+      "id": "_github_workflows_r_cmd_check_r_package_check",
+      "label": "R package check",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/.github/workflows/R-CMD-check.yaml",
+      "source_location": "jobs.R-CMD-check.steps",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "agents_graphify",
+      "label": "Graphify knowledge graph",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/AGENTS.md",
+      "source_location": "graphify",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "agents_scoped_graph_navigation",
+      "label": "Scoped graph navigation",
+      "file_type": "rationale",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/AGENTS.md",
+      "source_location": "Rules",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Query, path and explain return scoped subgraphs, usually much smaller than the full report or raw grep output."
+    },
+    {
+      "id": "agents_incremental_graph_update",
+      "label": "Incremental graph update",
+      "file_type": "rationale",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/AGENTS.md",
+      "source_location": "Rules",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Run graphify update . after code modifications to keep the graph current using AST-only extraction without API cost."
+    },
+    {
+      "id": "license_mit_license",
+      "label": "MIT License",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/LICENSE.md",
+      "source_location": "MIT License",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "license_cyril_geismar",
+      "label": "Cyril Geismar",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/LICENSE.md",
+      "source_location": "Copyright (c) 2026 Cyril Geismar",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "methods_daily_transmission_simulation",
+      "label": "Daily transmission simulation",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Initial conditions",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "methods_presence_interval",
+      "label": "Admission and discharge presence",
+      "file_type": "rationale",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Initial conditions",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Individuals are present from admission inclusive until discharge exclusive."
+    },
+    {
+      "id": "methods_baseline_reproduction_number",
+      "label": "Baseline reproduction number",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Initial conditions: R_i",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "methods_generation_time_pmf",
+      "label": "Generation time PMF",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Initial conditions: w(t-T_i)",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "methods_baseline_daily_infectiousness",
+      "label": "Baseline daily infectiousness",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Initial conditions: lambda_i(t)=R_i w(t-T_i)",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "methods_diffusion_matrices",
+      "label": "Diffusion matrices",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Distribution of infectiousness",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "methods_pairwise_diffusion_weights",
+      "label": "Pairwise diffusion weights",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Distribution of infectiousness: m_ij(t)",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Multiply attribute-specific weights, exclude self-transmission, and default to equal weights for distinct pairs when diffusion matrices are absent."
+    },
+    {
+      "id": "methods_normalized_infectiousness_allocation",
+      "label": "Normalized infectiousness allocation",
+      "file_type": "rationale",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Distribution of infectiousness: q_ij(t)",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Normalize separately for each source over every other present individual, including previously infected individuals; use zero when the denominator is zero."
+    },
+    {
+      "id": "methods_intervention_matrix",
+      "label": "Time-varying intervention matrix",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Interventions: E(t)",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Apply proportional hazard reductions after diffusion normalization so removed infectiousness is not redistributed to other recipients."
+    },
+    {
+      "id": "methods_pairwise_infection_hazard",
+      "label": "Pairwise infection hazard",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Interventions: h_ij(t)=lambda_i(t) q_ij(t) [1-e_ij(t)]",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "methods_total_daily_hazard",
+      "label": "Total daily infection hazard",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Infection and source assignment: H_j(t)",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "methods_bernoulli_infection_sampling",
+      "label": "Bernoulli infection sampling",
+      "file_type": "rationale",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Infection and source assignment: X_j(t)",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Sample infection independently for each susceptible present individual with probability 1-exp(-H_j(t)); individuals can be infected only once."
+    },
+    {
+      "id": "methods_hazard_weighted_source_assignment",
+      "label": "Hazard-weighted source assignment",
+      "file_type": "rationale",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Infection and source assignment: Pr(source=i | j infected on day t)",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Assign a previously infected infectious source with probability h_ij(t)/H_j(t); initial cases have no assigned source."
+    },
+    {
+      "id": "methods_simultaneous_daily_updates",
+      "label": "Simultaneous daily infection updates",
+      "file_type": "rationale",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Infection and source assignment",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Update infection states simultaneously at each day's end so newly infected individuals begin transmitting on the following day."
+    },
+    {
+      "id": "methods_transmission_records",
+      "label": "Individual transmission records",
+      "file_type": "concept",
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Infection and source assignment",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "_github_workflows_r_cmd_check_r_cmd_check",
+      "target": "_github_workflows_r_cmd_check_r_package_check",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/.github/workflows/R-CMD-check.yaml",
+      "source_location": "jobs.R-CMD-check.steps",
+      "weight": 1.0
+    },
+    {
+      "source": "agents_scoped_graph_navigation",
+      "target": "agents_graphify",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/AGENTS.md",
+      "source_location": "Rules",
+      "weight": 1.0
+    },
+    {
+      "source": "agents_incremental_graph_update",
+      "target": "agents_graphify",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/AGENTS.md",
+      "source_location": "Rules",
+      "weight": 1.0
+    },
+    {
+      "source": "license_mit_license",
+      "target": "license_cyril_geismar",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/LICENSE.md",
+      "source_location": "Copyright (c) 2026 Cyril Geismar",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_daily_transmission_simulation",
+      "target": "methods_presence_interval",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Initial conditions",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_baseline_daily_infectiousness",
+      "target": "methods_baseline_reproduction_number",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Initial conditions: lambda_i(t)=R_i w(t-T_i)",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_baseline_daily_infectiousness",
+      "target": "methods_generation_time_pmf",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Initial conditions: lambda_i(t)=R_i w(t-T_i)",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_pairwise_diffusion_weights",
+      "target": "methods_diffusion_matrices",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Distribution of infectiousness: m_ij(t)=L_l_i(t),l_j(t) G_g_i,g_j",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_normalized_infectiousness_allocation",
+      "target": "methods_pairwise_diffusion_weights",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Distribution of infectiousness: q_ij(t)",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_normalized_infectiousness_allocation",
+      "target": "methods_presence_interval",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Distribution of infectiousness: all individuals present on day t",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_pairwise_infection_hazard",
+      "target": "methods_baseline_daily_infectiousness",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Interventions: h_ij(t)",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_pairwise_infection_hazard",
+      "target": "methods_normalized_infectiousness_allocation",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Interventions: h_ij(t)",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_pairwise_infection_hazard",
+      "target": "methods_intervention_matrix",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Interventions: h_ij(t)",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_total_daily_hazard",
+      "target": "methods_pairwise_infection_hazard",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Infection and source assignment: H_j(t)=sum_i h_ij(t)",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_bernoulli_infection_sampling",
+      "target": "methods_total_daily_hazard",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Infection and source assignment: p_j(t)=1-exp(-H_j(t))",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_hazard_weighted_source_assignment",
+      "target": "methods_pairwise_infection_hazard",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Infection and source assignment: h_ij(t)/H_j(t)",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_hazard_weighted_source_assignment",
+      "target": "methods_total_daily_hazard",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Infection and source assignment: h_ij(t)/H_j(t)",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_daily_transmission_simulation",
+      "target": "methods_bernoulli_infection_sampling",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Infection and source assignment",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_daily_transmission_simulation",
+      "target": "methods_hazard_weighted_source_assignment",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Infection and source assignment",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_daily_transmission_simulation",
+      "target": "methods_simultaneous_daily_updates",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "Infection and source assignment",
+      "weight": 1.0
+    },
+    {
+      "source": "methods_transmission_records",
+      "target": "methods_hazard_weighted_source_assignment",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/cyrilgeismar/Documents/Projects/nososim/METHODS.md",
+      "source_location": "The simulation records each infected individual's identifier, infection date and transmission source.",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

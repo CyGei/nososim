@@ -1,0 +1,10 @@
+^\.git$
+^\.github$
+^\.gitignore$
+^README\.Rmd$
+^dev$
+^METHODS\.md$
+^LICENSE\.md$
+^graphify-out$
+^\.codex$
+^AGENTS\.md$

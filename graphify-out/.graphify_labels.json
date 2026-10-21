@@ -19,5 +19,6 @@
   "17": "tibble",
   "18": "tidyr",
   "19": "Q: Explain the link between reduction and intervention and whether the code can be simplified in tidy R.",
-  "20": "nososim"
+  "20": "nososim",
+  "21": "tibble::tibble"
 }

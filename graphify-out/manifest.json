@@ -114,9 +114,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1792609098.9043174,
-    "seen": 1792609295.8627641,
-    "ast_hash": "a74e066db7f375d81b87400cb3bc3893",
+    "mtime": 1792609798.818636,
+    "seen": 1792609833.0023942,
+    "ast_hash": "183475e3f375958f13c20014688cbe71",
     "semantic_hash": ""
   },
   "man/figures/README-unnamed-chunk-2-1.png": {
@@ -135,6 +135,18 @@
     "mtime": 1792609451.5301077,
     "seen": 1792609459.137374,
     "ast_hash": "38d01b88bfdd479b1cc460d987d7aec5",
+    "semantic_hash": ""
+  },
+  ".github/workflows/pkgdown.yaml": {
+    "mtime": 1792609818.6380696,
+    "seen": 1792609833.002391,
+    "ast_hash": "bc69eb48629602713c31f69ebd708ac1",
+    "semantic_hash": ""
+  },
+  "_pkgdown.yml": {
+    "mtime": 1792609798.2552068,
+    "seen": 1792609833.0023942,
+    "ast_hash": "84412a3957b6fb67457523d0f704424f",
     "semantic_hash": ""
   }
 }

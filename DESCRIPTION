@@ -6,7 +6,7 @@ Authors@R: person("Cyril", "Geismar", email = "cyrilgeismar@gmail.com",
 Description: Simulate nosocomial outbreaks in daily populations with changing
     attendance and attributes. Model transmission using individual infectiousness,
     mixing weights, and interventions, and plot presence and transmission links.
-URL: https://github.com/CyGei/nososim
+URL: https://CyGei.github.io/nososim/, https://github.com/CyGei/nososim, https://cygei.github.io/nososim/
 BugReports: https://github.com/CyGei/nososim/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -23,6 +23,8 @@ Imports:
     tidyr,
     utils
 Suggests:
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0),
     withr
 Config/testthat/edition: 3

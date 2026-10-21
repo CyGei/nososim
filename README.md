@@ -3,135 +3,66 @@
 
 # nososim
 
-<!-- badges: start -->
+Simulate hospital outbreaks with changing patient populations, contact
+patterns, and interventions.
 
-<!-- badges: end -->
-
-Simulate nosocomial outbreaks.
+Create a daily population, simulate transmission, and visualise who
+infected whom.
 
 ## Installation
 
-You can install the development version of nososim from
-[GitHub](https://github.com/) with:
+Install the development version from GitHub:
 
 ``` r
 # install.packages("pak")
 pak::pak("CyGei/nososim")
 ```
 
-## Example
+## A first outbreak
+
+Simulate an outbreak in a population of 30 people, starting with one
+infection. Containment strategy starts on day 10 reducing transmission
+hazards by 50%.
 
 ``` r
 library(nososim)
-library(tidyverse)
-#> ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-#> ✔ dplyr     1.2.1     ✔ readr     2.2.0
-#> ✔ forcats   1.0.1     ✔ stringr   1.6.0
-#> ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
-#> ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-#> ✔ purrr     1.2.2     
-#> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-#> ✖ dplyr::filter() masks stats::filter()
-#> ✖ dplyr::lag()    masks stats::lag()
-#> ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+library(ggplot2)
 
 set.seed(123)
+dates <- as.Date("2026-01-01") + 0:20
 
-dates <- as.Date("2026-01-01") + 0:30
-
-timeline <- make_timeline(
-  n = 40,
-  dates = dates,
-  attributes = list(
-    ward = c(A = 0.6, B = 0.4),
-    group = c(patient = 0.8, staff = 0.2)
-  ),
-  admission_delay = 0:3,
-  stay = 7:14,
-  R = rpois(100, 2.7)
-)
-
-timeline <- timeline |>
-  #ID 5 transfers to ward B on 09/01/2026
-  set_attribute(
-    id = "ID_5",
-    from = as.Date("2026-01-09"),
-    attributes = list(ward = "B")
-  ) |>
-  #give 2 days off to a all staff members
-  group_by(id) |>
-  (\(x) {
-    set_schedule(
-      x,
-      id = unique(x$id[x$group == "staff"]),
-      weekdays = sample(1:7, 5)
-    )
-  })() |>
-  ungroup() |>
-  nososim:::new_timeline()
-
-autoplot(timeline, aes(colour = ward)) +
-  facet_grid(
-    rows = vars(group),
-    scales = "free_y",
-    space = "free_y"
-  )
-```
-
-<img src="man/figures/README-unnamed-chunk-2-1.png" alt="" width="100%" />
-
-``` r
-
-initial <- timeline |>
-  filter(date %in% dates[c(1, 7)]) |>
-  slice_head(n = 1, by = date) |>
-  transmute(id, date_infection = date)
-
-staff_masking <- function(present, date) {
-  E_t <- matrix(
-    0,
-    nrow(present),
-    nrow(present),
-    dimnames = list(present$id, present$id)
-  )
-  if (date >= dates[12]) {
-    E_t[present$group == "staff", ] <- 0.8
-  }
-  E_t
-}
-
-mixing_matrices <- list(
-  # within ward transmission more likely
-  ward = matrix(
-    c(2, 1, 1, 2),
-    nrow = 2,
-    dimnames = list(
-      c("A", "B"),
-      c("A", "B")
-    )
-  ),
-  #staff-patient interactions more risky
-  group = matrix(
-    c(1, 1.5, 2, 1),
-    nrow = 2,
-    dimnames = list(
-      c("patient", "staff"),
-      c("patient", "staff")
-    )
-  )
-)
+timeline <- make_timeline(n = 30, dates = dates, admission_delay = 0:4, R = 2)
+initial <- data.frame(id = "ID_1", date_infection = dates[1])
 
 outbreak <- make_outbreak(
   timeline,
   initial,
   w = dpois(0:10, 2),
   dates = dates,
-  intervention = staff_masking,
-  mixing = mixing_matrices
+  intervention = function(present, date) {
+    E_t <- matrix(
+      0,
+      nrow(present),
+      nrow(present),
+      dimnames = list(present$id, present$id)
+    )
+    if (date >= dates[10]) {
+      E_t[,] <- 0.5
+    }
+    E_t
+  }
 )
 
-autoplot(outbreak, aes(colour = ward, fill = ward, shape = group)) +
-  scale_shape_manual(values = c(patient = 21, staff = 24))
+autoplot(outbreak, aes(colour = I("#B8D8D3"), fill = I("#176B65")))
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-2.png" alt="" width="100%" />
+<img src="man/figures/README-first-outbreak-1.png" alt="" width="100%" />
+
+## Go further
+
+The [getting started
+guide](https://CyGei.github.io/nososim/articles/nososim.html) walks
+through ward transfers, staff schedules, mixing patterns, and masking.
+Browse the [function
+reference](https://CyGei.github.io/nososim/reference/index.html) for
+individual function arguments and examples.

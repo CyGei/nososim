@@ -8,3 +8,8 @@
 ^graphify-out$
 ^\.codex$
 ^AGENTS\.md$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^vignettes$
+^README\.html$

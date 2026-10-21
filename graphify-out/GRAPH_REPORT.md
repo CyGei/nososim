@@ -1,14 +1,19 @@
 # Graph Report - nososim  (2026-10-21)
 
 ## Corpus Check
-- 20 files · ~11,069 words
+- 20 files · ~11,056 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 15 file(s) not represented in the graph (top: .Rd 9, (none) 5, .Rmd 1)
+- Unclassified: 17 file(s) not represented in the graph (top: .Rd 9, (none) 6, .Rmd 2)
 
 ## Summary
-- 126 nodes · 117 edges · 21 communities (11 shown, 10 thin omitted)
+- 127 nodes · 118 edges · 22 communities (11 shown, 11 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `dfefd10b`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - test-make_outbreak.R
@@ -25,6 +30,7 @@
 - Cyril Geismar
 - Q: Explain the link between reduction and intervention and whether the code can be simplified in tidy R.
 - nososim
+- tibble::tibble
 
 ## God Nodes (most connected - your core abstractions)
 1. `autoplot.nososim_outbreak()` - 5 edges
@@ -32,11 +38,11 @@
 3. `make_outbreak()` - 4 edges
 4. `summary.nososim_timeline()` - 4 edges
 5. `make_timeline()` - 4 edges
-6. `Daily transmission simulation` - 4 edges
-7. `Hazard-weighted source assignment` - 4 edges
-8. `autoplot.nososim_timeline()` - 3 edges
-9. `summary.nososim_outbreak()` - 3 edges
-10. `new_timeline()` - 3 edges
+6. `nososim` - 4 edges
+7. `Daily transmission simulation` - 4 edges
+8. `Hazard-weighted source assignment` - 4 edges
+9. `autoplot.nososim_timeline()` - 3 edges
+10. `summary.nososim_outbreak()` - 3 edges
 
 ## Surprising Connections (you probably didn't know these)
 - None detected - all connections are within the same source files.
@@ -44,11 +50,11 @@
 ## Import Cycles
 - None detected.
 
-## Communities (21 total, 10 thin omitted)
+## Communities (22 total, 11 thin omitted)
 
 ### Community 0 - "test-make_outbreak.R"
-Cohesion: 0.08
-Nodes (20): simple_outbreak(), blocked, excluded, expected, hazard_fixture(), initial, invalid, outbreak (+12 more)
+Cohesion: 0.10
+Nodes (18): blocked, excluded, expected, initial, invalid, outbreak, patient, present (+10 more)
 
 ### Community 1 - "autoplot.nososim_outbreak"
 Cohesion: 0.18
@@ -87,18 +93,20 @@ Cohesion: 0.50
 Nodes (3): Answer, Q: Explain the link between reduction and intervention and whether the code can be simplified in tidy R., Source Nodes
 
 ### Community 20 - "nososim"
-Cohesion: 0.50
-Nodes (3): Example, Installation, nososim
+Cohesion: 0.40
+Nodes (4): A first outbreak, Go further, Installation, nososim
 
 ## Knowledge Gaps
 - **9 isolated node(s):** `R-CMD-check workflow`, `R package check`, `Cyril Geismar`, `MIT License`, `Baseline reproduction number` (+4 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 86 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 87 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `hazard_fixture()` connect `tibble::tibble` to `test-make_outbreak.R`?**
+  _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **What connects `R-CMD-check workflow`, `R package check`, `Cyril Geismar` to the rest of the system?**
   _9 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `test-make_outbreak.R` be split into smaller, more focused modules?**
-  _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1 - nodes in this community are weakly interconnected._

@@ -66,9 +66,9 @@
     "semantic_hash": ""
   },
   "tests/testthat/test-make_outbreak.R": {
-    "mtime": 1792609451.5304608,
-    "seen": 1792609459.1373749,
-    "ast_hash": "d3d9314ebf28d225983fec1b9379a085",
+    "mtime": 1792609468.4604452,
+    "seen": 1792609468.677536,
+    "ast_hash": "4ee114c088f51ee8e3957b40d73d24d8",
     "semantic_hash": ""
   },
   "tests/testthat/test-summary.R": {

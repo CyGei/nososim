@@ -11,7 +11,9 @@ Create daily populations, simulate transmission, and plot outbreaks.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://CyGei.github.io/nososim/}
   \item \url{https://github.com/CyGei/nososim}
+  \item \url{https://cygei.github.io/nososim/}
   \item Report bugs at \url{https://github.com/CyGei/nososim/issues}
 }
 

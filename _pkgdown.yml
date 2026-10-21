@@ -1,0 +1,45 @@
+url: https://cygei.github.io/nososim/
+template:
+  bootstrap: 5
+  theme: github-light
+  bslib:
+    bg: '#FAFAF7'
+    fg: '#243238'
+    primary: '#176B65'
+    base_font:
+      google: Source Sans 3
+    heading_font:
+      google: Source Sans 3
+    code_font:
+      google: JetBrains Mono
+    border-radius: 0.4rem
+navbar:
+  bg: light
+  components:
+    intro:
+      text: Get started
+      href: articles/nososim.html
+  structure:
+    left:
+    - intro
+    - reference
+    right:
+    - search
+    - github
+reference:
+- title: Create a population
+  contents:
+  - make_timeline
+  - set_attribute
+  - set_schedule
+- title: Simulate transmission
+  contents: make_outbreak
+- title: Explore results
+  contents:
+  - starts_with("autoplot")
+  - starts_with("summary")
+- title: Package
+  contents:
+  - nososim-package
+  - reexports
+

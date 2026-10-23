@@ -1,0 +1,430 @@
+---
+title: "nososim: minimal validation"
+format: html
+execute:
+  warning: false
+  message: false
+---
+
+Three questions: **Does $R$ give the expected offspring distribution? Does mixing give the expected assortativity? Do interventions reduce transmission?**
+
+## Scenarios
+
+Define each family once, varying only $R$, within-group mixing, or IPC intervention. Each scenario uses 200 replicates; mixing scenarios start with eight cases per group.
+
+```{r}
+library(tidyverse)
+library(linktree)
+library(furrr)
+#devtools::install()
+library(nososim)
+library(pipetime)
+n_rep <- 200
+
+scenario <- function(
+  type,
+  R = 2,
+  n = 200,
+  days = 25,
+  w = c(0.2, 0.5, 0.3),
+  mixing = NULL,
+  seeds = 1,
+  reduction = 0,
+  from = Inf
+) {
+  list(
+    type = type,
+    R = R,
+    n = n,
+    days = days,
+    w = w,
+    mixing = mixing,
+    seeds = seeds,
+    reduction = reduction,
+    from = from
+  )
+}
+
+mix <- function(within) {
+  matrix(
+    c(within, 1, 1, within),
+    2,
+    byrow = TRUE,
+    dimnames = list(c("A", "B"), c("A", "B"))
+  )
+}
+
+scenarios <- c(
+  set_names(0:3, paste0("R", 0:3)) |>
+    map(\(R) scenario("offspring", R = R, days = 1, w = 1)),
+  c(disassortative = 0.5, random = 1, assortative = 4) |>
+    map(\(within) {
+      scenario(
+        "mixing",
+        R = 3,
+        n = 300,
+        days = 1,
+        w = 1,
+        seeds = 8,
+        mixing = mix(within)
+      )
+    }),
+  c(no_control = 0, half_control = 0.5, full_control = 1) |>
+    map(\(reduction) {
+      scenario("control", R = 3, from = 8, reduction = reduction)
+    })
+)
+
+design <- tibble(
+  name = names(scenarios),
+  type = map_chr(scenarios, "type"),
+  spec = unname(scenarios)
+)
+```
+
+## Simulation
+
+Use the same simulation for every scenario: create the population, seed infections, then apply mixing and controls. A fixed seed for each run makes results reproducible.
+
+```{r}
+simulate <- function(s, seed) {
+  set.seed(seed)
+  dates <- as.Date("2026-01-01") + 0:s$days
+
+  timeline <- make_timeline(
+    n = s$n,
+    dates = dates,
+    stay = s$days + 1,
+    R = s$R,
+    attributes = if (is.null(s$mixing)) {
+      list()
+    } else {
+      list(group = c(A = 0.5, B = 0.5))
+    }
+  )
+
+  people <- distinct(timeline, id, .keep_all = TRUE)
+  imported <- if (is.null(s$mixing)) {
+    slice_head(people, n = s$seeds)
+  } else {
+    people |> group_by(group) |> slice_head(n = s$seeds) |> ungroup()
+  }
+  imported <- transmute(imported, id, date = dates[1])
+
+  intervention <- function(present, date) {
+    value <- if (as.integer(date - dates[1]) >= s$from) s$reduction else 0
+    matrix(
+      value,
+      nrow(present),
+      nrow(present),
+      dimnames = list(present$id, present$id)
+    )
+  }
+
+  make_outbreak(
+    timeline,
+    imported,
+    w = s$w,
+    dates = dates,
+    intervention = intervention,
+    mixing = if (is.null(s$mixing)) NULL else list(group = s$mixing)
+  )
+}
+
+future::plan(future::multisession, workers = 5)
+
+runs <- expand_grid(design, replicate = seq_len(n_rep)) |>
+  mutate(
+    seed = 1000L + row_number(),
+    outbreak = furrr::future_map2(
+      spec,
+      seed,
+      simulate,
+      .options = furrr::furrr_options(seed = TRUE)
+    )
+  ) |>
+  time_pipe("runs")
+
+future::plan(future::sequential) # Close workers when finished
+```
+
+## Outputs
+
+Summarise total cases for every run, then extract the relevant measure for each family: imported-case offspring, group assortativity, or daily incidence (including zero-case days).
+
+```{r}
+get_summary <- function(x) {
+  tibble(
+    cases = nrow(x$infections),
+    attack_rate = nrow(x$infections) / n_distinct(x$timeline$id)
+  )
+}
+
+get_offspring <- function(x) {
+  # Only imported cases have complete follow-up in the one-day benchmark.
+  nososim::offspring(x) |>
+    semi_join(x$parameters$imported, by = "id")
+}
+
+get_incidence <- function(x) {
+  counts <- x$infections |>
+    mutate(day = as.integer(date_infection - min(x$dates))) |>
+    count(day, name = "cases")
+  tibble(day = seq_along(x$dates) - 1L) |>
+    left_join(counts, by = "day") |>
+    mutate(cases = replace_na(cases, 0L))
+}
+
+get_assortativity <- function(x, s) {
+  groups <- distinct(x$timeline, id, group)
+  edges <- nososim::count_edges(x, by = "group") |>
+    uncount(transmissions) |>
+    rename(from = source_group, to = recipient_group)
+
+  sizes <- count(groups, group)
+  f <- setNames(sizes$n, sizes$group)
+  estimates <- if (n_distinct(c(edges$from, edges$to)) < 2) {
+    tibble(group = character(), est = double(), lwr = double(), upr = double())
+  } else {
+    as_tibble(linktree::get_delta(edges$from, edges$to, f = f))
+  }
+
+  M <- s$mixing
+  tibble(
+    group = rownames(M),
+    expected = linktree::gamma2delta(diag(M) / c(M[1, 2], M[2, 1]))
+  ) |>
+    left_join(estimates, by = "group")
+}
+
+# Keep run identifiers and unnest each measure in one shared pipeline.
+collect_measure <- function(data, measure) {
+  data |>
+    transmute(name, replicate, data = map2(outbreak, spec, measure)) |>
+    unnest(data)
+}
+
+by_type <- split(runs, runs$type)
+outbreak_summary <- collect_measure(runs, \(x, s) get_summary(x))
+offspring <- collect_measure(by_type$offspring, \(x, s) get_offspring(x))
+assortativity <- collect_measure(by_type$mixing, get_assortativity)
+incidence <- collect_measure(by_type$control, \(x, s) get_incidence(x))
+```
+
+## Checks and figures
+
+**1. Offspring: observed versus exact expectation**
+
+With one imported case and one day generation time, offspring follow a binomial distribution. Compare the simulated mean with its exact expectation, allowing three Monte Carlo standard errors.
+
+```{r}
+offspring_theory <- design |>
+  filter(type == "offspring") |>
+  transmute(name, R = map_dbl(spec, "R"), n = map_dbl(spec, "n")) |>
+  mutate(
+    susceptible = n - 1,
+    p = 1 - exp(-R / susceptible),
+    expected = susceptible * p,
+    mc_se = sqrt(susceptible * p * (1 - p) / n_rep)
+  )
+
+benchmarks <- offspring_theory |>
+  left_join(
+    offspring |>
+      group_by(name) |>
+      summarise(observed = mean(offspring), .groups = "drop"),
+    by = "name"
+  ) |>
+  mutate(pass = abs(observed - expected) <= 3 * mc_se)
+benchmarks
+
+reference <- offspring_theory |>
+  transmute(
+    name,
+    data = map2(susceptible, p, \(size, prob) {
+      k <- 0:12
+      tibble(offspring = k, p = dbinom(k, size, prob))
+    })
+  ) |>
+  unnest(data)
+
+p_offspring <- offspring |>
+  count(name, offspring) |>
+  group_by(name) |>
+  mutate(p = n / sum(n)) |>
+  ggplot(aes(offspring, p)) +
+  geom_col() +
+  geom_point(data = reference, aes(offspring, p), inherit.aes = FALSE) +
+  facet_wrap(~name) +
+  labs(x = "Secondary infections per imported case", y = "Probability") +
+  theme_classic()
+p_offspring
+```
+
+**2. Mixing: observed versus theoretical `linktree` assortativity**
+
+Compare estimated assortativity with the value implied by each mixing matrix. The dashed identity line shows agreement; larger squares show replicate means.
+
+```{r}
+assortativity |>
+  group_by(name, group, expected) |>
+  summarise(estimated = mean(est, na.rm = TRUE), .groups = "drop")
+
+p_assortativity <- ggplot(assortativity, aes(expected, est, colour = group)) +
+  geom_abline(intercept = 0, slope = 1, linetype = 2) +
+  geom_point(alpha = 0.15) +
+  stat_summary(fun = mean, geom = "point", size = 3, shape = 15) +
+  labs(x = "Expected delta from mixing matrix", y = "Estimated delta") +
+  theme_classic()
+p_assortativity
+```
+
+**3. Interventions: incidence and attack rate**
+
+Compare daily infections and final attack rates across control strengths. Complete control must prevent all new infections from its start day onward.
+
+```{r}
+controls <- design |>
+  filter(type == "control") |>
+  transmute(
+    name,
+    from = map_dbl(spec, "from"),
+    reduction = map_dbl(spec, "reduction")
+  )
+
+outbreak_summary |>
+  semi_join(controls, by = "name") |>
+  group_by(name) |>
+  summarise(mean_attack_rate = mean(attack_rate), .groups = "drop")
+
+p_control <- incidence |>
+  group_by(name, day) |>
+  summarise(
+    mean_cases = mean(cases),
+    .groups = "drop",
+    lwr = quantile(cases, 0.025),
+    upr = quantile(cases, 0.975)
+  ) |>
+  ggplot(aes(day, mean_cases, group = name)) +
+  geom_ribbon(aes(ymin = lwr, ymax = upr, fill = name), alpha = 0.2) +
+  geom_point(aes(colour = name)) +
+  geom_line(aes(colour = name)) +
+  geom_vline(
+    data = distinct(controls, from),
+    aes(xintercept = from),
+    linetype = 2
+  ) +
+  labs(x = "Day", y = "Mean daily infections", colour = "Intervention") +
+  theme_classic()
+p_control
+```
+
+Expected outcomes: offspring means match the binomial formula within Monte Carlo error; early assortativity increases with within-group mixing and approximately matches the identity line; stronger controls reduce incidence and final attack rate, with no new infections from the start of complete control. 
+
+## Add a scenario: block ward A → ward B
+
+From `ipc_start` (inclusive), block only A → B transmissions.
+
+```{r}
+ward_dates <- as.Date("2026-01-01") + 0:25
+ipc_start <- ward_dates[1] + 5
+
+block_A_to_B <- function(present, date) {
+  E <- matrix(
+    0,
+    nrow(present),
+    nrow(present),
+    dimnames = list(present$id, present$id)
+  )
+  if (date >= ipc_start) {
+    E[present$ward == "A", present$ward == "B"] <- 1
+  }
+  E
+}
+
+simulate_wards <- function(seed) {
+  set.seed(seed)
+  timeline <- make_timeline(
+    n = 300,
+    dates = ward_dates,
+    stay = length(ward_dates),
+    R = 2,
+    attributes = list(ward = c(A = 0.5, B = 0.5))
+  )
+  imported <- timeline |>
+    distinct(id, ward) |>
+    group_by(ward) |>
+    slice_head(n = 4) |>
+    ungroup() |>
+    transmute(id, date = ward_dates[1])
+
+  make_outbreak(
+    timeline,
+    imported,
+    w = c(0.2, 0.5, 0.3),
+    dates = ward_dates,
+    intervention = block_A_to_B
+  )
+}
+
+ward_runs <- tibble(replicate = seq_len(n_rep)) |>
+  mutate(outbreak = map(2025L + replicate, simulate_wards))
+```
+
+Use `count_edges(by_date = TRUE)` to count each route by infection date. Fill absent routes and dates with zeros within every replicate, so means include runs with no transmission.
+
+```{r}
+ward_daily <- ward_runs |>
+  transmute(
+    replicate,
+    data = map(outbreak, \(x) {
+      nososim::count_edges(x, by = "ward", by_date = TRUE) |>
+        complete(
+          date_infection = ward_dates,
+          source_ward = c("A", "B"),
+          recipient_ward = c("A", "B"),
+          fill = list(transmissions = 0L)
+        )
+    })
+  ) |>
+  unnest(data) |>
+  mutate(route = paste(source_ward, "→", recipient_ward))
+
+ward_results <- ward_daily |>
+  mutate(
+    period = if_else(date_infection < ipc_start, "Before IPC", "From IPC start")
+  ) |>
+  group_by(replicate, route, period) |>
+  summarise(transmissions = sum(transmissions), .groups = "drop") |>
+  group_by(route, period) |>
+  summarise(mean_transmissions = mean(transmissions), .groups = "drop") |>
+  pivot_wider(names_from = period, values_from = mean_transmissions)
+ward_results
+
+ward_daily_summary <- ward_daily |>
+  group_by(date_infection, route) |>
+  summarise(
+    mean_transmissions = mean(transmissions),
+    lower = quantile(transmissions, 0.025),
+    upper = quantile(transmissions, 0.975),
+    .groups = "drop"
+  )
+
+ward_daily_summary |>
+  ggplot(aes(date_infection, mean_transmissions)) +
+  geom_ribbon(
+    aes(ymin = lower, ymax = upper),
+    fill = "steelblue",
+    alpha = 0.2
+  ) +
+  geom_point() +
+  geom_line() +
+  geom_vline(xintercept = ipc_start, colour = "orange") +
+  facet_wrap(~route) +
+  labs(
+    x = "Infection date",
+    y = "transmission count"
+  ) +
+  theme_classic()
+```
+

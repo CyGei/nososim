@@ -20,5 +20,10 @@
   "18": "tidyr",
   "19": "Q: Explain the link between reduction and intervention and whether the code can be simplified in tidy R.",
   "20": "nososim",
-  "21": "tibble::tibble"
+  "21": "tibble::tibble",
+  "22": "nososim_validation.qmd",
+  "23": "count_edges",
+  "24": "test-count_edges.R",
+  "25": "data-raw/outbreak.R",
+  "26": "data.R"
 }

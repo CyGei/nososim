@@ -85,10 +85,10 @@ intervention <- function(present, date) {
 
 outbreak <- make_outbreak(
   timeline = timeline,
-  initial = timeline |>
+  imported = timeline |>
     filter(date == start) |>
     slice_head(n = 1, by = ward) |>
-    transmute(id, date_infection = date),
+    select(id, date),
   w = distcrete::distcrete(
     "gamma",
     shape = 4,

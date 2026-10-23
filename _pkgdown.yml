@@ -38,6 +38,11 @@ reference:
   contents:
   - starts_with("autoplot")
   - starts_with("summary")
+  - count_edges
+  - offspring
+- title: Example data
+  contents:
+  - outbreak
 - title: Package
   contents:
   - nososim-package

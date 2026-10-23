@@ -10,6 +10,7 @@ URL: https://CyGei.github.io/nososim/, https://github.com/CyGei/nososim, https:/
 BugReports: https://github.com/CyGei/nososim/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
+LazyData: true
 Depends: R (>= 4.1.0)
 Imports:
     dplyr (>= 1.1.0),

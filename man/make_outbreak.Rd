@@ -4,12 +4,12 @@
 \alias{make_outbreak}
 \title{Simulate an outbreak}
 \usage{
-make_outbreak(timeline, initial, w, dates, intervention, mixing = NULL)
+make_outbreak(timeline, imported, w, dates, intervention, mixing = NULL)
 }
 \arguments{
 \item{timeline}{A population timeline from \code{\link[=make_timeline]{make_timeline()}}.}
 
-\item{initial}{Data frame with \code{id} and \code{date_infection} for initial cases.}
+\item{imported}{Data frame with \code{id} and \code{date} (infection date) for imported cases.}
 
 \item{w}{Probability mass function of the generation time distribution.}
 
@@ -28,7 +28,7 @@ Weights are multiplied across attributes. \code{NULL} assumes equal mixing.}
 \value{
 A \code{nososim_outbreak} containing the population timeline,
 infection records (\code{id}, \code{source}, \code{date_infection}), simulation
-dates, and parameters. Initial cases have \code{NA} sources.
+dates, and parameters. Imported cases have \code{NA} sources.
 }
 \description{
 Simulates nosocomial outbreaks. Each individual can be infected once,
@@ -42,7 +42,7 @@ attributes = list(
 group = c(patient = 0.8, staff = 0.2)
 ))
 
-initial <- data.frame(id = "ID_1", date_infection = dates[1])
+imported <- data.frame(id = "ID_1", date = dates[1])
 
 global_ipc <- function(present, date) {
   E_t <- matrix(
@@ -71,7 +71,7 @@ A_to_B_IPC <- function(present, date) {
   E_t
 }
 
-make_outbreak(timeline, initial, w = c(0.2, 0.5, 0.3),
+make_outbreak(timeline, imported, w = c(0.2, 0.5, 0.3),
   dates, intervention = A_to_B_IPC
 )
 }

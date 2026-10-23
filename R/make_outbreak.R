@@ -4,7 +4,7 @@
 #' and new cases become infectious from the following day.
 #'
 #' @param timeline A population timeline from [make_timeline()].
-#' @param initial Data frame with `id` and `date_infection` for initial cases.
+#' @param imported Data frame with `id` and `date` (infection date) for imported cases.
 #' @param w Probability mass function of the generation time distribution.
 #' @param dates Dates over which to simulate transmission.
 #' @param intervention Function of `present` and `date` returning the matrix
@@ -18,20 +18,20 @@
 #'
 #' @return A `nososim_outbreak` containing the population timeline,
 #'   infection records (`id`, `source`, `date_infection`), simulation
-#'   dates, and parameters. Initial cases have `NA` sources.
+#'   dates, and parameters. Imported cases have `NA` sources.
 #'
 #'
 #' @export
 #' @examples
 #' dates <- as.Date("2026-01-01") + 0:6
-#' timeline <- make_timeline(10, dates, stay = 7,  
+#' timeline <- make_timeline(10, dates, stay = 7,
 #' attributes = list(
 #'  ward = c(A = 0.5, B = 0.5),
 #' group = c(patient = 0.8, staff = 0.2)
 #' ))
-#' 
-#' initial <- data.frame(id = "ID_1", date_infection = dates[1])
-#' 
+#'
+#' imported <- data.frame(id = "ID_1", date = dates[1])
+#'
 #' global_ipc <- function(present, date) {
 #'   E_t <- matrix(
 #'     0, nrow(present), nrow(present),
@@ -58,14 +58,14 @@
 #'   E_t[present$ward == "A", present$ward == "B"] <- 0.9
 #'   E_t
 #' }
-#' 
-#' make_outbreak(timeline, initial, w = c(0.2, 0.5, 0.3),
+#'
+#' make_outbreak(timeline, imported, w = c(0.2, 0.5, 0.3),
 #'   dates, intervention = A_to_B_IPC
 #' )
 
 make_outbreak <- function(
   timeline,
-  initial,
+  imported,
   w,
   dates,
   intervention,
@@ -79,9 +79,14 @@ make_outbreak <- function(
     stop("`timeline` must have at most one row per ID and date.")
   }
 
-  initial <- tibble::as_tibble(initial)
+  if (!is.data.frame(imported) || !all(c("id", "date") %in% names(imported))) {
+    stop("`imported` must be a data frame with `id` and `date` columns.")
+  }
+
+  imported <- tibble::as_tibble(imported)
   dates <- sort(dates)
-  infections <- initial |>
+  infections <- imported |>
+    transmute(id, date_infection = date) |>
     arrange(date_infection, id) |>
     mutate(source = NA_character_)
 
@@ -133,7 +138,10 @@ make_outbreak <- function(
       infections = infections,
       dates = dates,
       parameters = list(
-        initial = initial, w = w, mixing = mixing, intervention = intervention
+        imported = imported,
+        w = w,
+        mixing = mixing,
+        intervention = intervention
       )
     ),
     class = "nososim_outbreak"
@@ -182,14 +190,19 @@ mixing_matrix <- function(present, mixing = NULL) {
 #'   after row normalisation, without redistributing prevented transmission.
 #' @noRd
 transmission_hazards <- function(present, m_t, E_t) {
-  if (!is.matrix(E_t) || !is.numeric(E_t) ||
-      !identical(dim(E_t), c(nrow(present), nrow(present)))) {
+  if (
+    !is.matrix(E_t) ||
+      !is.numeric(E_t) ||
+      !identical(dim(E_t), c(nrow(present), nrow(present)))
+  ) {
     stop(
       "`intervention` must return a numeric matrix with one row and column per ID present."
     )
   }
-  if (!setequal(rownames(E_t), present$id) ||
-      !setequal(colnames(E_t), present$id)) {
+  if (
+    !setequal(rownames(E_t), present$id) ||
+      !setequal(colnames(E_t), present$id)
+  ) {
     stop("Intervention matrix row and column names must match the IDs present.")
   }
   if (any(!is.finite(E_t)) || any(E_t < 0 | E_t > 1)) {

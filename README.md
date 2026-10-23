@@ -32,11 +32,11 @@ set.seed(123)
 dates <- as.Date("2026-01-01") + 0:20
 
 timeline <- make_timeline(n = 30, dates = dates, admission_delay = 0:4, R = 2)
-initial <- data.frame(id = "ID_1", date_infection = dates[1])
+imported <- data.frame(id = "ID_1", date = dates[1])
 
 outbreak <- make_outbreak(
   timeline,
-  initial,
+  imported,
   w = dpois(0:10, 2),
   dates = dates,
   intervention = function(present, date) {

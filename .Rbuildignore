@@ -13,3 +13,4 @@
 ^pkgdown$
 ^vignettes$
 ^README\.html$
+^data-raw$

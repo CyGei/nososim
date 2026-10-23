@@ -46,7 +46,7 @@ test_that("an outbreak without cases has missing infection dates", {
   start <- as.Date("2026-01-01")
   timeline <- make_timeline(1, start)
   outbreak <- make_outbreak(
-    timeline, tibble::tibble(id = character(), date_infection = as.Date(character())),
+    timeline, tibble::tibble(id = character(), date = as.Date(character())),
     w = 1, dates = as.Date(character()),
     intervention = function(present, date) stop("No days to simulate")
   )

@@ -2,15 +2,15 @@ test_that("full intervention prevents new infections", {
   start <- as.Date("2026-01-01")
   timeline <- tidyr::expand_grid(id = c("A", "B", "C"), date = start + 0:2) |>
     dplyr::mutate(R_i = 1000)
-  initial <- tibble::tibble(id = c("A", "B"), date_infection = start)
+  imported <- tibble::tibble(id = c("A", "B"), date = start)
 
   zero <- matrix(0, 3, 3, dimnames = list(c("A", "B", "C"), c("A", "B", "C")))
 
   blocked <- make_outbreak(
-    timeline, initial, w = 1, dates = start + 0:2,
+    timeline, imported, w = 1, dates = start + 0:2,
     intervention = \(present, date) zero + 1
   )
-  expect_equal(blocked$infections$id, initial$id)
+  expect_equal(blocked$infections$id, imported$id)
   expect_true(all(is.na(blocked$infections$source)))
 })
 
@@ -18,14 +18,14 @@ test_that("source sampling excludes blocked routes", {
   start <- as.Date("2026-01-01")
   timeline <- tidyr::expand_grid(id = c("A", "B", "C"), date = start + 0:2) |>
     dplyr::mutate(R_i = 1000)
-  initial <- tibble::tibble(id = c("A", "B"), date_infection = start)
+  imported <- tibble::tibble(id = c("A", "B"), date = start)
 
   zero <- matrix(0, 3, 3, dimnames = list(c("A", "B", "C"), c("A", "B", "C")))
 
   reduction <- zero
   reduction["A", "C"] <- 1
   outbreak <- make_outbreak(
-    timeline, initial, w = 1, dates = start + 0:2,
+    timeline, imported, w = 1, dates = start + 0:2,
     intervention = \(present, date) reduction
   )
   expect_equal(dplyr::filter(outbreak$infections, id == "C")$source, "B")
@@ -36,10 +36,10 @@ test_that("the intervention sees each day's population and infection state", {
   start <- as.Date("2026-01-01")
   timeline <- tidyr::expand_grid(id = c("A", "B", "C"), date = start + 0:2) |>
     dplyr::mutate(R_i = 1000)
-  initial <- tibble::tibble(id = c("A", "B"), date_infection = start)
+  imported <- tibble::tibble(id = c("A", "B"), date = start)
 
   timeline <- timeline |> dplyr::filter(id == "A" | date > start)
-  initial <- initial[1, ]
+  imported <- imported[1, ]
   seen <- list()
   intervention <- function(present, date) {
     seen[[length(seen) + 1]] <<- list(date = date, present = present)
@@ -52,7 +52,7 @@ test_that("the intervention sees each day's population and infection state", {
   }
 
   outbreak <- make_outbreak(
-    timeline, initial, w = 1, dates = rev(start + 0:3),
+    timeline, imported, w = 1, dates = rev(start + 0:3),
     intervention = intervention
   )
   expect_equal(purrr::map_int(seen, \(day) nrow(day$present)), c(1L, 3L, 3L, 0L))
@@ -77,12 +77,12 @@ test_that("daily locations and attendance determine transmission", {
   ) |>
     dplyr::mutate(date = start + day, R_i = 1000) |>
     dplyr::select(-day)
-  initial <- tibble::tibble(id = "source", date_infection = start)
+  imported <- tibble::tibble(id = "source", date = start)
   ward_weights <- diag(2)
   dimnames(ward_weights) <- list(c("A", "B"), c("A", "B"))
 
   outbreak <- make_outbreak(
-    timeline, initial, w = c(1, 1), dates = start + 0:4,
+    timeline, imported, w = c(1, 1), dates = start + 0:4,
     mixing = list(ward = ward_weights),
     intervention = function(present, date) {
       matrix(0, nrow(present), nrow(present),
@@ -102,12 +102,12 @@ test_that("daily locations and attendance determine transmission", {
 test_that("outbreaks require unique person-days and an intervention function", {
   start <- as.Date("2026-01-01")
   timeline <- tibble::tibble(id = "A", date = start, R_i = 2)
-  initial <- tibble::tibble(id = "A", date_infection = start)
+  imported <- tibble::tibble(id = "A", date = start)
 
-  expect_error(make_outbreak(timeline, initial, w = 1, dates = start,
+  expect_error(make_outbreak(timeline, imported, w = 1, dates = start,
     intervention = 0), "must be a function")
   expect_error(make_outbreak(
-    dplyr::bind_rows(timeline, timeline), initial,
+    dplyr::bind_rows(timeline, timeline), imported,
     w = 1, dates = start, intervention = function(present, date) 0
   ), "one row per ID and date")
 })
@@ -190,5 +190,36 @@ test_that("intervention matrices must explicitly identify valid reductions", {
     invalid <- x$zero
     invalid[1, 2] <- value
     expect_error(transmission_hazards(x$present, x$weights, invalid), "between 0 and 1")
+  }
+})
+
+test_that("imported accepts id and date and stores the supplied cases", {
+  start <- as.Date("2026-01-01")
+  imported <- data.frame(id = c("B", "A"), date = start + c(1, 0))
+  timeline <- tibble::tibble(id = c("A", "B"), date = start, R_i = 1)
+  outbreak <- make_outbreak(
+    timeline, imported = imported, w = 1, dates = as.Date(character()),
+    intervention = function(present, date) stop("No days to simulate")
+  )
+
+  expect_equal(outbreak$parameters$imported, tibble::as_tibble(imported))
+  expect_false("initial" %in% names(outbreak$parameters))
+  expect_equal(outbreak$infections, tibble::tibble(
+    id = c("A", "B"), source = NA_character_, date_infection = start + 0:1
+  ))
+})
+
+test_that("imported requires a data frame with id and date", {
+  start <- as.Date("2026-01-01")
+  timeline <- make_timeline(1, start)
+  for (invalid in list(
+    list(id = "ID_1", date = start),
+    data.frame(id = "ID_1", date_infection = start),
+    data.frame(date = start)
+  )) {
+    expect_error(make_outbreak(
+      timeline, imported = invalid, w = 1, dates = start,
+      intervention = function(present, date) 0
+    ), "`imported` must be a data frame with `id` and `date` columns", fixed = TRUE)
   }
 })

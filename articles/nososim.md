@@ -65,10 +65,10 @@ autoplot(timeline, aes(colour = ward)) +
 ``` r
 
 
-initial <- timeline |>
+imported <- timeline |>
   filter(date %in% dates[c(1, 7)]) |>
   slice_head(n = 1, by = date) |>
-  transmute(id, date_infection = date)
+  select(id, date)
 
 staff_masking <- function(present, date) {
   E_t <- matrix(
@@ -106,7 +106,7 @@ mixing_matrices <- list(
 
 outbreak <- make_outbreak(
   timeline,
-  initial,
+  imported,
   w = dpois(0:10, 2),
   dates = dates,
   intervention = staff_masking,

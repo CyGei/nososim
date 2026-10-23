@@ -23,6 +23,15 @@
   : Summarise an outbreak
 - [`summary(`*`<nososim_timeline>`*`)`](https://cygei.github.io/nososim/reference/summary.nososim_timeline.md)
   : Summarise a population timeline
+- [`count_edges()`](https://cygei.github.io/nososim/reference/count_edges.md)
+  : Count transmissions by attributes
+- [`offspring()`](https://cygei.github.io/nososim/reference/offspring.md)
+  : Count secondary infections
+
+## Example data
+
+- [`outbreak`](https://cygei.github.io/nososim/reference/outbreak.md) :
+  Example nosocomial outbreak
 
 ## Package
 

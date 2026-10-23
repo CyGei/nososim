@@ -120,10 +120,10 @@ staff masking intervention in one simulation.</p>
 <p><img src="nososim_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" alt="" width="768"></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">initial</span> <span class="op">&lt;-</span> <span class="va">timeline</span> <span class="op">|&gt;</span></span>
+<span><span class="va">imported</span> <span class="op">&lt;-</span> <span class="va">timeline</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">dates</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, by <span class="op">=</span> <span class="va">date</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html" class="external-link">transmute</a></span><span class="op">(</span><span class="va">id</span>, date_infection <span class="op">=</span> <span class="va">date</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">date</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">staff_masking</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">present</span>, <span class="va">date</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">E_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
@@ -161,7 +161,7 @@ staff masking intervention in one simulation.</p>
 <span></span>
 <span><span class="va">outbreak</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_outbreak.html">make_outbreak</a></span><span class="op">(</span></span>
 <span>  <span class="va">timeline</span>,</span>
-<span>  <span class="va">initial</span>,</span>
+<span>  <span class="va">imported</span>,</span>
 <span>  w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">dpois</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  dates <span class="op">=</span> <span class="va">dates</span>,</span>
 <span>  intervention <span class="op">=</span> <span class="va">staff_masking</span>,</span>

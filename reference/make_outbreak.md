@@ -6,7 +6,7 @@ and new cases become infectious from the following day.
 ## Usage
 
 ``` r
-make_outbreak(timeline, initial, w, dates, intervention, mixing = NULL)
+make_outbreak(timeline, imported, w, dates, intervention, mixing = NULL)
 ```
 
 ## Arguments
@@ -16,9 +16,9 @@ make_outbreak(timeline, initial, w, dates, intervention, mixing = NULL)
   A population timeline from
   [`make_timeline()`](https://cygei.github.io/nososim/reference/make_timeline.md).
 
-- initial:
+- imported:
 
-  Data frame with `id` and `date_infection` for initial cases.
+  Data frame with `id` and `date` (infection date) for imported cases.
 
 - w:
 
@@ -46,7 +46,7 @@ make_outbreak(timeline, initial, w, dates, intervention, mixing = NULL)
 
 A `nososim_outbreak` containing the population timeline, infection
 records (`id`, `source`, `date_infection`), simulation dates, and
-parameters. Initial cases have `NA` sources.
+parameters. Imported cases have `NA` sources.
 
 ## Examples
 
@@ -58,7 +58,7 @@ attributes = list(
 group = c(patient = 0.8, staff = 0.2)
 ))
 
-initial <- data.frame(id = "ID_1", date_infection = dates[1])
+imported <- data.frame(id = "ID_1", date = dates[1])
 
 global_ipc <- function(present, date) {
   E_t <- matrix(
@@ -87,7 +87,7 @@ A_to_B_IPC <- function(present, date) {
   E_t
 }
 
-make_outbreak(timeline, initial, w = c(0.2, 0.5, 0.3),
+make_outbreak(timeline, imported, w = c(0.2, 0.5, 0.3),
   dates, intervention = A_to_B_IPC
 )
 #> <nososim_outbreak>

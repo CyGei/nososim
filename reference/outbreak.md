@@ -7,7 +7,7 @@ Generated with seed 123 by `inst/examples/outbreak.R`.
 ## Usage
 
 ``` r
-data(outbreak)
+outbreak
 ```
 
 ## Format

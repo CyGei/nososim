@@ -52,10 +52,10 @@ parameters. Imported cases have `NA` sources.
 
 ``` r
 dates <- as.Date("2026-01-01") + 0:6
-timeline <- make_timeline(10, dates, stay = 7,  
+timeline <- make_timeline(10, dates, stay = 7,
 attributes = list(
  ward = c(A = 0.5, B = 0.5),
-group = c(patient = 0.8, staff = 0.2)
+role = c(patient = 0.8, staff = 0.2)
 ))
 
 imported <- data.frame(id = "ID_1", date = dates[1])
@@ -74,7 +74,7 @@ staff_masking <- function(present, date) {
     0, nrow(present), nrow(present),
     dimnames = list(present$id, present$id)
   )
-  E_t[present$group == "staff", ] <- 0.9
+  E_t[present$role == "staff", ] <- 0.9
   E_t
 }
 

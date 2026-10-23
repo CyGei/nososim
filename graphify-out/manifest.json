@@ -18,9 +18,9 @@
     "semantic_hash": "1fe7e359213e07c559d0dda0dc35ecb6"
   },
   "R/make_outbreak.R": {
-    "mtime": 1792751136.2074983,
-    "seen": 1792751149.7734249,
-    "ast_hash": "e5d06645af2db052ca5ea7c70dc69323",
+    "mtime": 1792751644.650474,
+    "seen": 1792751651.9571981,
+    "ast_hash": "9e4dc341d8187f108e9e2755d769f2cc",
     "semantic_hash": ""
   },
   "R/nososim-package.R": {
@@ -42,9 +42,9 @@
     "semantic_hash": "417882ba19564473816feee63b6ea84e"
   },
   "dev/draft.R": {
-    "mtime": 1792751136.2089689,
-    "seen": 1792751149.773428,
-    "ast_hash": "5809b3ebaf6ec5a05beae51708f3264d",
+    "mtime": 1792751644.6502817,
+    "seen": 1792751651.957201,
+    "ast_hash": "80a389d9bdaa5d7b9c7c88cf13b694e4",
     "semantic_hash": ""
   },
   "inst/examples/outbreak.R": {
@@ -78,9 +78,9 @@
     "semantic_hash": ""
   },
   "tests/testthat/test-timeline.R": {
-    "mtime": 1792609451.5307088,
-    "seen": 1792609459.137376,
-    "ast_hash": "464c6e51cfc8e50bffc236e57f5fb8dc",
+    "mtime": 1792751644.651062,
+    "seen": 1792751651.9572039,
+    "ast_hash": "2b2abf8788a3b21b57028323f0df771f",
     "semantic_hash": ""
   },
   ".github/workflows/R-CMD-check.yaml": {
@@ -102,9 +102,9 @@
     "semantic_hash": "5fae70e49e4ea78f63a9afb887d1a55e"
   },
   "METHODS.md": {
-    "mtime": 1792605655.1659827,
-    "seen": 1792605778.152352,
-    "ast_hash": "12dfb54149c84d5a28096f1f9227e470",
+    "mtime": 1792751644.6513078,
+    "seen": 1792751651.957206,
+    "ast_hash": "3d11a1eed9d874216a53e776f75ba0f8",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20261021_174241_26ab279b_explain_the_link_between_reduction_and_interventio.md": {
@@ -144,9 +144,9 @@
     "semantic_hash": ""
   },
   "_pkgdown.yml": {
-    "mtime": 1792610194.1218047,
-    "seen": 1792663834.910232,
-    "ast_hash": "85d6bbca24a84c6f4b748c2e2c5ce255",
+    "mtime": 1792751405.4233909,
+    "seen": 1792751651.957207,
+    "ast_hash": "315ffe20fa9d3f1b789f6e0ff3fd9271",
     "semantic_hash": ""
   },
   "man/figures/README-first-outbreak-1.png": {
@@ -174,9 +174,9 @@
     "semantic_hash": ""
   },
   "tests/testthat/test-count_edges.R": {
-    "mtime": 1792680354.1369112,
-    "seen": 1792680373.106695,
-    "ast_hash": "21d385dba8c9df02491fba5620781096",
+    "mtime": 1792751644.6508355,
+    "seen": 1792751651.957203,
+    "ast_hash": "5dd1c343b66f754cf573400b08f377ab",
     "semantic_hash": ""
   },
   "R/data.R": {

@@ -3,7 +3,7 @@ test_that("joint edge counts aggregate to single-attribute counts", {
   outbreak <- structure(list(
     timeline = tibble::tibble(
       id = letters[1:5], date = date,
-      group = c("patient", "staff", "patient", "patient", "staff"),
+      role = c("patient", "staff", "patient", "patient", "staff"),
       ward = c("A", "B", "A", "B", "A")
     ),
     infections = tibble::tibble(
@@ -12,10 +12,10 @@ test_that("joint edge counts aggregate to single-attribute counts", {
     )
   ), class = "nososim_outbreak")
 
-  joint <- count_edges(outbreak, by = c("group", "ward"))
+  joint <- count_edges(outbreak, by = c("role", "ward"))
 
   expect_equal(sum(joint$transmissions), 3L)
-  for (attribute in c("group", "ward")) {
+  for (attribute in c("role", "ward")) {
     columns <- paste0(c("source_", "recipient_"), attribute)
     aggregated <- joint |>
       dplyr::group_by(dplyr::across(dplyr::all_of(columns))) |>

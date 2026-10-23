@@ -1,12 +1,12 @@
 # Graph Report - nososim  (2026-10-23)
 
 ## Corpus Check
-- 24 files · ~16,230 words
+- 26 files · ~16,357 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 21 file(s) not represented in the graph (top: .Rd 11, (none) 8, .Rmd 2)
+- Unclassified: 23 file(s) not represented in the graph (top: .Rd 12, (none) 8, .Rmd 2)
 
 ## Summary
-- 153 nodes · 141 edges · 25 communities (14 shown, 11 thin omitted)
+- 156 nodes · 142 edges · 27 communities (14 shown, 13 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
@@ -53,7 +53,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (25 total, 11 thin omitted)
+## Communities (27 total, 13 thin omitted)
 
 ### Community 0 - "test-make_outbreak.R"
 Cohesion: 0.10
@@ -113,14 +113,14 @@ Nodes (9): aggregated, columns, daily, date, dates, empty, joint, outbreak (+1 m
 
 ## Knowledge Gaps
 - **9 isolated node(s):** `R-CMD-check workflow`, `R package check`, `Cyril Geismar`, `MIT License`, `Baseline reproduction number` (+4 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 108 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 111 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `hazard_fixture()` connect `tibble::tibble` to `test-make_outbreak.R`?**
-  _High betweenness centrality (0.009) - this node is a cross-community bridge._
+  _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **What connects `R-CMD-check workflow`, `R package check`, `Cyril Geismar` to the rest of the system?**
   _9 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `test-make_outbreak.R` be split into smaller, more focused modules?**

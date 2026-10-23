@@ -48,9 +48,9 @@
     "semantic_hash": ""
   },
   "inst/examples/outbreak.R": {
-    "mtime": 1792751136.2085252,
-    "seen": 1792751149.773428,
-    "ast_hash": "af2d7b5bdffd0b98150af37183e34e68",
+    "mtime": 1792751319.766407,
+    "seen": 1792751330.570955,
+    "ast_hash": "e73c4800999a4d416449acfbb946c515",
     "semantic_hash": ""
   },
   "tests/testthat.R": {
@@ -177,6 +177,18 @@
     "mtime": 1792680354.1369112,
     "seen": 1792680373.106695,
     "ast_hash": "21d385dba8c9df02491fba5620781096",
+    "semantic_hash": ""
+  },
+  "R/data.R": {
+    "mtime": 1792751319.7666507,
+    "seen": 1792751330.5709498,
+    "ast_hash": "534c39e1459c084172dfd16fef677b0b",
+    "semantic_hash": ""
+  },
+  "data-raw/outbreak.R": {
+    "mtime": 1792751319.766581,
+    "seen": 1792751330.570954,
+    "ast_hash": "27c79ad67c9ddd3c18546ac05c235e67",
     "semantic_hash": ""
   }
 }

@@ -1,7 +1,7 @@
 # Graph Report - nososim  (2026-10-23)
 
 ## Corpus Check
-- 26 files · ~16,357 words
+- 26 files · ~16,372 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 23 file(s) not represented in the graph (top: .Rd 12, (none) 8, .Rmd 2)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `eaba10c7`
+- Built from commit: `9a6807d0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -69,7 +69,7 @@ Nodes (10): Baseline daily infectiousness, Baseline reproduction number, Daily t
 
 ### Community 3 - "draft.R"
 Cohesion: 0.20
-Nodes (6): dates, group_weights, outbreak, start, timeline, ward_weights
+Nodes (6): dates, outbreak, role_weights, start, timeline, ward_weights
 
 ### Community 4 - "test-timeline.R"
 Cohesion: 0.20

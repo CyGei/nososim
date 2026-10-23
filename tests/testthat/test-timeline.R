@@ -5,12 +5,12 @@ test_that("daily construction preserves person attributes and stay boundaries", 
   timeline <- make_timeline(
     3, start + 0:5, attributes = list(
       ward = c(A = 1, B = 0, C = 0),
-      group = c(patient = 0, visitor = 1)
+      role = c(patient = 0, visitor = 1)
     ),
     admission_delay = 3, stay = 2, R = c(0.5, 3, 8)
   )
   expect_equal(nrow(timeline), 6L)
-  expect_true(all(timeline$ward == "A" & timeline$group == "visitor"))
+  expect_true(all(timeline$ward == "A" & timeline$role == "visitor"))
   people <- timeline |> dplyr::group_by(id) |>
     dplyr::summarise(n_R = dplyr::n_distinct(R_i), first = min(date), last = max(date))
   expect_true(all(people$n_R == 1))

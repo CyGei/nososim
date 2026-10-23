@@ -11,7 +11,7 @@ timeline <- make_timeline(
   dates = dates,
   attributes = list(
     ward = c(A = 0.5, B = 0.5),
-    group = c(patient = 0.8, staff = 0.2)
+    role = c(patient = 0.8, staff = 0.2)
   ),
   admission_delay = 0:4,
   stay = 3:7,
@@ -21,7 +21,7 @@ summary(timeline)
 
 autoplot(timeline, aes(colour = ward)) +
   facet_grid(
-    rows = vars(group),
+    rows = vars(role),
     scales = "free_y",
     space = "free_y"
   ) +
@@ -39,7 +39,7 @@ timeline <- timeline |>
   (\(x) {
     set_schedule(
       x,
-      id = unique(x$id[x$group == "staff"]),
+      id = unique(x$id[x$role == "staff"]),
       weekdays = sample(1:7, 5)
     )
   })() |>
@@ -48,7 +48,7 @@ timeline <- timeline |>
 
 autoplot(timeline, aes(colour = ward)) +
   facet_grid(
-    rows = vars(group),
+    rows = vars(role),
     scales = "free_y",
     space = "free_y"
   ) +
@@ -63,7 +63,7 @@ ward_weights <- tribble(
   tibble::column_to_rownames("from") |>
   as.matrix()
 
-group_weights <- tribble(
+role_weights <- tribble(
   ~from     , ~patient , ~staff ,
   "patient" ,        1 ,      2 ,
   "staff"   ,        2 ,      1
@@ -98,14 +98,14 @@ outbreak <- make_outbreak(
     (\(w) w / sum(w))(),
   dates = dates,
   intervention = intervention,
-  mixing = list(ward = ward_weights, group = group_weights)
+  mixing = list(ward = ward_weights, role = role_weights)
 )
 outbreak
 
 # F. Overlay the transmission tree on the same timelines.
 autoplot(
   outbreak,
-  aes(colour = ward, fill = ward, shape = group)
+  aes(colour = ward, fill = ward, shape = role)
 ) +
   scale_shape_manual(values = c(patient = 21, staff = 24)) +
   paletteer::scale_fill_paletteer_d("ltc::trio1") +

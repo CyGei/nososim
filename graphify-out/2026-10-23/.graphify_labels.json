@@ -23,5 +23,7 @@
   "21": "tibble::tibble",
   "22": "nososim_validation.qmd",
   "23": "count_edges",
-  "24": "test-count_edges.R"
+  "24": "test-count_edges.R",
+  "25": "data-raw/outbreak.R",
+  "26": "data.R"
 }

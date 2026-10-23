@@ -9,7 +9,7 @@ A \code{nososim_outbreak} list with population \code{timeline}, \code{infections
 simulation \code{dates}, and \code{parameters}.
 }
 \usage{
-data(outbreak)
+outbreak
 }
 \description{
 A simulated outbreak in a population of 40 people over 21 days, with ward

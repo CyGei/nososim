@@ -3,7 +3,7 @@
 #'
 #' Creates a population with individual reproduction numbers, admission
 #' dates, lengths of stay, and optional attributes. Individuals are
-#' present from admission up to, but excluding, discharge.
+#' present on every date from admission through discharge, inclusive.
 #'
 #' @param n Number of individuals.
 #' @param dates Vector of unique dates.
@@ -53,9 +53,9 @@ make_timeline <- function(
   }
 
   individuals |>
-    mutate(discharge = admission + stay) |>
+    mutate(discharge = admission + stay - 1) |>
     tidyr::expand_grid(date = dates) |>
-    filter(date >= admission, date < discharge) |>
+    filter(date >= admission, date <= discharge) |>
     select(id, date, R_i, all_of(names(attributes))) |>
     arrange(id, date) |>
     new_timeline()
@@ -69,7 +69,7 @@ make_timeline <- function(
 #' @param timeline A population timeline.
 #' @param id Individual ID(s) to update.
 #' @param from Start date (inclusive).
-#' @param to End date (exclusive), or `NULL` for all subsequent dates.
+#' @param to End date (inclusive), or `NULL` for all subsequent dates.
 #' @param attributes Named list of existing attributes and their new values.
 #'
 #' @return The updated timeline.
@@ -88,7 +88,7 @@ set_attribute <- function(timeline, id, from, to = NULL, attributes) {
 
   rows <- timeline$id %in% id & timeline$date >= from
   if (!is.null(to)) {
-    rows <- rows & timeline$date < to
+    rows <- rows & timeline$date <= to
   }
 
   for (name in names(attributes)) {

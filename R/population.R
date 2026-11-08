@@ -1,37 +1,43 @@
-#' Populate available places
+#' Create a population
 #'
-#' Draws arrival counts, limits them to free places, then generates only the
-#' admitted records. Each stay starts today and frees its place at `end`.
+#' Draws arrival counts, limits them to available capacity, then generates only the
+#' admitted records. Each stay starts today and includes `end`; capacity is free the next day.
 #'
-#' @param locations A table from [make_landscape()], with `n` places per location.
+#' @param landscape A table from [make_landscape()], with capacity `n` per location.
 #' @param dates Consecutive daily dates.
-#' @param admissions Function `(locations, date)` returning one non-negative
+#' @param admissions Function `(landscape, date)` returning one non-negative
 #'   integer attempted arrival count per location, in row order.
-#' @param individuals Function `(places, date)` returning one record per allocated
-#'   place, in the same order. Preserve location columns and supply `start`
-#'   (the current date) and `end` (a later date). All other columns are yours.
+#' @param individuals Function `(admitted, date)` returning one record per admitted
+#'   person, in the same order. Preserve location columns and supply `start`
+#'   (the current date) and `end` (the last day present, on or after `start`). All other columns are yours.
+#' @details Each day, `make_population()` calls your functions with the tables and
+#'   date they need. It passes `landscape` to `admissions()`. After checking free
+#'   capacity, it creates `admitted`, with one row per admitted person, and passes
+#'   it to `individuals()`. It contains the
+#'   landscape columns except `n`. Keep both arguments in your function definitions,
+#'   even if your rule does not use the date.
 #' @return A population tibble of admitted records, with location and date
 #'   metadata for [autoplot()].
 #' @export
 #' @examples
-#' locations <- make_landscape(c(A = 1, B = 2))
+#' landscape <- make_landscape(c(A = 1, B = 2))
 #' make_population(
-#'   locations, as.Date("2026-01-01") + 0:4,
-#'   admissions = function(locations, date) rep(1L, nrow(locations)),
-#'   individuals = function(places, date) {
-#'     dplyr::mutate(places, start = date, end = date + 2L)
+#'   landscape, as.Date("2026-01-01") + 0:4,
+#'   admissions = function(landscape, date) rep(1L, nrow(landscape)),
+#'   individuals = function(admitted, date) {
+#'     dplyr::mutate(admitted, start = date, end = date + 2L)
 #'   }
 #' )
-make_population <- function(locations, dates, admissions, individuals) {
-  locations <- tibble::as_tibble(locations)
-  keys <- grep("^location_[0-9]+$", names(locations), value = TRUE)
+make_population <- function(landscape, dates, admissions, individuals) {
+  landscape <- tibble::as_tibble(landscape)
+  keys <- grep("^location_[0-9]+$", names(landscape), value = TRUE)
   stopifnot(
     length(keys) > 0,
-    !anyDuplicated(locations[keys]),
-    is.numeric(locations$n),
-    is.null(dim(locations$n)),
-    all(is.finite(locations$n)),
-    all(locations$n >= 0 & locations$n == floor(locations$n))
+    !anyDuplicated(landscape[keys]),
+    is.numeric(landscape$n),
+    is.null(dim(landscape$n)),
+    all(is.finite(landscape$n)),
+    all(landscape$n >= 0 & landscape$n == floor(landscape$n))
   )
 
   stopifnot(
@@ -50,52 +56,52 @@ make_population <- function(locations, dates, admissions, individuals) {
   for (i in seq_along(dates)) {
     date <- dates[i]
 
-    # Count people still present and find free places.
-    occupied <- tabulate(where[ends > date], nrow(locations))
-    available <- locations$n - occupied
+    # Count people still present and find free capacity.
+    occupied <- tabulate(where[ends >= date], nrow(landscape))
+    available <- landscape$n - occupied
 
-    # Limit arrivals to the available places.
-    arrivals <- admissions(locations, date)
+    # Limit arrivals to available capacity.
+    arrivals <- admissions(landscape, date)
     stopifnot(
       is.numeric(arrivals),
       is.null(dim(arrivals)),
-      length(arrivals) == nrow(locations),
+      length(arrivals) == nrow(landscape),
       all(is.finite(arrivals)),
       all(arrivals >= 0 & arrivals == floor(arrivals))
     )
-    admitted <- pmin(available, arrivals)
-    if (sum(admitted) == 0) {
+    counts <- pmin(available, arrivals)
+    if (sum(counts) == 0) {
       next
     }
 
     # Generate records only for admitted people.
-    places <- locations |>
-      mutate(n = .env$admitted) |>
+    admitted <- landscape |>
+      mutate(n = .env$counts) |>
       tidyr::uncount(n)
-    people <- individuals(places, date)
+    population <- individuals(admitted, date)
     stopifnot(
-      is.data.frame(people),
-      identical(as.list(people[keys]), as.list(places[keys])),
-      inherits(people$start, "Date"),
-      inherits(people$end, "Date"),
-      is.null(dim(people$start)),
-      is.null(dim(people$end)),
-      all(people$start == date),
-      all(is.finite(people$end)),
-      all(people$end > date)
+      is.data.frame(population),
+      identical(as.list(population[keys]), as.list(admitted[keys])),
+      inherits(population$start, "Date"),
+      inherits(population$end, "Date"),
+      is.null(dim(population$start)),
+      is.null(dim(population$end)),
+      all(population$start == date),
+      all(is.finite(population$end)),
+      all(population$end >= date)
     )
 
     # Keep the records and track occupancy for subsequent days.
-    where <- c(where, rep(seq_len(nrow(locations)), admitted))
-    ends <- c(ends, people$end)
-    records[[length(records) + 1L]] <- people
+    where <- c(where, rep(seq_len(nrow(landscape)), counts))
+    ends <- c(ends, population$end)
+    records[[length(records) + 1L]] <- population
   }
 
   population <- bind_rows(records)
   tibble::new_tibble(
     as.list(population),
     nrow = nrow(population),
-    locations = locations,
+    landscape = landscape,
     dates = dates,
     class = "nososim_population"
   )

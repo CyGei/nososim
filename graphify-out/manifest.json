@@ -6,9 +6,9 @@
     "semantic_hash": "dc4b2409b20a8b257ebbab77d59c6c9f"
   },
   "R/autoplot.R": {
-    "mtime": 1794149735.5212224,
-    "seen": 1794150123.7708821,
-    "ast_hash": "47cd053732d94b9dedd75d8e4cfd17df",
+    "mtime": 1794176694.289855,
+    "seen": 1794177007.698187,
+    "ast_hash": "21f78599259cfd96c375a50c14325621",
     "semantic_hash": ""
   },
   "R/globals.R": {
@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "R/timeline.R": {
-    "mtime": 1793978159.9685159,
-    "seen": 1793978306.8789902,
-    "ast_hash": "417882ba19564473816feee63b6ea84e",
+    "mtime": 1794175387.296026,
+    "seen": 1794175404.515367,
+    "ast_hash": "34b55646e44d96a6bb8f6112a27be982",
     "semantic_hash": ""
   },
   "dev/draft.R": {
@@ -54,9 +54,9 @@
     "semantic_hash": "19a0d66ee9268cb98f2071d86b640f30"
   },
   "tests/testthat/test-autoplot.R": {
-    "mtime": 1794149360.6107302,
-    "seen": 1794149503.978534,
-    "ast_hash": "da90fd024adf77ebe6e4617223a49962",
+    "mtime": 1794175387.2965965,
+    "seen": 1794175404.515369,
+    "ast_hash": "e9d05eaad8315dd27cd5ed8b7fa6b260",
     "semantic_hash": ""
   },
   "tests/testthat/test-make_outbreak.R": {
@@ -66,9 +66,9 @@
     "semantic_hash": ""
   },
   "tests/testthat/test-timeline.R": {
-    "mtime": 1793978160.078624,
-    "seen": 1793978306.878995,
-    "ast_hash": "2b2abf8788a3b21b57028323f0df771f",
+    "mtime": 1794175387.296807,
+    "seen": 1794175404.515371,
+    "ast_hash": "f307783f89b16c29dc44f39923a8a23b",
     "semantic_hash": ""
   },
   ".github/workflows/R-CMD-check.yaml": {
@@ -90,9 +90,9 @@
     "semantic_hash": "5fae70e49e4ea78f63a9afb887d1a55e"
   },
   "METHODS.md": {
-    "mtime": 1792751741.0927732,
-    "seen": 1793883859.0600598,
-    "ast_hash": "12dfb54149c84d5a28096f1f9227e470",
+    "mtime": 1794175387.2962513,
+    "seen": 1794175404.515373,
+    "ast_hash": "04c57355139a0cbd2a6e707271bd444a",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20261021_174241_26ab279b_explain_the_link_between_reduction_and_interventio.md": {
@@ -102,9 +102,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1793978763.1398826,
-    "seen": 1793978784.045284,
-    "ast_hash": "f502fff181e17befe159f7e5f3c910b0",
+    "mtime": 1794174307.618182,
+    "seen": 1794174316.128205,
+    "ast_hash": "e4b284c61dec66ed03134716732bfb10",
     "semantic_hash": ""
   },
   "man/figures/README-unnamed-chunk-2-1.png": {
@@ -198,15 +198,15 @@
     "semantic_hash": ""
   },
   "R/landscape.R": {
-    "mtime": 1794150181.3721447,
-    "seen": 1794150306.733633,
-    "ast_hash": "b5b05bb84960988225d89dd902de3ca8",
+    "mtime": 1794174307.617332,
+    "seen": 1794174316.128196,
+    "ast_hash": "fac36919924562abb412007278ca23b6",
     "semantic_hash": ""
   },
   "tests/testthat/test-landscape.R": {
-    "mtime": 1793978763.1393044,
-    "seen": 1793978784.04528,
-    "ast_hash": "1d7af5670f58e5561cc60a84272a84b1",
+    "mtime": 1794174320.173219,
+    "seen": 1794174320.4267,
+    "ast_hash": "b45faf4564741e7dcc1502982b333769",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20261106_100304_bc9c18d5_use_one_concise_consistent_sampler_interface_for_p.md": {
@@ -252,15 +252,15 @@
     "semantic_hash": ""
   },
   "R/population.R": {
-    "mtime": 1794150312.8100033,
-    "seen": 1794150313.785745,
-    "ast_hash": "d9042d3d37e1ae19d94c504ddb6ed78d",
+    "mtime": 1794175387.2957542,
+    "seen": 1794175404.5153658,
+    "ast_hash": "ed0377d163d27914933e1373b1424ea1",
     "semantic_hash": ""
   },
   "tests/testthat/test-population.R": {
-    "mtime": 1794146533.1674666,
-    "seen": 1794146648.270675,
-    "ast_hash": "f68ec614ebcd423ab36be1b3383983cd",
+    "mtime": 1794175402.4912214,
+    "seen": 1794175404.515371,
+    "ast_hash": "a98b13988f28f15452263c6581051279",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20261106_154630_d1a1d3fd_show_an_executable_vignette_example_of_the_propose.md": {
@@ -297,6 +297,18 @@
     "mtime": 1794149647.7495105,
     "seen": 1794150123.770904,
     "ast_hash": "bd5bacc0886d6c67b3f292371b145b11",
+    "semantic_hash": ""
+  },
+  "R/get_contacts.R": {
+    "mtime": 1794177293.0197406,
+    "seen": 1794177294.162967,
+    "ast_hash": "b193e8fc8d0ea2a875282a024ed3d5ca",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-get_contacts.R": {
+    "mtime": 1794177293.019827,
+    "seen": 1794177294.1629739,
+    "ast_hash": "14d63f86b258d986cb49dbce2c7a1191",
     "semantic_hash": ""
   }
 }

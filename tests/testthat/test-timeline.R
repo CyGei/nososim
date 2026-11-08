@@ -56,9 +56,9 @@ test_that("attribute edits respect IDs, both boundaries and other columns", {
     timeline, id = c("ID_1", "ID_2"), from = start + 1, to = start + 3,
     attributes = list(ward = "B", service = "ICU")
   )
-  expect_equal(dplyr::filter(updated, id == "ID_1")$ward, c("A", "B", "B", "A", "A"))
+  expect_equal(dplyr::filter(updated, id == "ID_1")$ward, c("A", "B", "B", "B", "A"))
   expect_equal(dplyr::filter(updated, id == "ID_2")$service,
-               c("general", "ICU", "ICU", "general", "general"))
+               c("general", "ICU", "ICU", "ICU", "general"))
   expect_equal(dplyr::filter(updated, id == "ID_3"), dplyr::filter(timeline, id == "ID_3"))
   expect_equal(dplyr::select(updated, id, date, R_i), dplyr::select(timeline, id, date, R_i))
 })

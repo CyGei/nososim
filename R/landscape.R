@@ -1,10 +1,10 @@
 #' Create a landscape
 #'
-#' Converts named locations and their numbers of places (`n`) into a table.
+#' Converts named locations and their capacities (`n`) into a table.
 #' Columns `location_1`, `location_2`, etc. retain the hierarchy, in input order.
 #'
-#' @param landscape Named nested list with non-negative integer numbers of
-#'   places (`n`) at its leaves.
+#' @param landscape Named nested list with non-negative integer capacities
+#'   (`n`) at its leaves.
 #' @return A tibble with location columns and `n`.
 #' @importFrom rlang :=
 #' @export
@@ -32,12 +32,12 @@ make_landscape <- function(landscape) {
       all(x == floor(x))
     )
 
-    locations <- lapply(path, function(name) rep(name, length(x)))
-    locations <- append(locations, list(names(x)))
-    names(locations) <- paste0("location_", seq_along(locations))
+    columns <- lapply(path, function(name) rep(name, length(x)))
+    columns <- append(columns, list(names(x)))
+    names(columns) <- paste0("location_", seq_along(columns))
 
-    locations$n <- unname(x)
-    tibble::as_tibble(locations)
+    columns$n <- unname(x)
+    tibble::as_tibble(columns)
   }
 
   flatten(landscape) |>

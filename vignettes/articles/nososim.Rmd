@@ -3,73 +3,92 @@ title: "Getting started"
 output: html_document
 ---
 
-Draw arrival counts, check available places, then generate the admitted people.
+Draw arrival counts, check available capacity, then generate the admitted people.
 Your functions supply all individual attributes and stay dates.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(error = FALSE, collapse = TRUE, comment = "#>")
 ```
 
-## Define places
-
-`make_landscape()` gives one row per location, with `n` places.
-This example uses hospitals, wards and rooms.
 
 ```{r}
 library(nososim)
+devtools::load_all()
 library(dplyr)
 library(ggplot2)
-devtools::load_all()
+```
+
+## Define a landscape
+
+`make_landscape()` gives one row per location, with `n` capacity.
+
+```{r}
 hospital <- list(
-  H1 = list(
-    A = c(a = 2, b = 3),
-    B = c(a = 1, b = 4, c = 2)
+  Geneva = list(
+    ICU = c(a = 2, b = 3),
+    General = c(a = 1, b = 4, c = 2)
   ),
-  H2 = list(
-    A = c(a = 3, b = 5),
-    B = c(a = 2, b = 4, c = 1)
+  Gallen = list(
+    ICU = c(a = 3, b = 5),
+    General = c(a = 2, b = 4, c = 1)
   )
 )
 landscape <- make_landscape(hospital)
 ```
 
-## Draw attempted arrivals
+## Define admissions and individuals
 
-`admissions()` returns one count per location. Here each location has one
-attempted arrival per day. The simulator limits these counts to free places.
+The `admissions()` function returns a vector of counts, one per row of `landscape`. It defines how many people arrive at each location on a given day. These are attempted arrivals; the simulator limits them to free capacity.
 
 ```{r}
+landscape <- landscape |>
+  mutate(
+    rate = case_when(
+      location_1 == "Geneva" & location_2 == "ICU" ~ 0.8,
+      location_1 == "Geneva" & location_2 == "General" ~ 1.5,
+      location_1 == "Gallen" & location_2 == "ICU" ~ 2,
+      location_1 == "Gallen" & location_2 == "General" ~ 4
+    )
+  )
+
 admissions <- function(landscape, date) {
-  rep(1L, nrow(landscape))
+  #rep(1L, nrow(landscape))
+  rpois(nrow(landscape), landscape$rate)
 }
 ```
 
-## Generate admitted individuals
 
-`individuals()` receives one row per allocated place. It creates complete
-records for those people: location columns, `start` (today), `end` (a later date),
-and any attributes you choose. Nobody is generated for a blocked arrival.
+The `individuals()` function returns a table of admitted people, one row per person, with attributes and stay dates. `individuals()` must return `admitted` with, at least, the following additional columns:
+- start: a Date equal to `date`.
+- end: a finite Date on or after `start`, including this last day.
+Any additional columns are optional—for example, id, age, or role.
 
 ```{r}
-individuals <- function(locations, date) {
-  locations |>
+individuals <- function(admitted, date) {
+  admitted |>
     mutate(
       id = paste0(format(date, "%Y%m%d"), "_", row_number()),
       age = sample(18:90, n(), replace = TRUE),
       role = "patient",
+      los = case_when(
+        location_2 == "ICU" ~ sample(3:7, n(), replace = TRUE),
+        location_2 == "General" ~ sample(5:10, n(), replace = TRUE)
+      ),
       start = date,
-      end = start + if_else(location_2 == "A", 2L, 3L)
+      end = start + los - 1L #-1 for inclusive end date
     )
 }
 ```
 
-The IDs, attributes and stay dates above are all user-defined. A separate `los`
-column is optional; the simulator only needs the location columns and period.
 
-## Run
+
+## Generate a population
+
+`make_population()` returns a table of admitted people, one row per person, with attributes and stay dates. It calls your `admissions()` and `individuals()` functions for each day in the date range. Capacity becomes available on the day after `end`.
 
 ```{r}
-dates <- as.Date("2026-01-01") + 0:6
+dates <- seq(as.Date("2024-01-01"), as.Date("2024-01-30"), by = "day")
+
 set.seed(123)
 population <- make_population(
   landscape,
@@ -77,44 +96,40 @@ population <- make_population(
   admissions = admissions,
   individuals = individuals
 )
+
 population |>
   select(id, starts_with("location_"), age, role, start, end) |>
   head(10)
-
-```
-
-The simulation starts empty. Places become free on `end`, before that day's
-arrivals. The output contains admitted records only, including people who have
-since left. Blocked attempts leave; later arrivals can use places as they become free.
-
-## Optional location parameters
-
-Additional columns are interpreted by your functions. For example, `rate` below
-is a user-chosen parameter for Poisson arrivals per location per day.
-
-```{r}
-rate_landscape <- landscape |>
-  mutate(rate = if_else(location_2 == "A", 0.8, 1.2))
-
-random_admissions <- function(landscape, date) {
-  rpois(nrow(landscape), landscape$rate)
-}
-
-rate_population <- make_population(
-  rate_landscape,
-  dates,
-  admissions = random_admissions,
-  individuals = individuals
-)
-
 ```
 
 ## Plot stays
 
-Each row is an available place, grouped by nested location labels. Stays run
-from `start` to `end`; grey lines retain places that are empty.
+Each plot row represents one unit of capacity, grouped by location. Stays run
+from `start` through `end` (inclusive); grey lines show unused capacity.
 
 ```{r, fig.width=9, fig.height=8}
-autoplot(rate_population, aes(colour = id)) +
+autoplot(population, aes(colour = id)) +
   theme(legend.position = "none")
+```
+
+## Extract daily contacts
+
+`get_contacts()` returns a matrix of contacts between people present on a given date. Each row and column represents one person, and the value is 1 if they share a set of attributes on that date, 0 otherwise.
+
+```{r}
+get_contacts(population, dates[1])
+```
+
+Use `by` to choose which columns must match. For example, require the same
+hospital, ward, and role:
+
+```{r}
+get_contacts(population, dates[1], by = c("location_1", "location_2", "role"))
+```
+
+For a matrix on each date:
+
+```{r}
+contacts <- lapply(dates, function(date) get_contacts(population, date))
+names(contacts) <- as.character(dates)
 ```

@@ -3,7 +3,7 @@
 ## Initial conditions
 
 Transmission is simulated in discrete daily time steps. Each individual has an identifier, admission and discharge dates, a baseline reproduction number $R_i$, and optional attributes such as ward or
-group. Individuals are present from admission up to, but excluding, discharge. Initial cases and their
+group. Individuals are present from admission through discharge, inclusive. Initial cases and their
 infection dates are specified in advance, while all other individuals are susceptible on admission.
 Individuals can be infected only once.
 

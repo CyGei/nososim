@@ -2,37 +2,45 @@
 % Please edit documentation in R/population.R
 \name{make_population}
 \alias{make_population}
-\title{Populate available places}
+\title{Create a population}
 \usage{
-make_population(locations, dates, admissions, individuals)
+make_population(landscape, dates, admissions, individuals)
 }
 \arguments{
-\item{locations}{A table from \code{\link[=make_landscape]{make_landscape()}}, with \code{n} places per location.}
+\item{landscape}{A table from \code{\link[=make_landscape]{make_landscape()}}, with capacity \code{n} per location.}
 
 \item{dates}{Consecutive daily dates.}
 
-\item{admissions}{Function \verb{(locations, date)} returning one non-negative
+\item{admissions}{Function \verb{(landscape, date)} returning one non-negative
 integer attempted arrival count per location, in row order.}
 
-\item{individuals}{Function \verb{(places, date)} returning one record per allocated
-place, in the same order. Preserve location columns and supply \code{start}
-(the current date) and \code{end} (a later date). All other columns are yours.}
+\item{individuals}{Function \verb{(admitted, date)} returning one record per admitted
+person, in the same order. Preserve location columns and supply \code{start}
+(the current date) and \code{end} (the last day present, on or after \code{start}). All other columns are yours.}
 }
 \value{
 A population tibble of admitted records, with location and date
 metadata for \code{\link[=autoplot]{autoplot()}}.
 }
 \description{
-Draws arrival counts, limits them to free places, then generates only the
-admitted records. Each stay starts today and frees its place at \code{end}.
+Draws arrival counts, limits them to available capacity, then generates only the
+admitted records. Each stay starts today and includes \code{end}; capacity is free the next day.
+}
+\details{
+Each day, \code{make_population()} calls your functions with the tables and
+date they need. It passes \code{landscape} to \code{admissions()}. After checking free
+capacity, it creates \code{admitted}, with one row per admitted person, and passes
+it to \code{individuals()}. It contains the
+landscape columns except \code{n}. Keep both arguments in your function definitions,
+even if your rule does not use the date.
 }
 \examples{
-locations <- make_landscape(c(A = 1, B = 2))
+landscape <- make_landscape(c(A = 1, B = 2))
 make_population(
-  locations, as.Date("2026-01-01") + 0:4,
-  admissions = function(locations, date) rep(1L, nrow(locations)),
-  individuals = function(places, date) {
-    dplyr::mutate(places, start = date, end = date + 2L)
+  landscape, as.Date("2026-01-01") + 0:4,
+  admissions = function(landscape, date) rep(1L, nrow(landscape)),
+  individuals = function(admitted, date) {
+    dplyr::mutate(admitted, start = date, end = date + 2L)
   }
 )
 }

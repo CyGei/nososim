@@ -14,6 +14,7 @@
   "12": "globals.R",
   "13": "nososim-package.R",
   "14": "Q: Restore the nested landscape stay plot for autoplot using the current make_population output, keeping code concise.",
+  "15": "test-contact_matrix.R",
   "16": "rlang",
   "17": "tibble",
   "18": "tidyr",

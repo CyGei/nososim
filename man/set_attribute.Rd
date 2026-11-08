@@ -13,7 +13,7 @@ set_attribute(timeline, id, from, to = NULL, attributes)
 
 \item{from}{Start date (inclusive).}
 
-\item{to}{End date (exclusive), or \code{NULL} for all subsequent dates.}
+\item{to}{End date (inclusive), or \code{NULL} for all subsequent dates.}
 
 \item{attributes}{Named list of existing attributes and their new values.}
 }

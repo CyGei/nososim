@@ -33,7 +33,7 @@ containing \code{id}, \code{date}, \code{R_i}, and optional attributes.
 \description{
 Creates a population with individual reproduction numbers, admission
 dates, lengths of stay, and optional attributes. Individuals are
-present from admission up to, but excluding, discharge.
+present on every date from admission through discharge, inclusive.
 }
 \examples{
 dates <- as.Date("2026-01-01") + 0:6

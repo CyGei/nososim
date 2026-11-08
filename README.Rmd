@@ -73,6 +73,6 @@ autoplot(outbreak, aes(colour = I("#B8D8D3"), fill = I("#176B65")))
 ## Go further
 
 The [getting started guide](https://CyGei.github.io/nososim/articles/nososim.html)
-walks through ward transfers, staff schedules, mixing patterns, and masking.
+starts with the physical landscape and its numbers of places (`n`).
 Browse the [function reference](https://CyGei.github.io/nososim/reference/index.html)
 for individual function arguments and examples.

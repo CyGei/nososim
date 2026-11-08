@@ -1,68 +1,85 @@
-#' Plot a population timeline or outbreak
-#'
-#' @param object A timeline or outbreak from [make_timeline()] or [make_outbreak()].
-#' @param mapping Additional aesthetics from [ggplot2::aes()].
-#' @param ... Unused.
-#' @return A ggplot showing daily presence, with infection links for outbreaks.
+#' @rdname autoplot.nososim_timeline
 #' @export
-#' @examples
-#' timeline <- make_timeline(2, as.Date("2026-01-01") + 0:6)
-#' autoplot(timeline)
-autoplot.nososim_timeline <- function(object, mapping = aes(), ...) {
+autoplot.nososim_population <- function(object, mapping = aes(), ...) {
   rlang::check_dots_empty()
-  tibble::as_tibble(object) |>
-    mutate(id = factor(id, levels = rev(unique(id)))) |>
-    ggplot(mapping) +
-    aes(y = id) +
+  positions <- population_positions(object)
+  data <- positions$data
+  places <- positions$places
+  keys <- grep("^location_[0-9]+$", names(places), value = TRUE)
+  labels <- apply(places[keys], 1, function(x) {
+    paste(c(" ", rev(replace(x, is.na(x), " "))), collapse = "\r")
+  })
+
+  ggplot(data, mapping) +
+    aes(y = .y) +
+    ggplot2::geom_hline(
+      data = places,
+      aes(yintercept = .y),
+      colour = "grey90",
+      linewidth = 0.4,
+      inherit.aes = FALSE
+    ) +
     geom_segment(
-      aes(x = date, xend = date + 1, yend = id),
+      aes(x = start, xend = end, yend = .y),
       linewidth = 2,
       lineend = "round"
     ) +
-    scale_x_date(date_breaks = "2 days", date_labels = "%d %b") +
+    ggplot2::scale_y_discrete(
+      limits = if (nrow(places)) levels(places$.y) else NULL,
+      labels = stats::setNames(labels, as.character(places$.y)),
+      guide = if (nrow(places)) {
+        legendry::guide_axis_nested(key = "\r", drop_zero = FALSE)
+      } else {
+        "none"
+      }
+    ) +
+    scale_x_date(
+      limits = range(c(attr(object, "dates"), data$start, data$end)),
+      date_breaks = "2 days",
+      date_labels = "%d %b"
+    ) +
     labs(x = "Date", y = NULL) +
     theme_classic() +
-    theme(
-      panel.grid.major.y = element_line(
-        colour = "grey85",
-        linewidth = 0.3
-      ),
-      panel.grid.major.x = element_blank(),
-      panel.grid.minor = element_blank(),
-      legend.position = "top"
-    )
+    theme(axis.ticks.y = element_blank(), legend.position = "top")
 }
 
-#' @rdname autoplot.nososim_timeline
-#' @export
-autoplot.nososim_outbreak <- function(object, mapping = aes(), ...) {
-  rlang::check_dots_empty()
-  timeline <- tibble::as_tibble(object$timeline)
-  infections <- object$infections
-  point_mapping <- aes(x = date_infection, shape = I(21))
-  if (!is.null(mapping$shape)) {
-    point_mapping$shape <- mapping$shape
+#' Assign stays to available display rows within each location
+#' @noRd
+population_positions <- function(object) {
+  locations <- attr(object, "locations")
+  keys <- grep("^location_[0-9]+$", names(locations), value = TRUE)
+  places <- tidyr::uncount(locations[c(keys, "n")], n)
+  places$.y <- factor(
+    seq_len(nrow(places)),
+    levels = rev(seq_len(nrow(places)))
+  )
+  data <- tibble::as_tibble(object)
+  index <- integer(nrow(data))
+  if (nrow(data)) {
+    lookup <- locations[keys]
+    lookup$.location <- seq_len(nrow(locations))
+    index <- left_join(
+      data[keys],
+      lookup,
+      by = keys,
+      relationship = "many-to-one"
+    )$.location
+    stopifnot(!anyNA(index), all(data$end > data$start))
+  } else {
+    data$start <- data$end <- attr(object, "dates")[0]
   }
 
-  events <- infections |>
-    mutate(source_date = date_infection[match(source, id)]) |>
-    left_join(timeline, by = c("id", "date_infection" = "date"))
-
-  autoplot(object$timeline, mapping = mapping) +
-    ggarrow::geom_arrow_segment(
-      data = filter(events, !is.na(source)),
-      aes(x = source_date, xend = date_infection, y = source, yend = id),
-      length_head = grid::unit(2, "mm"),
-      resect_head = grid::unit(2, "mm"),
-      linewidth = 0.5,
-      inherit.aes = FALSE,
-      colour = "black"
-    ) +
-    geom_point(
-      data = events,
-      point_mapping,
-      colour = "black",
-      show.legend = c(colour = FALSE, fill = FALSE),
-      size = 3
-    )
+  where <- rep(seq_len(nrow(locations)), locations$n)
+  until <- rep(-Inf, nrow(places))
+  slot <- integer(nrow(data))
+  for (i in order(data$start)) {
+    free <- which(where == index[i] & until <= as.numeric(data$start[i]))
+    if (!length(free)) {
+      stop("Stays exceed the available places.")
+    }
+    slot[i] <- free[1L]
+    until[slot[i]] <- as.numeric(data$end[i])
+  }
+  data$.y <- places$.y[slot]
+  list(data = data, places = places)
 }

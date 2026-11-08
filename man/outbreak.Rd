@@ -17,7 +17,7 @@ and role attributes, one imported case, and no intervention. Generated with
 seed 123 by \code{inst/examples/outbreak.R}.
 }
 \examples{
-summary(outbreak)
+outbreak$infections
 count_edges(outbreak, by = "ward")
 }
 \keyword{datasets}

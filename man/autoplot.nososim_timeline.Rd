@@ -3,26 +3,41 @@
 \name{autoplot.nososim_timeline}
 \alias{autoplot.nososim_timeline}
 \alias{autoplot.nososim_outbreak}
-\title{Plot a population timeline or outbreak}
+\alias{autoplot.nososim_population}
+\title{Plot population stays or daily attendance}
 \usage{
 \method{autoplot}{nososim_timeline}(object, mapping = aes(), ...)
 
 \method{autoplot}{nososim_outbreak}(object, mapping = aes(), ...)
+
+\method{autoplot}{nososim_population}(object, mapping = aes(), ...)
 }
 \arguments{
-\item{object}{A timeline or outbreak from \code{\link[=make_timeline]{make_timeline()}} or \code{\link[=make_outbreak]{make_outbreak()}}.}
+\item{object}{A population from \code{\link[=make_population]{make_population()}}, daily attendance from
+\code{\link[=make_timeline]{make_timeline()}}, or an outbreak from \code{\link[=make_outbreak]{make_outbreak()}}.}
 
 \item{mapping}{Additional aesthetics from \code{\link[ggplot2:aes]{ggplot2::aes()}}.}
 
 \item{...}{Unused.}
 }
 \value{
-A ggplot showing daily presence, with infection links for outbreaks.
+A ggplot showing stays or daily presence, with infection links for outbreaks.
 }
 \description{
-Plot a population timeline or outbreak
+Population stays use time on the x-axis and nested locations on the y-axis,
+with one row per available place.
 }
 \examples{
+locations <- make_landscape(list(site = c(a = 2, b = 1)))
+population <- make_population(
+  locations, as.Date("2026-01-01") + 0:6,
+  admissions = function(locations, date) rep(1L, nrow(locations)),
+  individuals = function(places, date) {
+    dplyr::mutate(places, start = date, end = date + 2L)
+  }
+)
+autoplot(population)
+
 timeline <- make_timeline(2, as.Date("2026-01-01") + 0:6)
 autoplot(timeline)
 }

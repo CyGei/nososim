@@ -27,8 +27,11 @@ navbar:
     - search
     - github
 reference:
+- title: Define the landscape
+  contents: make_landscape
 - title: Create a population
   contents:
+  - make_population
   - make_timeline
   - set_attribute
   - set_schedule
@@ -37,7 +40,6 @@ reference:
 - title: Explore results
   contents:
   - starts_with("autoplot")
-  - starts_with("summary")
   - count_edges
   - offspring
 - title: Example data

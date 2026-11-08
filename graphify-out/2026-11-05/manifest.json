@@ -1,0 +1,212 @@
+{
+  ".codex/hooks.json": {
+    "mtime": 1792604167.5079777,
+    "seen": 1792604387.7653708,
+    "ast_hash": "dc4b2409b20a8b257ebbab77d59c6c9f",
+    "semantic_hash": "dc4b2409b20a8b257ebbab77d59c6c9f"
+  },
+  "R/autoplot.R": {
+    "mtime": 1793903244.2271092,
+    "seen": 1793903245.735154,
+    "ast_hash": "7b4a5635b71d93f24fc061c6618da7b3",
+    "semantic_hash": ""
+  },
+  "R/globals.R": {
+    "mtime": 1793903015.790075,
+    "seen": 1793903245.735157,
+    "ast_hash": "69b3f8e680a70bcfbeca7c1a326adbd0",
+    "semantic_hash": ""
+  },
+  "R/make_outbreak.R": {
+    "mtime": 1793903164.9609208,
+    "seen": 1793903245.735157,
+    "ast_hash": "d2f7a2af80bd0790783e12bab7b323cb",
+    "semantic_hash": ""
+  },
+  "R/nososim-package.R": {
+    "mtime": 1793895579.8766441,
+    "seen": 1793895594.0182898,
+    "ast_hash": "a27b6b8cccc6a9d47351c5d979a7be5d",
+    "semantic_hash": ""
+  },
+  "R/timeline.R": {
+    "mtime": 1793903164.960521,
+    "seen": 1793903245.73516,
+    "ast_hash": "7e5a7d54803e9bbf45ddbc9de6d14ea9",
+    "semantic_hash": ""
+  },
+  "dev/draft.R": {
+    "mtime": 1792751644.6502817,
+    "seen": 1792751651.957201,
+    "ast_hash": "80a389d9bdaa5d7b9c7c88cf13b694e4",
+    "semantic_hash": ""
+  },
+  "inst/examples/outbreak.R": {
+    "mtime": 1793903164.9618826,
+    "seen": 1793903245.735161,
+    "ast_hash": "6cfdde20c2461312a98796e0150d415b",
+    "semantic_hash": ""
+  },
+  "tests/testthat.R": {
+    "mtime": 1792597845.9623392,
+    "seen": 1792604387.765377,
+    "ast_hash": "19a0d66ee9268cb98f2071d86b640f30",
+    "semantic_hash": "19a0d66ee9268cb98f2071d86b640f30"
+  },
+  "tests/testthat/test-autoplot.R": {
+    "mtime": 1793903113.528055,
+    "seen": 1793903245.735163,
+    "ast_hash": "c5909b87f39ed09d0e0681befe8e6025",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-make_outbreak.R": {
+    "mtime": 1793903113.5284064,
+    "seen": 1793903245.735164,
+    "ast_hash": "83f0df6c99e9a0737b24407ce0199d45",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-timeline.R": {
+    "mtime": 1793903113.5273707,
+    "seen": 1793903245.7351649,
+    "ast_hash": "0ff1dc04b4dc280762600393ad21fc58",
+    "semantic_hash": ""
+  },
+  ".github/workflows/R-CMD-check.yaml": {
+    "mtime": 1792597845.9626887,
+    "seen": 1792604387.7653792,
+    "ast_hash": "e76caab1380510dcff125fd9a4d6c7ef",
+    "semantic_hash": "e76caab1380510dcff125fd9a4d6c7ef"
+  },
+  "AGENTS.md": {
+    "mtime": 1792604167.5077941,
+    "seen": 1792604387.7653801,
+    "ast_hash": "779a7496aaa43bf2e76d3da3ac754544",
+    "semantic_hash": "779a7496aaa43bf2e76d3da3ac754544"
+  },
+  "LICENSE.md": {
+    "mtime": 1792601147.1625445,
+    "seen": 1792604387.7653801,
+    "ast_hash": "5fae70e49e4ea78f63a9afb887d1a55e",
+    "semantic_hash": "5fae70e49e4ea78f63a9afb887d1a55e"
+  },
+  "METHODS.md": {
+    "mtime": 1792751741.0927732,
+    "seen": 1793883859.0600598,
+    "ast_hash": "12dfb54149c84d5a28096f1f9227e470",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261021_174241_26ab279b_explain_the_link_between_reduction_and_interventio.md": {
+    "mtime": 1792604561.7017832,
+    "seen": 1792604802.947307,
+    "ast_hash": "6352bc6279c036ab42133c85b31c326b",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1793903206.7797546,
+    "seen": 1793903245.735167,
+    "ast_hash": "39bff3fa4fbd57d8d3bc0ca2372220e9",
+    "semantic_hash": ""
+  },
+  "man/figures/README-unnamed-chunk-2-1.png": {
+    "mtime": 1792609098.8660183,
+    "seen": 1792609295.862765,
+    "ast_hash": "362b8725dce3660ea11292bc890687a9",
+    "semantic_hash": ""
+  },
+  "man/figures/README-unnamed-chunk-2-2.png": {
+    "mtime": 1792609098.8834329,
+    "seen": 1792609295.862765,
+    "ast_hash": "4399ace00fbd6d4ebdfd07e0c4daf95f",
+    "semantic_hash": ""
+  },
+  "tests/testthat/helper-outbreak.R": {
+    "mtime": 1793903113.4894063,
+    "seen": 1793903245.735162,
+    "ast_hash": "7c778528d9b32b20537beb49c97a3f78",
+    "semantic_hash": ""
+  },
+  ".github/workflows/pkgdown.yaml": {
+    "mtime": 1792609818.6380696,
+    "seen": 1792609833.002391,
+    "ast_hash": "bc69eb48629602713c31f69ebd708ac1",
+    "semantic_hash": ""
+  },
+  "_pkgdown.yml": {
+    "mtime": 1793903015.7898593,
+    "seen": 1793903245.735168,
+    "ast_hash": "30ec24d469d7c74ef87fc3e7dd5311bb",
+    "semantic_hash": ""
+  },
+  "man/figures/README-first-outbreak-1.png": {
+    "mtime": 1793903206.5065272,
+    "seen": 1793903245.7351701,
+    "ast_hash": "650df5e84f5cf6d8063db0f086178788",
+    "semantic_hash": ""
+  },
+  "R/offspring.R": {
+    "mtime": 1792672472.965188,
+    "seen": 1792672559.950583,
+    "ast_hash": "70cad02902f1d73afe258e5b2caf498a",
+    "semantic_hash": ""
+  },
+  "dev/nososim_validation.qmd": {
+    "mtime": 1792751136.20875,
+    "seen": 1792751149.7734349,
+    "ast_hash": "662cee5bce953eb14682baa9a3836f7b",
+    "semantic_hash": ""
+  },
+  "R/count_edges.R": {
+    "mtime": 1793898896.963814,
+    "seen": 1793899471.155488,
+    "ast_hash": "fdff7b4cbfc46d6b3766655fdcab6a5d",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-count_edges.R": {
+    "mtime": 1792751644.6508355,
+    "seen": 1792751651.957203,
+    "ast_hash": "5dd1c343b66f754cf573400b08f377ab",
+    "semantic_hash": ""
+  },
+  "R/data.R": {
+    "mtime": 1793903164.9624808,
+    "seen": 1793903245.735156,
+    "ast_hash": "771a4c1c625ca91c62c0932fc7cacf14",
+    "semantic_hash": ""
+  },
+  "data-raw/outbreak.R": {
+    "mtime": 1792751319.766581,
+    "seen": 1792751330.570954,
+    "ast_hash": "27c79ad67c9ddd3c18546ac05c235e67",
+    "semantic_hash": ""
+  },
+  "dev/landscape.R": {
+    "mtime": 1793881576.9613318,
+    "seen": 1793883859.060054,
+    "ast_hash": "6db88d314df5d306fdbde3641be113dc",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261105_123434_482bb752_which_existing_nososim_conventions_should_guide_a.md": {
+    "mtime": 1793882074.2700112,
+    "seen": 1793883859.060063,
+    "ast_hash": "4357a0aec8a7147fead1a4471f3907c0",
+    "semantic_hash": ""
+  },
+  "R/population.R": {
+    "mtime": 1793903015.789096,
+    "seen": 1793903245.7351592,
+    "ast_hash": "e7bfcc669f9f8e72b2c5da5402030cce",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-population.R": {
+    "mtime": 1793903113.4915106,
+    "seen": 1793903245.735164,
+    "ast_hash": "4d8a5c62070643bc9adf3138e0061164",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-landscape-timeline.R": {
+    "mtime": 1793903113.5278451,
+    "seen": 1793903245.735163,
+    "ast_hash": "eb55f565a9c6c5bf94d535979208e1ce",
+    "semantic_hash": ""
+  }
+}

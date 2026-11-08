@@ -152,7 +152,7 @@ make_outbreak <- function(
 #' @noRd
 print.nososim_outbreak <- function(x, ...) {
   cat("<nososim_outbreak>\n")
-  print(summary(x), ...)
+  print(unclass(x), ...)
   invisible(x)
 }
 

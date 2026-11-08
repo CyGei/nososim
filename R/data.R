@@ -7,6 +7,6 @@
 #' @format A `nososim_outbreak` list with population `timeline`, `infections`,
 #'   simulation `dates`, and `parameters`.
 #' @examples
-#' summary(outbreak)
+#' outbreak$infections
 #' count_edges(outbreak, by = "ward")
 "outbreak"

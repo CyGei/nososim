@@ -1,0 +1,170 @@
+{
+  "generated_at": "2026-11-06T16:29:53.156431+00:00",
+  "nodes": {
+    "r_landscape_r_make_landscape": {
+      "code_fingerprint": "337276213d4450e5f35d4c04b73c3259ea7ede194d1b0413f0c41d0a326a22f8",
+      "label": "make_landscape()",
+      "last": "2026-11-06T16:15:49.777869+00:00",
+      "neg": 1,
+      "provenance": [
+        {
+          "date": "2026-11-06T16:15:49.777869+00:00",
+          "outcome": "useful",
+          "q": "Insert the agreed make_population into the package and update the vignette with clean concise generic R code and documentation."
+        },
+        {
+          "date": "2026-11-06T15:46:30.688795+00:00",
+          "outcome": "useful",
+          "q": "Show an executable vignette example of the proposed make_population with user-customizable admissions and explain how individuals are generated."
+        },
+        {
+          "date": "2026-11-06T15:37:43.779023+00:00",
+          "outcome": "useful",
+          "q": "How would you construct make_population? Be clear concise and tidy."
+        },
+        {
+          "date": "2026-11-06T15:30:06.532372+00:00",
+          "outcome": "useful",
+          "q": "Implement admission rates as location-table columns in the vignette and show the next step."
+        },
+        {
+          "date": "2026-11-06T15:27:10.443319+00:00",
+          "outcome": "useful",
+          "q": "Use n instead of capacity. Should admission rates belong to make_landscape or elsewhere, and what is the most elegant approach?"
+        }
+      ],
+      "score": 5.995009009,
+      "source_file": "R/landscape.R",
+      "status": "contested",
+      "uses": 7,
+      "verdict": "useful"
+    },
+    "r_make_outbreak_r_make_outbreak": {
+      "code_fingerprint": "73e20e2aa22ba12bc2712f2b12fa4c65c0e15cbf4c608a4ef5afc18de93bc1e7",
+      "label": "make_outbreak()",
+      "last": "2026-11-06T15:09:32.987103+00:00",
+      "neg": 1,
+      "provenance": [
+        {
+          "date": "2026-11-06T15:09:32.987103+00:00",
+          "outcome": "corrected",
+          "q": "What is the best architecture for generating people through time from the current landscape, with location-specific admissions, lengths of stay and dynamically drawn attributes?"
+        },
+        {
+          "date": "2026-11-06T15:01:01.881186+00:00",
+          "outcome": "useful",
+          "q": "Review the current code against main and suggest a very concise simple landscape and population implementation matching the whiteboard."
+        },
+        {
+          "date": "2026-11-05T12:34:34.269644+00:00",
+          "outcome": "useful",
+          "q": "Which existing nososim conventions should guide a landscape API?"
+        }
+      ],
+      "score": 0.973341024,
+      "source_file": "R/make_outbreak.R",
+      "status": "contested",
+      "uses": 2,
+      "verdict": "useful"
+    },
+    "r_make_outbreak_r_mixing_matrix": {
+      "code_fingerprint": "73e20e2aa22ba12bc2712f2b12fa4c65c0e15cbf4c608a4ef5afc18de93bc1e7",
+      "label": "mixing_matrix()",
+      "last": "2026-11-05T12:34:34.269644+00:00",
+      "provenance": [
+        {
+          "date": "2026-11-05T12:34:34.269644+00:00",
+          "outcome": "useful",
+          "q": "Which existing nososim conventions should guide a landscape API?"
+        }
+      ],
+      "score": 0.973477517,
+      "source_file": "R/make_outbreak.R",
+      "status": "tentative",
+      "uses": 1
+    },
+    "r_make_outbreak_r_transmission_hazards": {
+      "code_fingerprint": "73e20e2aa22ba12bc2712f2b12fa4c65c0e15cbf4c608a4ef5afc18de93bc1e7",
+      "label": "transmission_hazards()",
+      "last": "2026-11-05T12:34:34.269644+00:00",
+      "provenance": [
+        {
+          "date": "2026-11-05T12:34:34.269644+00:00",
+          "outcome": "useful",
+          "q": "Which existing nososim conventions should guide a landscape API?"
+        }
+      ],
+      "score": 0.973477517,
+      "source_file": "R/make_outbreak.R",
+      "status": "tentative",
+      "uses": 1
+    },
+    "r_population_r_make_population": {
+      "code_fingerprint": "e9abc1b56c1dd4dfe479875b64c5c46cc1a19a781119fd8b6f894a0a9ae1a1f9",
+      "label": "make_population()",
+      "last": "2026-11-06T16:15:49.777869+00:00",
+      "neg": 2,
+      "provenance": [
+        {
+          "date": "2026-11-06T16:15:49.777869+00:00",
+          "outcome": "useful",
+          "q": "Insert the agreed make_population into the package and update the vignette with clean concise generic R code and documentation."
+        },
+        {
+          "date": "2026-11-06T15:09:32.987103+00:00",
+          "outcome": "corrected",
+          "q": "What is the best architecture for generating people through time from the current landscape, with location-specific admissions, lengths of stay and dynamically drawn attributes?"
+        },
+        {
+          "date": "2026-11-06T15:01:01.881186+00:00",
+          "outcome": "useful",
+          "q": "Review the current code against main and suggest a very concise simple landscape and population implementation matching the whiteboard."
+        },
+        {
+          "date": "2026-11-06T10:03:04.379419+00:00",
+          "outcome": "corrected",
+          "q": "Use one concise consistent sampler interface for population generation."
+        },
+        {
+          "date": "2026-11-06T09:50:34.296712+00:00",
+          "outcome": "useful",
+          "q": "Implement landscape-conditioned population generation with hierarchical admission_rate and los specifications."
+        }
+      ],
+      "score": 1.978737186,
+      "source_file": "R/population.R",
+      "status": "contested",
+      "uses": 4,
+      "verdict": "useful"
+    },
+    "r_timeline_r_make_timeline": {
+      "code_fingerprint": "e7ca0821d158a93896c4406111027b900dd52b0715b57ea64959a3b1b5b8c4ee",
+      "label": "make_timeline()",
+      "last": "2026-11-06T15:09:32.987103+00:00",
+      "neg": 1,
+      "provenance": [
+        {
+          "date": "2026-11-06T15:09:32.987103+00:00",
+          "outcome": "corrected",
+          "q": "What is the best architecture for generating people through time from the current landscape, with location-specific admissions, lengths of stay and dynamically drawn attributes?"
+        },
+        {
+          "date": "2026-11-06T15:01:01.881186+00:00",
+          "outcome": "useful",
+          "q": "Review the current code against main and suggest a very concise simple landscape and population implementation matching the whiteboard."
+        },
+        {
+          "date": "2026-11-05T18:46:08.149800+00:00",
+          "outcome": "useful",
+          "q": "How does our current landscape, timeline and population generation compare with an arrivals-driven, capacity-constrained hospital ward model, and what is the simplest clear robust generic approach?"
+        }
+      ],
+      "score": 0.97916202,
+      "source_file": "R/timeline.R",
+      "status": "contested",
+      "uses": 2,
+      "verdict": "useful"
+    }
+  },
+  "version": 1
+}

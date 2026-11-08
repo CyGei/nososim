@@ -80,6 +80,7 @@ population <- make_population(
 population |>
   select(id, starts_with("location_"), age, role, start, end) |>
   head(10)
+
 ```
 
 The simulation starts empty. Places become free on `end`, before that day's

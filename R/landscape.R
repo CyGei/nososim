@@ -18,22 +18,28 @@ make_landscape <- function(landscape) {
       rlang::is_named(x),
       !anyDuplicated(names(x))
     )
+
     if (is.list(x)) {
-      return(
-        imap(x, function(value, name) flatten(value, c(path, name))) |>
-          bind_rows()
-      )
+      branches <- imap(x, function(value, name) {
+        flatten(value, c(path, name))
+      })
+      return(bind_rows(branches))
     }
-    stopifnot(all(is.finite(x)), all(x >= 0), all(x == floor(x)))
-    tibble(
-      !!!stats::setNames(
-        as.list(path),
-        sprintf("location_%d", seq_along(path))
-      ),
-      !!paste0("location_", length(path) + 1L) := names(x),
-      n = unname(x)
+
+    stopifnot(
+      all(is.finite(x)),
+      all(x >= 0),
+      all(x == floor(x))
     )
+
+    locations <- lapply(path, function(name) rep(name, length(x)))
+    locations <- append(locations, list(names(x)))
+    names(locations) <- paste0("location_", seq_along(locations))
+
+    locations$n <- unname(x)
+    tibble::as_tibble(locations)
   }
+
   flatten(landscape) |>
     select(-n, n)
 }

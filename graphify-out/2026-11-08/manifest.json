@@ -6,15 +6,15 @@
     "semantic_hash": "dc4b2409b20a8b257ebbab77d59c6c9f"
   },
   "R/autoplot.R": {
-    "mtime": 1793978159.9298186,
-    "seen": 1793978306.878985,
-    "ast_hash": "1a8b4965b9b429b4ca9d4b064fdcbea6",
+    "mtime": 1794149735.5212224,
+    "seen": 1794150123.7708821,
+    "ast_hash": "47cd053732d94b9dedd75d8e4cfd17df",
     "semantic_hash": ""
   },
   "R/globals.R": {
-    "mtime": 1794146533.2085834,
-    "seen": 1794146648.270667,
-    "ast_hash": "1fe7e359213e07c559d0dda0dc35ecb6",
+    "mtime": 1794149267.7334118,
+    "seen": 1794149503.978529,
+    "ast_hash": "7d0ed601d1ad8938b8377eddb3d29b33",
     "semantic_hash": ""
   },
   "R/make_outbreak.R": {
@@ -54,9 +54,9 @@
     "semantic_hash": "19a0d66ee9268cb98f2071d86b640f30"
   },
   "tests/testthat/test-autoplot.R": {
-    "mtime": 1793978160.0654283,
-    "seen": 1793978306.8789928,
-    "ast_hash": "ea815095038d620d134e9ed53a449374",
+    "mtime": 1794149360.6107302,
+    "seen": 1794149503.978534,
+    "ast_hash": "da90fd024adf77ebe6e4617223a49962",
     "semantic_hash": ""
   },
   "tests/testthat/test-make_outbreak.R": {
@@ -198,9 +198,9 @@
     "semantic_hash": ""
   },
   "R/landscape.R": {
-    "mtime": 1793983453.0494688,
-    "seen": 1793983530.0576,
-    "ast_hash": "80d71f73e5c9532dc798113732966808",
+    "mtime": 1794150122.8250334,
+    "seen": 1794150123.770886,
+    "ast_hash": "b5b05bb84960988225d89dd902de3ca8",
     "semantic_hash": ""
   },
   "tests/testthat/test-landscape.R": {
@@ -252,9 +252,9 @@
     "semantic_hash": ""
   },
   "R/population.R": {
-    "mtime": 1794146533.167344,
-    "seen": 1794146648.2706702,
-    "ast_hash": "d8eba9f3dd304ae03a6d77630c1042a4",
+    "mtime": 1794149267.7279794,
+    "seen": 1794149503.9785311,
+    "ast_hash": "9b84828a20d99490455cf5938fb61b72",
     "semantic_hash": ""
   },
   "tests/testthat/test-population.R": {
@@ -285,6 +285,18 @@
     "mtime": 1793983530.176351,
     "seen": 1794146648.270685,
     "ast_hash": "3f0af98c534666dab237ca415c62c380",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261108_140538_3add0663_generate_individuals_only_when_places_are_availabl.md": {
+    "mtime": 1794146738.9410346,
+    "seen": 1794149503.9785469,
+    "ast_hash": "e5a6cf640b8662ef0d29ce62adf22349",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261108_145407_7197d943_restore_the_nested_landscape_stay_plot_for_autoplo.md": {
+    "mtime": 1794149647.7495105,
+    "seen": 1794150123.770904,
+    "ast_hash": "bd5bacc0886d6c67b3f292371b145b11",
     "semantic_hash": ""
   }
 }

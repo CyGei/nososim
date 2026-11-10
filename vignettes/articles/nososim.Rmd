@@ -3,9 +3,6 @@ title: "Getting started"
 output: html_document
 ---
 
-Draw arrival counts, check available capacity, then generate the admitted people.
-Your functions supply all individual attributes and stay dates.
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(error = FALSE, collapse = TRUE, comment = "#>")
 ```
@@ -20,7 +17,7 @@ library(ggplot2)
 
 ## Define a landscape
 
-`make_landscape()` gives one row per location, with `n` capacity.
+`make_landscape()` gives one row per location, with a `capacity` column.
 
 ```{r}
 hospital <- list(
@@ -38,22 +35,25 @@ landscape <- make_landscape(hospital)
 
 ## Define admissions and individuals
 
-The `admissions()` function returns a vector of counts, one per row of `landscape`. It defines how many people arrive at each location on a given day. These are attempted arrivals; the simulator limits them to free capacity.
+The `admissions()` function returns a vector of counts, one per row of `landscape`. It receives a daily copy of the landscape with an `available` column containing the number of free spaces. It returns actual admissions, which must not exceed availability. 
 
 ```{r}
 landscape <- landscape |>
   mutate(
-    rate = case_when(
-      location_1 == "Geneva" & location_2 == "ICU" ~ 0.8,
-      location_1 == "Geneva" & location_2 == "General" ~ 1.5,
-      location_1 == "Gallen" & location_2 == "ICU" ~ 2,
-      location_1 == "Gallen" & location_2 == "General" ~ 4
+    filling_prob = case_when(
+      level_1 == "Geneva" & level_2 == "ICU" ~ 0.9,
+      level_1 == "Geneva" & level_2 == "General" ~ 0.7,
+      level_1 == "Gallen" & level_2 == "ICU" ~ 0.8,
+      level_1 == "Gallen" & level_2 == "General" ~ 0.5
     )
   )
 
 admissions <- function(landscape, date) {
-  #rep(1L, nrow(landscape))
-  rpois(nrow(landscape), landscape$rate)
+  rbinom(
+    nrow(landscape),
+    size = landscape$available,
+    prob = landscape$filling_prob
+  )
 }
 ```
 
@@ -71,8 +71,8 @@ individuals <- function(admitted, date) {
       age = sample(18:90, n(), replace = TRUE),
       role = "patient",
       los = case_when(
-        location_2 == "ICU" ~ sample(3:7, n(), replace = TRUE),
-        location_2 == "General" ~ sample(5:10, n(), replace = TRUE)
+        level_2 == "ICU" ~ sample(3:7, n(), replace = TRUE),
+        level_2 == "General" ~ sample(5:10, n(), replace = TRUE)
       ),
       start = date,
       end = start + los - 1L #-1 for inclusive end date
@@ -98,7 +98,7 @@ population <- make_population(
 )
 
 population |>
-  select(id, starts_with("location_"), age, role, start, end) |>
+  select(id, starts_with("level_"), age, role, start, end) |>
   head(10)
 ```
 
@@ -114,17 +114,10 @@ autoplot(population, aes(colour = id)) +
 
 ## Extract daily contacts
 
-`get_contacts()` returns a matrix of contacts between people present on a given date. Each row and column represents one person, and the value is 1 if they share a set of attributes on that date, 0 otherwise.
+`get_contacts()` returns a matrix of contacts between people present on a given date. Each row and column represents one person, and the value is 1 if they share a set of attributes on that date, 0 otherwise. Use `by` to choose which columns must match.
 
 ```{r}
-get_contacts(population, dates[1])
-```
-
-Use `by` to choose which columns must match. For example, require the same
-hospital, ward, and role:
-
-```{r}
-get_contacts(population, dates[1], by = c("location_1", "location_2", "role"))
+get_contacts(population, dates[1], by = c("level_1", "level_2", "role"))
 ```
 
 For a matrix on each date:

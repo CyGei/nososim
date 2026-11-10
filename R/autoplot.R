@@ -5,7 +5,7 @@ autoplot.nososim_population <- function(object, mapping = aes(), ...) {
   positions <- population_positions(object)
   data <- positions$data
   slots <- positions$slots
-  keys <- grep("^location_[0-9]+$", names(slots), value = TRUE)
+  keys <- grep("^level_[0-9]+$", names(slots), value = TRUE)
   labels <- apply(slots[keys], 1, function(x) {
     paste(c(" ", rev(replace(x, is.na(x), " "))), collapse = "\r")
   })
@@ -53,8 +53,8 @@ autoplot.nososim_population <- function(object, mapping = aes(), ...) {
 #' @noRd
 population_positions <- function(object) {
   landscape <- attr(object, "landscape")
-  keys <- grep("^location_[0-9]+$", names(landscape), value = TRUE)
-  slots <- tidyr::uncount(landscape[c(keys, "n")], n)
+  keys <- grep("^level_[0-9]+$", names(landscape), value = TRUE)
+  slots <- tidyr::uncount(landscape[c(keys, "capacity")], capacity)
   slots$.y <- factor(
     seq_len(nrow(slots)),
     levels = rev(seq_len(nrow(slots)))
@@ -75,7 +75,7 @@ population_positions <- function(object) {
     data$start <- data$end <- attr(object, "dates")[0]
   }
 
-  where <- rep(seq_len(nrow(landscape)), landscape$n)
+  where <- rep(seq_len(nrow(landscape)), landscape$capacity)
   until <- rep(-Inf, nrow(slots))
   slot <- integer(nrow(data))
   for (i in order(data$start)) {

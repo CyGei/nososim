@@ -22,7 +22,7 @@ test_that("transmission links connect source and recipient infection dates", {
 plot_population <- function(landscape, counts = rep(1L, nrow(landscape))) {
   make_population(
     landscape, as.Date("2026-01-01") + 0:6,
-    admissions = function(landscape, date) counts,
+    admissions = function(landscape, date) pmin(counts, landscape$available),
     individuals = function(admitted, date) dplyr::mutate(admitted,
       id = paste0(date, "_", dplyr::row_number()), start = date, end = date + 2L)
   )
@@ -38,12 +38,12 @@ test_that("population plots show full stays, nested labels and unused capacity",
   expect_s3_class(population, "nososim_population")
   expect_identical(population, before)
   expect_identical(attr(population, "landscape"), landscape)
-  expect_equal(nrow(layers[[1]]), sum(landscape$n))
+  expect_equal(nrow(layers[[1]]), sum(landscape$capacity))
   expect_equal(layers[[2]]$x, as.numeric(population$start))
   expect_equal(layers[[2]]$xend, as.numeric(population$end + 1))
   expect_identical(unname(plot$scales$get_scales("y")$labels),
     c(rep(" \ra\rsite", 2), " \rb\rsite", rep(" \rempty\rsite", 2)))
-  expect_equal(length(levels(plot$data$.y)), sum(landscape$n))
+  expect_equal(length(levels(plot$data$.y)), sum(landscape$capacity))
 
   for (rows in split(plot$data, plot$data$.y, drop = TRUE)) {
     rows <- rows[order(rows$start), ]

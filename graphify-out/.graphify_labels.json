@@ -31,6 +31,7 @@
   "29": "Q: What is the best architecture for generating people through time from the current landscape, with location-specific admissions, lengths of stay and dynamically drawn attributes?",
   "30": "test-landscape.R",
   "31": "Q: Focus only on make_landscape from the vignette nested hospital/ward/room list and remove unnecessary experimental population and timeline changes.",
+  "32": "collect_levels",
   "33": "Q: Use n instead of capacity. Should admission rates belong to make_landscape or elsewhere, and what is the most elegant approach?",
   "34": "Q: Implement admission rates as location-table columns in the vignette and show the next step.",
   "35": "Q: How does our current landscape, timeline and population generation compare with an arrivals-driven, capacity-constrained hospital ward model, and what is the simplest clear robust generic approach?",
@@ -42,5 +43,6 @@
   "41": "Q: Insert the agreed make_population into the package and update the vignette with clean concise generic R code and documentation.",
   "42": "Q: Review the current vignette and user workflow for API cleanliness: are admissions columns defaults, or are location columns and admission/individual functions user defined?",
   "43": "Q: Update the vignette and documentation around the agreed clean workflow, clearly separating user inputs from generated population fields.",
-  "44": "legendry"
+  "44": "legendry",
+  "45": "purrr"
 }

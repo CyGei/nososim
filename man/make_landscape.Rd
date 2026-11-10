@@ -8,14 +8,14 @@ make_landscape(landscape)
 }
 \arguments{
 \item{landscape}{Named nested list with non-negative integer capacities
-(\code{n}) at its leaves.}
+(\code{capacity}) at its leaves.}
 }
 \value{
-A tibble with location columns and \code{n}.
+A tibble with level columns and \code{capacity}.
 }
 \description{
-Converts named locations and their capacities (\code{n}) into a table.
-Columns \code{location_1}, \code{location_2}, etc. retain the hierarchy, in input order.
+Converts named locations and their capacities (\code{capacity}) into a table.
+Columns \code{level_1}, \code{level_2}, etc. retain the hierarchy, in input order.
 }
 \examples{
 make_landscape(list(H1 = list(A = c(a = 2, b = 3))))

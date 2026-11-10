@@ -7,12 +7,13 @@
 make_population(landscape, dates, admissions, individuals)
 }
 \arguments{
-\item{landscape}{A table from \code{\link[=make_landscape]{make_landscape()}}, with capacity \code{n} per location.}
+\item{landscape}{A table from \code{\link[=make_landscape]{make_landscape()}}, with a \code{capacity} column per location.}
 
 \item{dates}{Consecutive daily dates.}
 
 \item{admissions}{Function \verb{(landscape, date)} returning one non-negative
-integer attempted arrival count per location, in row order.}
+integer admission count per location, in row order, no greater than
+its available capacity.}
 
 \item{individuals}{Function \verb{(admitted, date)} returning one record per admitted
 person, in the same order. Preserve location columns and supply \code{start}
@@ -23,22 +24,30 @@ A population tibble of admitted records, with location and date
 metadata for \code{\link[=autoplot]{autoplot()}}.
 }
 \description{
-Draws arrival counts, limits them to available capacity, then generates only the
+Draws admissions from available capacity, then generates only the
 admitted records. Each stay starts today and includes \code{end}; capacity is free the next day.
 }
 \details{
 Each day, \code{make_population()} calls your functions with the tables and
-date they need. It passes \code{landscape} to \code{admissions()}. After checking free
-capacity, it creates \code{admitted}, with one row per admitted person, and passes
+date they need. It passes a daily copy of \code{landscape} to \code{admissions()},
+with an \code{available} column giving today's free capacity; \code{capacity} remains
+the total capacity. Admission counts exceeding availability are errors.
+The \code{available} column is calculated each day, replacing any input column
+with that name. It then creates \code{admitted}, with one row per admitted person, and passes
 it to \code{individuals()}. It contains the
-landscape columns except \code{n}. Keep both arguments in your function definitions,
+landscape columns except \code{capacity}. Keep both arguments in your function definitions,
 even if your rule does not use the date.
+In the example, \code{filling_rate} is a per-available-bed daily rate,
+converted to a filling probability with \code{1 - exp(-filling_rate)}.
 }
 \examples{
-landscape <- make_landscape(c(A = 1, B = 2))
+landscape <- dplyr::mutate(make_landscape(c(A = 1, B = 2)), filling_rate = 0.5)
 make_population(
   landscape, as.Date("2026-01-01") + 0:4,
-  admissions = function(landscape, date) rep(1L, nrow(landscape)),
+  admissions = function(landscape, date) {
+    stats::rbinom(nrow(landscape), size = landscape$available,
+      prob = 1 - exp(-landscape$filling_rate))
+  },
   individuals = function(admitted, date) {
     dplyr::mutate(admitted, start = date, end = date + 2L)
   }

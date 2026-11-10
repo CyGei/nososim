@@ -5,7 +5,7 @@
 #' @param population A table with unique `id`, `start`, `end`, and grouping columns.
 #' @param date A single Date. Both `start` and `end` are included.
 #' @param by Columns to match, including any location or attribute columns.
-#'   Defaults to all `location_*` columns. Missing values match missing values.
+#'   Defaults to all `level_*` columns. Missing values match missing values.
 #' @return A symmetric matrix of 0s and 1s, named by the IDs present on `date`,
 #'   in population row order. The diagonal is zero. No people present gives a
 #'   0-by-0 matrix.
@@ -13,18 +13,18 @@
 #' @examples
 #' population <- tibble::tibble(
 #'   id = c("a", "b", "c"),
-#'   location_1 = c("A", "A", "B"),
+#'   level_1 = c("A", "A", "B"),
 #'   role = c("patient", "staff", "patient"),
 #'   start = as.Date("2026-01-01"),
 #'   end = as.Date("2026-01-03")
 #' )
 #' get_contacts(population, as.Date("2026-01-02"))
 #' get_contacts(population, as.Date("2026-01-02"),
-#'   by = c("location_1", "role"))
+#'   by = c("level_1", "role"))
 get_contacts <- function(
   population,
   date,
-  by = grep("^location_[0-9]+$", names(population), value = TRUE)
+  by = grep("^level_[0-9]+$", names(population), value = TRUE)
 ) {
   stopifnot(
     inherits(date, "Date"),

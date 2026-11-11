@@ -54,9 +54,9 @@
     "semantic_hash": "19a0d66ee9268cb98f2071d86b640f30"
   },
   "tests/testthat/test-autoplot.R": {
-    "mtime": 1794242974.5565488,
-    "seen": 1794242995.634588,
-    "ast_hash": "d90c7c8a30ad4c7972ee4752e12b28b1",
+    "mtime": 1794319994.7528927,
+    "seen": 1794320019.078696,
+    "ast_hash": "db8a5bb7b7d8b52af463c3957f5430c3",
     "semantic_hash": ""
   },
   "tests/testthat/test-make_outbreak.R": {
@@ -252,15 +252,15 @@
     "semantic_hash": ""
   },
   "R/population.R": {
-    "mtime": 1794242974.5561304,
-    "seen": 1794242995.6345851,
-    "ast_hash": "6b70407d36abfb0f4dca588de332d198",
+    "mtime": 1794327882.4753096,
+    "seen": 1794328320.5788229,
+    "ast_hash": "31cb010ce08cbb84a414b89ff66a2037",
     "semantic_hash": ""
   },
   "tests/testthat/test-population.R": {
-    "mtime": 1794242974.556437,
-    "seen": 1794242995.63459,
-    "ast_hash": "73f2b5970eb254b38c1ee01b21a9ab31",
+    "mtime": 1794320012.999922,
+    "seen": 1794320019.078699,
+    "ast_hash": "3975a7886ae6468fac44c07e7109c854",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20261106_154630_d1a1d3fd_show_an_executable_vignette_example_of_the_propose.md": {

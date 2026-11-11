@@ -7,7 +7,8 @@
 get_contacts(
   population,
   date,
-  by = grep("^level_[0-9]+$", names(population), value = TRUE)
+  by = grep("^level_[0-9]+$", names(population), value = TRUE),
+  weights = NULL
 )
 }
 \arguments{
@@ -15,16 +16,31 @@ get_contacts(
 
 \item{date}{A single Date. Both \code{start} and \code{end} are included.}
 
-\item{by}{Columns to match, including any location or attribute columns.
-Defaults to all \verb{level_*} columns. Missing values match missing values.}
+\item{by}{A character vector of columns to match, or a vectorised function
+\verb{(i, j)} returning one logical value per pair. \code{i} and \code{j} are tables whose
+corresponding rows are the people being compared. Defaults to all
+\verb{level_*} columns. For column matching, missing values match missing values.
+For functions, \code{NA} results mean no contact, and results must be symmetric.
+Self-pairs are excluded; the function is not called with fewer than two
+people present.}
+
+\item{weights}{Optional named list of numeric matrices. List names identify
+population columns; matrix row names identify source categories and column
+names identify recipient categories. Coefficients must be finite and
+non-negative, with unique category names covering everyone present on both
+axes. Missing values in weighted attributes are errors. Coefficients multiply
+across attributes. \code{NULL} or an empty list leaves contacts unweighted.}
 }
 \value{
-A symmetric matrix of 0s and 1s, named by the IDs present on \code{date},
-in population row order. The diagonal is zero. No people present gives a
+A matrix named by the IDs present on \code{date}, in population row order.
+Without weights, entries are symmetric 0s and 1s. With weights, entries are
+non-negative contact intensities and may be asymmetric. Rows are sources
+and columns recipients. The diagonal is zero; no people present gives a
 0-by-0 matrix.
 }
 \description{
-Two people are in contact when all their \code{by} values match.
+Define contacts using matching columns or a pairwise function, then optionally
+multiply them by attribute-specific weights without normalisation.
 }
 \examples{
 population <- tibble::tibble(
@@ -37,4 +53,10 @@ population <- tibble::tibble(
 get_contacts(population, as.Date("2026-01-02"))
 get_contacts(population, as.Date("2026-01-02"),
   by = c("level_1", "role"))
+get_contacts(population, as.Date("2026-01-02"),
+  by = function(i, j) i$level_1 == j$level_1)
+role_weights <- matrix(c(1, 2, 1, 1), 2, byrow = TRUE,
+  dimnames = list(c("patient", "staff"), c("patient", "staff")))
+get_contacts(population, as.Date("2026-01-02"), by = "level_1",
+  weights = list(role = role_weights))
 }

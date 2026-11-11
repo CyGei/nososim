@@ -1,17 +1,17 @@
-# Graph Report - nososim  (2026-11-10)
+# Graph Report - nososim  (2026-11-11)
 
 ## Corpus Check
-- 46 files · ~22,328 words
+- 48 files · ~23,659 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 23 file(s) not represented in the graph (top: .Rd 12, (none) 8, .Rmd 2)
 
 ## Summary
-- 275 nodes · 242 edges · 46 communities (32 shown, 14 thin omitted)
+- 294 nodes · 261 edges · 47 communities (34 shown, 13 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `12d45677`
+- Built from commit: `88ac8906`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -52,6 +52,7 @@
 - Q: Insert the agreed make_population into the package and update the vignette with clean concise generic R code and documentation.
 - Q: Review the current vignette and user workflow for API cleanliness: are admissions columns defaults, or are location columns and admission/individual functions user defined?
 - Q: Update the vignette and documentation around the agreed clean workflow, clearly separating user inputs from generated population fields.
+- test-get_contacts-weights.R
 
 ## God Nodes (most connected - your core abstractions)
 1. `autoplot.nososim_population()` - 7 edges
@@ -78,11 +79,11 @@
 ## Import Cycles
 - None detected.
 
-## Communities (46 total, 14 thin omitted)
+## Communities (47 total, 13 thin omitted)
 
 ### Community 0 - "test-make_outbreak.R"
-Cohesion: 0.08
-Nodes (21): offspring(), simple_outbreak(), blocked, excluded, expected, hazard_fixture(), imported, invalid (+13 more)
+Cohesion: 0.07
+Nodes (22): offspring(), simple_outbreak(), contact_weight_fixture(), blocked, excluded, expected, hazard_fixture(), imported (+14 more)
 
 ### Community 1 - "autoplot.nososim_population"
 Cohesion: 0.15
@@ -117,8 +118,8 @@ Cohesion: 0.40
 Nodes (4): Answer, Outcome, Q: Restore the nested landscape stay plot for autoplot using the current make_population output, keeping code concise., Source Nodes
 
 ### Community 15 - "test-get_contacts.R"
-Cohesion: 0.40
-Nodes (4): contacts, date, expected, population
+Cohesion: 0.33
+Nodes (5): before, contacts, date, expected, population
 
 ### Community 19 - "Q: Explain the link between reduction and intervention and whether the code can be simplified in tidy R."
 Cohesion: 0.50
@@ -164,6 +165,10 @@ Nodes (3): hospital, landscape, wards
 Cohesion: 0.40
 Nodes (4): Answer, Outcome, Q: Focus only on make_landscape from the vignette nested hospital/ward/room list and remove unnecessary experimental population and timeline changes., Source Nodes
 
+### Community 32 - "collect_levels"
+Cohesion: 0.18
+Nodes (3): apply_contact_weights(), make_landscape(), collect_levels()
+
 ### Community 33 - "Q: Use n instead of capacity. Should admission rates belong to make_landscape or elsewhere, and what is the most elegant approach?"
 Cohesion: 0.40
 Nodes (4): Answer, Outcome, Q: Use n instead of capacity. Should admission rates belong to make_landscape or elsewhere, and what is the most elegant approach?, Source Nodes
@@ -208,23 +213,27 @@ Nodes (4): Answer, Outcome, Q: Review the current vignette and user workflow for
 Cohesion: 0.40
 Nodes (4): Answer, Outcome, Q: Update the vignette and documentation around the agreed clean workflow, clearly separating user inputs from generated population fields., Source Nodes
 
+### Community 46 - "test-get_contacts-weights.R"
+Cohesion: 0.14
+Nodes (13): before, binary, empty, expected, future, ids, population, previous (+5 more)
+
 ## Knowledge Gaps
 - **9 isolated node(s):** `R-CMD-check workflow`, `R package check`, `Cyril Geismar`, `MIT License`, `Baseline reproduction number` (+4 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 208 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 223 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `make_population()` connect `autoplot.nososim_population` to `test-population.R`, `timeline.R`?**
-  _High betweenness centrality (0.022) - this node is a cross-community bridge._
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
 - **What connects `R-CMD-check workflow`, `R package check`, `Cyril Geismar` to the rest of the system?**
   _9 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `test-make_outbreak.R` be split into smaller, more focused modules?**
-  _Cohesion score 0.07692307692307693 - nodes in this community are weakly interconnected._
-- **Why does `get_contacts()` connect `count_edges` to `autoplot.nososim_population`?**
-  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+  _Cohesion score 0.07407407407407407 - nodes in this community are weakly interconnected._
 - **Should `autoplot.nososim_population` be split into smaller, more focused modules?**
   _Cohesion score 0.14705882352941177 - nodes in this community are weakly interconnected._
 - **Should `test-population.R` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
+- **Should `test-get_contacts-weights.R` be split into smaller, more focused modules?**
+  _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._

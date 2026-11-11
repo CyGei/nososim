@@ -46,7 +46,9 @@ make_population <- function(landscape, dates, admissions, individuals) {
     is.numeric(landscape$capacity),
     is.null(dim(landscape$capacity)),
     all(is.finite(landscape$capacity)),
-    all(landscape$capacity >= 0 & landscape$capacity == floor(landscape$capacity))
+    all(
+      landscape$capacity >= 0 & landscape$capacity == floor(landscape$capacity)
+    )
   )
 
   stopifnot(

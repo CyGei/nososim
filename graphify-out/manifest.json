@@ -252,9 +252,9 @@
     "semantic_hash": ""
   },
   "R/population.R": {
-    "mtime": 1794319994.7524486,
-    "seen": 1794320019.0786932,
-    "ast_hash": "e4fb860aaab7e5fb2648ddb244c7ff71",
+    "mtime": 1794327882.4753096,
+    "seen": 1794328320.5788229,
+    "ast_hash": "31cb010ce08cbb84a414b89ff66a2037",
     "semantic_hash": ""
   },
   "tests/testthat/test-population.R": {
@@ -300,15 +300,27 @@
     "semantic_hash": ""
   },
   "R/get_contacts.R": {
-    "mtime": 1794242974.5554988,
-    "seen": 1794242995.634582,
-    "ast_hash": "5540196cdef566f95cffb45de0965d92",
+    "mtime": 1794406632.3849804,
+    "seen": 1794406699.538156,
+    "ast_hash": "39b5c27ec4c7aadc73fde5ac4e53be63",
     "semantic_hash": ""
   },
   "tests/testthat/test-get_contacts.R": {
-    "mtime": 1794242974.5569055,
-    "seen": 1794242995.634589,
-    "ast_hash": "086e7d8ae38467e917b412a4e6595cf1",
+    "mtime": 1794405975.9187167,
+    "seen": 1794405988.839791,
+    "ast_hash": "464c7444efb22391e9befd4bbeecf0a9",
+    "semantic_hash": ""
+  },
+  "R/contact_weights.R": {
+    "mtime": 1794406690.7619164,
+    "seen": 1794406699.538153,
+    "ast_hash": "30b2b3e9e7c2e24dce98418163880a23",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-get_contacts-weights.R": {
+    "mtime": 1794406666.5573397,
+    "seen": 1794406699.538163,
+    "ast_hash": "142519e22570aa2bc23c0f355980e189",
     "semantic_hash": ""
   }
 }

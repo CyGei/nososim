@@ -6,27 +6,27 @@
     "semantic_hash": "dc4b2409b20a8b257ebbab77d59c6c9f"
   },
   "R/autoplot.R": {
-    "mtime": 1794242974.5559206,
-    "seen": 1794242995.634578,
-    "ast_hash": "43dbe760015993c2006a9778a47a2ebd",
+    "mtime": 1794409594.5471084,
+    "seen": 1794410003.421514,
+    "ast_hash": "f69edcde64aaeb9c000d705d549d3935",
     "semantic_hash": ""
   },
   "R/globals.R": {
-    "mtime": 1794149267.7334118,
-    "seen": 1794149503.978529,
-    "ast_hash": "7d0ed601d1ad8938b8377eddb3d29b33",
+    "mtime": 1794410033.1709416,
+    "seen": 1794410034.73339,
+    "ast_hash": "6d825d8463bf1e289860061e88ebc4d7",
     "semantic_hash": ""
   },
   "R/make_outbreak.R": {
-    "mtime": 1793978251.530911,
-    "seen": 1793978306.878989,
-    "ast_hash": "3420a020243fabd7676e28dd92badbd3",
+    "mtime": 1794409903.5480204,
+    "seen": 1794410003.421518,
+    "ast_hash": "a68dc8a268e0dd24259b1a5023c803d9",
     "semantic_hash": ""
   },
   "R/nososim-package.R": {
-    "mtime": 1794146533.208352,
-    "seen": 1794146648.270669,
-    "ast_hash": "401b5c46fccc3422d72ee034e40dd8d8",
+    "mtime": 1794409997.5764313,
+    "seen": 1794410003.421519,
+    "ast_hash": "ceabca638983b1aa646ff078a1deef1a",
     "semantic_hash": ""
   },
   "R/timeline.R": {
@@ -54,21 +54,21 @@
     "semantic_hash": "19a0d66ee9268cb98f2071d86b640f30"
   },
   "tests/testthat/test-autoplot.R": {
-    "mtime": 1794319994.7528927,
-    "seen": 1794320019.078696,
-    "ast_hash": "db8a5bb7b7d8b52af463c3957f5430c3",
+    "mtime": 1794409997.579237,
+    "seen": 1794410003.421524,
+    "ast_hash": "3fc43b6df6ec3efd30af90716a3dfc7b",
     "semantic_hash": ""
   },
   "tests/testthat/test-make_outbreak.R": {
-    "mtime": 1793978160.0717626,
-    "seen": 1793978306.878994,
-    "ast_hash": "9683e81ff94e794d61b28aed6fc41580",
+    "mtime": 1794409997.579002,
+    "seen": 1794410003.421526,
+    "ast_hash": "aa78b9c5fdb784f868123e4aea02cc04",
     "semantic_hash": ""
   },
   "tests/testthat/test-timeline.R": {
-    "mtime": 1794175387.296807,
-    "seen": 1794175404.515371,
-    "ast_hash": "f307783f89b16c29dc44f39923a8a23b",
+    "mtime": 1794409997.5786588,
+    "seen": 1794410003.4215271,
+    "ast_hash": "6a4c7f6c12fc5a873709557213749864",
     "semantic_hash": ""
   },
   ".github/workflows/R-CMD-check.yaml": {
@@ -144,9 +144,9 @@
     "semantic_hash": ""
   },
   "R/offspring.R": {
-    "mtime": 1792672472.965188,
-    "seen": 1792672559.950583,
-    "ast_hash": "70cad02902f1d73afe258e5b2caf498a",
+    "mtime": 1794409594.5479445,
+    "seen": 1794410003.4215198,
+    "ast_hash": "384797d0727eb99e77c83ebdd58d7f85",
     "semantic_hash": ""
   },
   "dev/nososim_validation.qmd": {
@@ -156,9 +156,9 @@
     "semantic_hash": ""
   },
   "R/count_edges.R": {
-    "mtime": 1793978159.936488,
-    "seen": 1793978306.878986,
-    "ast_hash": "c426c075e8f343d4115038fec43664d6",
+    "mtime": 1794409594.5474405,
+    "seen": 1794410003.421515,
+    "ast_hash": "894a6118634111efc8b847f2c89c7119",
     "semantic_hash": ""
   },
   "tests/testthat/test-count_edges.R": {
@@ -198,15 +198,15 @@
     "semantic_hash": ""
   },
   "R/landscape.R": {
-    "mtime": 1794242974.5557137,
-    "seen": 1794242995.634583,
-    "ast_hash": "66b9f09778323e29a72f8fadb2ab49dc",
+    "mtime": 1794409903.547188,
+    "seen": 1794410003.421518,
+    "ast_hash": "8fc9b880610ed9e33423f2ad934f2f06",
     "semantic_hash": ""
   },
   "tests/testthat/test-landscape.R": {
-    "mtime": 1794242974.5568075,
-    "seen": 1794242995.634589,
-    "ast_hash": "ee9b291f55105d4b19561f3ec9cdf238",
+    "mtime": 1794409843.5836895,
+    "seen": 1794410003.421526,
+    "ast_hash": "38ab17b9cf7ac25faf485325ba41ab23",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20261106_100304_bc9c18d5_use_one_concise_consistent_sampler_interface_for_p.md": {
@@ -252,15 +252,15 @@
     "semantic_hash": ""
   },
   "R/population.R": {
-    "mtime": 1794327882.4753096,
-    "seen": 1794328320.5788229,
-    "ast_hash": "31cb010ce08cbb84a414b89ff66a2037",
+    "mtime": 1794410066.9730046,
+    "seen": 1794410104.303589,
+    "ast_hash": "5d4cedd3bd5cddb49399acebe58dc5f3",
     "semantic_hash": ""
   },
   "tests/testthat/test-population.R": {
-    "mtime": 1794320012.999922,
-    "seen": 1794320019.078699,
-    "ast_hash": "3975a7886ae6468fac44c07e7109c854",
+    "mtime": 1794410102.7517972,
+    "seen": 1794410104.3035939,
+    "ast_hash": "4eea93b9f5cd6f64203dfd754f390922",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20261106_154630_d1a1d3fd_show_an_executable_vignette_example_of_the_propose.md": {
@@ -300,27 +300,33 @@
     "semantic_hash": ""
   },
   "R/get_contacts.R": {
-    "mtime": 1794406632.3849804,
-    "seen": 1794406699.538156,
-    "ast_hash": "39b5c27ec4c7aadc73fde5ac4e53be63",
+    "mtime": 1794410066.9733474,
+    "seen": 1794410104.303585,
+    "ast_hash": "4702aa69cbeec9792f396a4080f4b754",
     "semantic_hash": ""
   },
   "tests/testthat/test-get_contacts.R": {
-    "mtime": 1794405975.9187167,
-    "seen": 1794405988.839791,
-    "ast_hash": "464c7444efb22391e9befd4bbeecf0a9",
-    "semantic_hash": ""
-  },
-  "R/contact_weights.R": {
-    "mtime": 1794406690.7619164,
-    "seen": 1794406699.538153,
-    "ast_hash": "30b2b3e9e7c2e24dce98418163880a23",
+    "mtime": 1794409997.5780215,
+    "seen": 1794410003.421525,
+    "ast_hash": "1711265003e344a6bbb0067a5d7c1dfe",
     "semantic_hash": ""
   },
   "tests/testthat/test-get_contacts-weights.R": {
-    "mtime": 1794406666.5573397,
-    "seen": 1794406699.538163,
-    "ast_hash": "142519e22570aa2bc23c0f355980e189",
+    "mtime": 1794409997.5782828,
+    "seen": 1794410003.421525,
+    "ast_hash": "6491ac271a458d8d3c54045eeaa8bed3",
+    "semantic_hash": ""
+  },
+  "R/mixing.R": {
+    "mtime": 1794409997.577157,
+    "seen": 1794410003.421519,
+    "ast_hash": "c6aea088f37c682da1be4e7766d6bf91",
+    "semantic_hash": ""
+  },
+  "R/utils.R": {
+    "mtime": 1794409997.5769176,
+    "seen": 1794410003.421521,
+    "ast_hash": "3afda70995526f617ec195adefc6959f",
     "semantic_hash": ""
   }
 }

@@ -1,11 +1,16 @@
-#' @rdname autoplot.nososim_timeline
+#' Plot population stays and available capacity
+#'
+#' @param object A population from [make_population()].
+#' @param mapping Aesthetic mappings passed to [ggplot2::ggplot()].
+#' @param ... Unused.
+#' @return A ggplot with one row per unit of capacity, grouped by location.
 #' @export
 autoplot.nososim_population <- function(object, mapping = aes(), ...) {
   rlang::check_dots_empty()
   positions <- population_positions(object)
   data <- positions$data
   slots <- positions$slots
-  keys <- grep("^level_[0-9]+$", names(slots), value = TRUE)
+  keys <- level_columns(slots)
   labels <- apply(slots[keys], 1, function(x) {
     paste(c(" ", rev(replace(x, is.na(x), " "))), collapse = "\r")
   })
@@ -41,8 +46,6 @@ autoplot.nososim_population <- function(object, mapping = aes(), ...) {
     ) +
     scale_x_date(
       limits = range(c(attr(object, "dates"), data$start, data$end + 1))
-      # date_breaks = "2 days",
-      # date_labels = "%d %b"
     ) +
     labs(x = "Date", y = NULL) +
     theme_classic() +
@@ -53,7 +56,7 @@ autoplot.nososim_population <- function(object, mapping = aes(), ...) {
 #' @noRd
 population_positions <- function(object) {
   landscape <- attr(object, "landscape")
-  keys <- grep("^level_[0-9]+$", names(landscape), value = TRUE)
+  keys <- level_columns(landscape)
   slots <- tidyr::uncount(landscape[c(keys, "capacity")], capacity)
   slots$.y <- factor(
     seq_len(nrow(slots)),
@@ -70,7 +73,6 @@ population_positions <- function(object) {
       by = keys,
       relationship = "many-to-one"
     )$.location
-    stopifnot(!anyNA(index), all(data$end >= data$start))
   } else {
     data$start <- data$end <- attr(object, "dates")[0]
   }

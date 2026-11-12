@@ -4,12 +4,7 @@
 \alias{get_contacts}
 \title{Find daily contacts}
 \usage{
-get_contacts(
-  population,
-  date,
-  by = grep("^level_[0-9]+$", names(population), value = TRUE),
-  weights = NULL
-)
+get_contacts(population, date, by = level_columns(population), weights = NULL)
 }
 \arguments{
 \item{population}{A table with unique \code{id}, \code{start}, \code{end}, and grouping columns.}

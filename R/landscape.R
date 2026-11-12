@@ -13,31 +13,23 @@
 make_landscape <- function(landscape) {
   collect_levels <- function(x, path = character()) {
     stopifnot(
-      is.list(x) || is.numeric(x),
       length(x) > 0,
       rlang::is_named(x),
       !anyDuplicated(names(x))
     )
 
-    # A list contains more levels: visit each child.
     if (is.list(x)) {
-      branches <- purrr::imap(x, function(child, name) {
+      purrr::imap(x, function(child, name) {
         collect_levels(child, path = c(path, name))
-      })
-      return(dplyr::bind_rows(branches))
+      }) |>
+        dplyr::bind_rows()
+    } else {
+      check_counts(x)
+      tibble::tibble(
+        level = purrr::map(names(x), function(name) c(path, name)),
+        capacity = unname(x)
+      )
     }
-
-    # A numeric vector contains the final locations and capacities.
-    stopifnot(
-      all(is.finite(x)),
-      all(x >= 0),
-      all(x == floor(x))
-    )
-
-    tibble::tibble(
-      level = purrr::map(names(x), function(name) c(path, name)),
-      capacity = unname(x)
-    )
   }
 
   collect_levels(landscape) |>

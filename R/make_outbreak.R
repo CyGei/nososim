@@ -71,17 +71,12 @@ make_outbreak <- function(
   intervention,
   mixing = NULL
 ) {
-  if (!is.function(intervention)) {
-    stop("`intervention` must be a function of `present` and `date`.")
-  }
-
-  if (anyDuplicated(timeline[c("id", "date")])) {
-    stop("`timeline` must have at most one row per ID and date.")
-  }
-
-  if (!is.data.frame(imported) || !all(c("id", "date") %in% names(imported))) {
-    stop("`imported` must be a data frame with `id` and `date` columns.")
-  }
+  stopifnot(
+    is.function(intervention),
+    !anyDuplicated(timeline[c("id", "date")]),
+    is.data.frame(imported),
+    all(c("id", "date") %in% names(imported))
+  )
 
   imported <- tibble::as_tibble(imported)
   dates <- sort(dates)
@@ -156,29 +151,6 @@ print.nososim_outbreak <- function(x, ...) {
   invisible(x)
 }
 
-#' Build the daily mixing matrix
-#'
-#' @param present Daily population with `id` and mixing attribute columns.
-#' @inheritParams make_outbreak
-#' @return A matrix named by ID: source rows and recipient columns.
-#' @noRd
-mixing_matrix <- function(present, mixing = NULL) {
-  mixing |>
-    imap(\(weights, column) {
-      values <- as.character(present[[column]])
-      weights[values, values, drop = FALSE]
-    }) |>
-    reduce(
-      \(x, y) x * y,
-      .init = matrix(
-        1,
-        nrow(present),
-        nrow(present),
-        dimnames = list(present$id, present$id)
-      )
-    )
-}
-
 #' Calculate daily transmission hazards
 #'
 #' @param present Daily population with `id` and `lambda` (infectiousness).
@@ -190,24 +162,14 @@ mixing_matrix <- function(present, mixing = NULL) {
 #'   after row normalisation, without redistributing prevented transmission.
 #' @noRd
 transmission_hazards <- function(present, m_t, E_t) {
-  if (
-    !is.matrix(E_t) ||
-      !is.numeric(E_t) ||
-      !identical(dim(E_t), c(nrow(present), nrow(present)))
-  ) {
-    stop(
-      "`intervention` must return a numeric matrix with one row and column per ID present."
-    )
-  }
-  if (
-    !setequal(rownames(E_t), present$id) ||
-      !setequal(colnames(E_t), present$id)
-  ) {
-    stop("Intervention matrix row and column names must match the IDs present.")
-  }
-  if (any(!is.finite(E_t)) || any(E_t < 0 | E_t > 1)) {
-    stop("Intervention reductions must be finite values between 0 and 1.")
-  }
+  stopifnot(
+    is.matrix(E_t),
+    is.numeric(E_t),
+    identical(dim(E_t), c(nrow(present), nrow(present))),
+    setequal(rownames(E_t), present$id),
+    setequal(colnames(E_t), present$id),
+    all(is.finite(E_t) & E_t >= 0 & E_t <= 1)
+  )
 
   E_t <- E_t[present$id, present$id, drop = FALSE]
   m_t <- m_t[present$id, present$id, drop = FALSE]

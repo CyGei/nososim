@@ -39,25 +39,13 @@
 #' )
 make_population <- function(landscape, dates, admissions, individuals) {
   landscape <- tibble::as_tibble(landscape)
-  keys <- grep("^level_[0-9]+$", names(landscape), value = TRUE)
-  stopifnot(
-    length(keys) > 0,
-    !anyDuplicated(landscape[keys]),
-    is.numeric(landscape$capacity),
-    is.null(dim(landscape$capacity)),
-    all(is.finite(landscape$capacity)),
-    all(
-      landscape$capacity >= 0 & landscape$capacity == floor(landscape$capacity)
-    )
-  )
-
+  dates <- sort(dates, na.last = TRUE)
   stopifnot(
     inherits(dates, "Date"),
     length(dates) > 0,
     all(is.finite(dates)),
-    all(diff(sort(dates)) == 1)
+    all(diff(dates) == 1)
   )
-  dates <- sort(dates)
 
   # Track each admitted person's location and departure date.
   where <- integer()
@@ -71,17 +59,9 @@ make_population <- function(landscape, dates, admissions, individuals) {
     occupied <- tabulate(where[ends >= date], nrow(landscape))
     available <- landscape$capacity - occupied
 
-    # Let the admission rule draw from today's free capacity.
     daily_landscape <- dplyr::mutate(landscape, available = .env$available)
     counts <- admissions(daily_landscape, date)
-    stopifnot(
-      is.numeric(counts),
-      is.null(dim(counts)),
-      length(counts) == nrow(landscape),
-      all(is.finite(counts)),
-      all(counts >= 0 & counts == floor(counts)),
-      all(counts <= available)
-    )
+    check_counts(counts, nrow(landscape), available)
     if (sum(counts) == 0) {
       next
     }
@@ -91,17 +71,7 @@ make_population <- function(landscape, dates, admissions, individuals) {
       mutate(capacity = .env$counts) |>
       tidyr::uncount(capacity)
     population <- individuals(admitted, date)
-    stopifnot(
-      is.data.frame(population),
-      identical(as.list(population[keys]), as.list(admitted[keys])),
-      inherits(population$start, "Date"),
-      inherits(population$end, "Date"),
-      is.null(dim(population$start)),
-      is.null(dim(population$end)),
-      all(population$start == date),
-      all(is.finite(population$end)),
-      all(population$end >= date)
-    )
+    check_individuals(population, admitted, date)
 
     # Keep the records and track occupancy for subsequent days.
     where <- c(where, rep(seq_len(nrow(landscape)), counts))
@@ -116,5 +86,16 @@ make_population <- function(landscape, dates, admissions, individuals) {
     landscape = landscape,
     dates = dates,
     class = "nososim_population"
+  )
+}
+
+check_individuals <- function(population, admitted, date) {
+  keys <- level_columns(admitted)
+  stopifnot(
+    identical(as.list(population[keys]), as.list(admitted[keys])),
+    inherits(population$start, "Date"),
+    inherits(population$end, "Date"),
+    all(population$start == date),
+    all(is.finite(population$end) & population$end >= date)
   )
 }

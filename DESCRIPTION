@@ -14,9 +14,7 @@ LazyData: true
 Depends: R (>= 4.1.0)
 Imports:
     dplyr (>= 1.1.0),
-    ggarrow,
     ggplot2 (>= 3.4.0),
-    grid,
     legendry (>= 0.3.0),
     purrr,
     rlang,

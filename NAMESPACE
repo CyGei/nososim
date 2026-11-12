@@ -29,8 +29,6 @@ importFrom(ggplot2,
   aes,
   autoplot,
   element_blank,
-  element_line,
-  geom_point,
   geom_segment,
   ggplot,
   labs,
@@ -38,11 +36,7 @@ importFrom(ggplot2,
   theme,
   theme_classic
 )
-importFrom(purrr,
-  imap,
-  map_chr,
-  reduce
-)
+importFrom(purrr,map_chr)
 importFrom(rlang,
   ":=",
   .data,

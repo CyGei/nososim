@@ -15,15 +15,7 @@
 #' count_edges(outbreak, by = "ward", by_date = TRUE)
 #' count_edges(outbreak, by = c("ward", "role"))
 count_edges <- function(x, by, by_date = FALSE) {
-  stopifnot(inherits(x, "nososim_outbreak"))
-  stopifnot(is.logical(by_date), length(by_date) == 1L, !is.na(by_date))
-  stopifnot(
-    is.character(by),
-    length(by) > 0,
-    !anyNA(by),
-    !anyDuplicated(by),
-    all(by %in% setdiff(names(x$timeline), c("id", "date", "R_i")))
-  )
+  stopifnot(is.character(by), length(by) > 0)
 
   edges <- dplyr::filter(x$infections, !is.na(source))
 

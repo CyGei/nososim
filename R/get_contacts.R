@@ -44,53 +44,23 @@
 get_contacts <- function(
   population,
   date,
-  by = grep("^level_[0-9]+$", names(population), value = TRUE),
+  by = level_columns(population),
   weights = NULL
 ) {
   stopifnot(
     inherits(date, "Date"),
     length(date) == 1,
     is.finite(date),
-    is.function(by) || (is.character(by) && length(by) > 0),
-    all(c("id", "start", "end") %in% names(population))
+    "id" %in% names(population),
+    is.function(by) || (is.character(by) && length(by) > 0)
   )
-  if (is.character(by)) {
-    stopifnot(all(by %in% names(population)))
-  }
 
-  # Keep people present on this date.
   present <- tibble::as_tibble(population) |>
     filter(start <= .env$date, end >= .env$date)
   stopifnot(!anyNA(present$id), !anyDuplicated(present$id))
 
   if (is.function(by)) {
-    n <- nrow(present)
-    contacts <- matrix(0L, n, n)
-    if (n > 1L) {
-      # Compare corresponding rows in both directions, excluding self-pairs.
-      i <- rep(seq_len(n), times = n)
-      j <- rep(seq_len(n), each = n)
-      pairs <- cbind(i[i != j], j[i != j])
-      matches <- by(
-        present[pairs[, 1], , drop = FALSE],
-        present[pairs[, 2], , drop = FALSE]
-      )
-      if (
-        !is.logical(matches) ||
-          !is.null(dim(matches)) ||
-          length(matches) != nrow(pairs)
-      ) {
-        stop("`by` must return one logical value per pair.", call. = FALSE)
-      }
-      matches[is.na(matches)] <- FALSE
-      contacts[pairs] <- as.integer(matches)
-      if (!identical(contacts, t(contacts))) {
-        stop(
-          "`by` must be symmetric: swapping people must give the same result.",
-          call. = FALSE
-        )
-      }
-    }
+    contacts <- pairwise_contacts(present, by)
   } else {
     # People with matching values belong to the same group.
     groups <- present |>
@@ -101,8 +71,24 @@ get_contacts <- function(
   }
   diag(contacts) <- 0L
   dimnames(contacts) <- list(present$id, present$id)
-  if (!is.null(weights)) {
-    contacts <- apply_contact_weights(contacts, present, weights)
+  if (length(weights)) {
+    contacts <- contacts * mixing_matrix(present, weights)
   }
+  contacts
+}
+
+pairwise_contacts <- function(present, by) {
+  n <- nrow(present)
+  contacts <- matrix(0L, n, n)
+  if (n < 2L) {
+    return(contacts)
+  }
+
+  # Compare both directions, leaving out self-pairs.
+  pairs <- which(row(contacts) != col(contacts), arr.ind = TRUE)
+  matches <- by(present[pairs[, 1], ], present[pairs[, 2], ])
+  stopifnot(is.logical(matches), length(matches) == nrow(pairs))
+  contacts[pairs] <- as.integer(!is.na(matches) & matches)
+  stopifnot(isSymmetric(contacts))
   contacts
 }

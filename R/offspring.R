@@ -7,8 +7,6 @@
 #' @return A tibble with `id` and `offspring` counts.
 #' @export
 offspring <- function(x) {
-  stopifnot(inherits(x, "nososim_outbreak"))
-
   infections <- x$infections
 
   tibble::tibble(

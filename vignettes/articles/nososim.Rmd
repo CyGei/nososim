@@ -200,26 +200,31 @@ population |>
   ungroup()
 ```
 
-## Extract daily contacts
+## Define daily contacts and weights
 
-Use column names in `by` for simple matching or a custom function can compare two rows and return TRUE if they are contacts.
+`get_contacts()` selects the people present on a date. In this example:
+
+- Two patients can contact only when sharing the same hospital, ward, and room.
+- Any pair involving staff can contact anywhere within the same hospital.
+- People in different hospitals cannot contact.
 
 ```{r}
-date <- dates[1]
+contact_date <- dates[1]
 
-# Anyone sharing level_1 and level_2 is a contact.
-contacts <- get_contacts(
-  population,
-  date,
-  by = c("level_1", "level_2")
-)
+contact_rule <- function(i, j) {
+  same_hospital <- i$level_1 == j$level_1
+  same_ward <- i$level_2 == j$level_2
+  same_room <- i$level_3 == j$level_3
+  either_staff <- i$role == "staff" | j$role == "staff"
+
+  same_hospital & (either_staff | (same_ward & same_room))
+}
 ```
 
-## Define contact weights
-
-Use `level_2` for ward weights and `role` for role weights. Matrix rows are
-sources and columns are recipients. Pass weights and a pairwise contact rule
-together to `get_contacts()`. Coefficients multiply contacts without normalisation.
+Weights set the intensity of allowed contacts. Here, `level_2` weights wards
+and `role` weights patients and staff. Matrix rows are sources; columns are
+recipients. The ward and role coefficients multiply without normalisation.
+Excluded contacts always remain zero.
 
 ```{r}
 weights <- list(
@@ -237,74 +242,45 @@ weights <- list(
   )
 )
 
-# patients contact roommates; staff contact everyone in their ward.
-contact_rule <- function(i, j) {
-  same_hospital <- i$level_1 == j$level_1
-  same_ward <- i$level_2 == j$level_2
-  same_room <- i$level_3 == j$level_3
-  either_staff <- i$role == "staff" | j$role == "staff"
-
-  same_hospital & same_ward & (either_staff | same_room)
-}
-
 contact_matrices <- list(
   unweighted = NULL,
   role_weighted = weights["role"],
   location_weighted = weights["level_2"],
   all_weighted = weights
 ) |>
-  purrr::map(function(w) get_contacts(population, date, by = contact_rule, weights = w))
+  purrr::map(function(w) {
+    get_contacts(population, contact_date, by = contact_rule, weights = w)
+  })
 ```
 
-Weights use each person's attributes on the contact date. For example,
-an ICU patient-to-staff contact receives a coefficient of `2 * 2 = 4`.
-Weights may be directional. Zero contacts remain zero: the current contact rule
-excludes cross-ward contacts, so the off-diagonal ward weights have no
-effect here.
+For example, a contact from General staff to an ICU patient in the same hospital
+has weight `3 * 1 = 3`; the reverse direction has weight `1 * 2 = 2`.
+These cross-ward weights affect only pairs involving staff, since patients in
+different wards cannot contact each other.
 
 ## Compare contact weights
 
-The four panels compare no weights, role weights, ward weights, and both.
-All use the same people, location order, and colour scale.
-Thin lines separate wards; thick lines separate hospitals.
+The four panels share the same people, ordering, and colour scale.
+Nested axis labels group people by ward and hospital.
 
 ```{r contact-comparison, fig.width=13, fig.height=14}
-people <- population |>
-  filter(start <= .env$date, end >= .env$date) |>
+labels <- population |>
+  filter(start <= contact_date, end >= contact_date) |>
   arrange(level_1, level_2, role, level_3, id) |>
-  mutate(position = row_number())
+  transmute(id, label = paste(id, level_2, level_1, sep = "\r")) |>
+  tibble::deframe()
 
-labels <- with(people, setNames(paste(id, level_2, level_1, sep = "\r"), id))
-
-boundaries <- people |>
-  mutate(
-    hospital_end = level_1 != lead(level_1),
-    ward_end = hospital_end | level_2 != lead(level_2)
-  ) |>
-  filter(ward_end) |>
-  transmute(
-    x = position + 0.5, y = nrow(people) - position + 0.5,
-    width = if_else(hospital_end, 0.8, 0.3),
-    colour = if_else(hospital_end, "grey20", "grey65")
-  )
-
-contact_comparison <- contact_matrices |>
+contact_matrices |>
   purrr::imap_dfr(function(values, label) {
-    as.data.frame(as.table(values), responseName = "intensity") |>
+    as.data.frame(as.table(values)) |>
       setNames(c("source", "recipient", "intensity")) |>
       mutate(matrix = factor(label, levels = names(contact_matrices)))
   }) |>
   ggplot(aes(recipient, source, fill = intensity)) +
   geom_tile() +
   facet_wrap(~matrix, ncol = 2) +
-  geom_vline(data = boundaries,
-    aes(xintercept = x, linewidth = width, colour = colour)) +
-  geom_hline(data = boundaries,
-    aes(yintercept = y, linewidth = width, colour = colour)) +
-  scale_linewidth_identity() +
-  scale_colour_identity() +
   scale_x_discrete(
-    limits = people$id, labels = labels,
+    limits = names(labels), labels = labels,
     guide = legendry::guide_axis_nested(
       key = "\r", drop_zero = FALSE,
       levels_text = list(
@@ -315,14 +291,10 @@ contact_comparison <- contact_matrices |>
     )
   ) +
   scale_y_discrete(
-    limits = rev(people$id), labels = labels,
+    limits = rev(names(labels)), labels = labels,
     guide = legendry::guide_axis_nested(key = "\r", drop_zero = FALSE)
   ) +
-  scale_fill_gradient(
-    low = "white", high = "#2166AC",
-    limits = c(0, max(unlist(contact_matrices))),
-    name = "Contact intensity"
-  ) +
+  scale_fill_gradient(low = "white", high = "#2166AC", name = "Contact intensity") +
   coord_fixed() +
   labs(x = "Recipient", y = "Source") +
   theme_minimal() +
@@ -332,6 +304,4 @@ contact_comparison <- contact_matrices |>
     axis.text.y = element_text(size = 6),
     legend.position = "bottom"
   )
-
-contact_comparison
 ```

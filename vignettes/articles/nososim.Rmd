@@ -280,9 +280,11 @@ contact_matrices |>
   geom_tile() +
   facet_wrap(~matrix, ncol = 2) +
   scale_x_discrete(
-    limits = names(labels), labels = labels,
+    limits = names(labels),
+    labels = labels,
     guide = legendry::guide_axis_nested(
-      key = "\r", drop_zero = FALSE,
+      key = "\r",
+      drop_zero = FALSE,
       levels_text = list(
         element_text(angle = 90, hjust = 1, vjust = 0.5),
         element_text(angle = 0, hjust = 0.5, vjust = 1),
@@ -291,10 +293,15 @@ contact_matrices |>
     )
   ) +
   scale_y_discrete(
-    limits = rev(names(labels)), labels = labels,
+    limits = rev(names(labels)),
+    labels = labels,
     guide = legendry::guide_axis_nested(key = "\r", drop_zero = FALSE)
   ) +
-  scale_fill_gradient(low = "white", high = "#2166AC", name = "Contact intensity") +
+  scale_fill_gradient(
+    low = "white",
+    high = "#2166AC",
+    name = "Contact intensity"
+  ) +
   coord_fixed() +
   labs(x = "Recipient", y = "Source") +
   theme_minimal() +
@@ -305,3 +312,57 @@ contact_matrices |>
     legend.position = "bottom"
   )
 ```
+
+## Simulate an outbreak
+
+Add a per-contact transmission rate, `tau`, to each person. `make_outbreak()`
+uses `simulacr::make_pmf_delay()` for `w`: numeric weights refer to delays
+0, 1, 2, etc. A function or `distcrete` object can also be supplied.
+Contacts multiply these rates directly, without normalisation.
+
+The epidemic advances with `simulacr::simulate_outbreak_step()`: contacts on
+a date produce infections recorded on the following day. The final step can
+therefore produce cases dated the day after the last date in `dates`.
+
+Here, one person is infected on the first day. The optional intervention halves
+all transmission hazards from day 15; omit `intervention` for no reduction.
+
+`tau` changes a source’s transmission rate; `E_t` changes particular routes.
+```{r}
+population <- population |>
+  mutate(tau = 0.2)
+imported <- tibble::tibble(id = population$id[1], date_infection = dates[1])
+
+set.seed(123)
+outbreak <- make_outbreak(
+  population,
+  imported,
+  w = c(0.2, 0.5, 0.3),
+  dates = dates,
+  contacts = function(present, date) {
+    get_contacts(present, date, by = contact_rule, weights = weights)
+  },
+  intervention = function(present, date) {
+    matrix(
+      if (date >= dates[15]) 0.5 else 0,
+      nrow(present),
+      nrow(present),
+      dimnames = list(present$id, present$id)
+    )
+  }
+)
+
+outbreak$infections
+
+count_edges(outbreak, by = c("role", "level_2"))
+```
+
+Infection history follows each person's ID across stays and shifts.
+For time-varying rates, supply `tau = function(present, date) ...` returning
+one rate per person. Both callbacks can use `present$infection_age` and
+`present$date_infection`; the intervention also receives current infectiousness.
+`outbreak$reproduction` records summed outgoing FOI (equation 12), while
+`offspring(outbreak)` counts successful secondary infections.
+
+`count_edges()` uses attributes on the contact date, one day before the recorded
+infection date.

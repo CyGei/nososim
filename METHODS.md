@@ -1,95 +1,90 @@
 # Methods
 
-## Initial conditions
+## Population and infection history
 
-Transmission is simulated in discrete daily time steps. Each individual has an identifier, admission and discharge dates, a baseline reproduction number $R_i$, and optional attributes such as ward or
-group. Individuals are present from admission through discharge, inclusive. Initial cases and their
-infection dates are specified in advance, while all other individuals are susceptible on admission.
-Individuals can be infected only once.
+Transmission is simulated in daily steps using population records with `id`,
+`start`, and `end`. Both stay boundaries are included. Repeated IDs represent
+separate stays or shifts; infection history is retained across absences.
+Each person can be infected once. `simulacr::simulate_outbreak_step()` advances
+the epidemic from each contact date $t$ to $t+1$. Imported cases are supplied
+with `id` and
+`date_infection`; they enter on that date, while earlier imports initialise the
+simulation. A scheduled import is ignored if the person has already acquired
+infection.
 
-For individual $i$ infected on date $T_i$, the baseline daily infectiousness $\lambda_i(t)$ is
+## Contacts and infectiousness
 
-$$
-\lambda_i(t)=R_i\,w(t-T_i)
-$$
+The daily contact matrix $C_t$ contains non-negative, potentially asymmetric
+intensities. Rows are sources and columns are recipients. Self-contact is zero.
+Absent individuals have no contacts and need not appear in the daily matrix.
+Contact rules and attribute weights are combined by `get_contacts()`; their
+coefficients are used directly, without normalisation.
 
-Where $w$ refers to the PMF of the generation time.
-
-## Distribution of infectiousness 
-
-Mixing matrices describe how infectiousness is distributed among individuals according to attributes such as location or group. Rows represent source attributes and columns represent recipient attributes. Matrix entries are non-negative, may be asymmetric, and are zero for excluded transmission routes.
-
-The relative mixing weight from source $i$ to recipient $j$ denoted $m_{ij}(t)\in[0,\infty)$, is the product of the corresponding weights across attributes. For example, given a location matrix $L$ and a group matrix $G$:
-
-$$
-m_{ij}(t)=L_{l_i(t),l_j(t)}\,G_{g_i,g_j},\qquad i\ne j
-$$
-
-where $l_i(t)$ is the location of individual $i$ on day $t$, and $g_i$ is their fixed group. The attribute matrices can remain constant while pairwise weights change with daily locations. Self-transmission is excluded by setting $m_{ii}(t)=0$. In the absence of mixing matrices, all distinct pairs receive equal weights $m_{ij}(t)=1$ by default.
-
-These weights are normalised separately for each source over all individuals present on day $t$ (except the source itself), denoted $\mathcal P(t)$:
+For source $i$ infected on date $T_i$, the pairwise force of infection is
 
 $$
-q_{ij}(t)=\frac{m_{ij}(t)}{\sum_{\ell\in\mathcal P(t)}m_{i\ell}(t)},\qquad i,j\in\mathcal P(t)
+\lambda_{t,i\rightarrow j}
+= I_{t,i} C_{t,i\rightarrow j} \tau_{t,i} w(t-T_i).
 $$
 
-Thus $q_{ij}(t)$ represents the proportion of source $i$'s baseline infectiousness allocated to recipient $j$. Weights sum to one for each source when the denominator is positive, and are otherwise set to zero. All individuals present, including those previously infected, contribute to the normalisation.
+Here $\tau_{t,i}$ is the per-contact transmission rate, and $w$ is a
+generation-time PMF constructed with `simulacr::make_pmf_delay()`. Numeric
+weights correspond to delays 0, 1, 2, etc., and are normalised by that function.
+PMF functions and `distcrete` objects are also accepted. The engine evaluates
+$w(t-T_i)$ exactly at contact time $t$, including delay zero.
+The `tau(present, date)` callback allows rates to vary with date or individual
+attributes; by default it reads the population's `tau` column.
 
-## Interventions
-Iterventions are represented by a time-varying matrix $E(t)$ whose entries $e_{ij}(t)\in[0,1]$ specify the proportional reduction in transmission hazard from source $i$ to recipient $j$. A value of zero indicates no reduction, while one prevents transmission entirely. Intervention effects may vary over time and across individuals or attributes.
+## Optional interventions
 
-The resulting daily infection hazard from source $i$ to recipient $j$ is
+An intervention supplies proportional reductions $E_{t,ij}\in[0,1]$ with source
+rows and recipient columns named by ID. The adjusted force of infection is
 
 $$
-h_{ij}(t)=\lambda_i(t)\,q_{ij}(t)\,[1-e_{ij}(t)]
+\lambda^{*}_{t,ij}=\lambda_{t,i\rightarrow j}(1-E_{t,ij}).
 $$
 
-Interventions are applied after mixing weights have been normalised, so reductions in infectiousness are not redistributed among other recipients.
+Without an intervention, $E_{t,ij}=0$. Reductions do not redistribute
+infectiousness to other recipients. The baseline contact matrix remains
+unchanged. The engine receives the effective contact matrix $C^{*}_{t,ij}=C_{t,ij}(1-E_{t,ij})$.
 
 ## Infection and source assignment
 
-The total daily infection hazard for recipient $j$ is the sum of contributions from all individuals present:
+Let $S_{t,j}$ indicate whether person $j$ is susceptible at the start of the day.
+Their total force of infection and probability of becoming infected at $t+1$ are
 
 $$
-H_j(t)=\sum_{i\in\mathcal P(t)}h_{ij}(t)
+H_{t,j}=S_{t,j}\sum_i\lambda^{*}_{t,ij},
+\qquad p_{t,j}=1-\exp(-H_{t,j}).
 $$
 
-The corresponding infection probability is
+Each susceptible person's infection is drawn independently from
+$\operatorname{Bernoulli}(p_{t,j})$. The expected number of new cases produced by that contact step is
+$\sum_j p_{t,j}$. Given an infection at $t+1$, its source is sampled with
+probability
 
 $$
-p_j(t)=1-e^{-H_j(t)}
+\Pr(\alpha_j=i\mid j\text{ infected at }t+1)
+=\frac{\lambda^{*}_{t,ij}}{\sum_k\lambda^{*}_{t,kj}}.
 $$
 
-For each susceptible individual $j\in S(t)$, where $S(t)$ is the set of susceptible individuals present on day $t$, infection is simulated independently as 
+The engine returns new infections dated $t+1$. They join infection history
+before the next step and cannot transmit within the step that generated them.
+The final contact date can therefore produce cases on the following day.
+Imported infections have no assigned source.
+
+## Summed force of infection and realised offspring
+
+The model-defined quantity in equation 12 is recorded for each individual as
 
 $$
-X_j(t)\sim\operatorname{Bernoulli}(p_j(t))
+R_i=\sum_t\sum_j\lambda^{*}_{t,ij}.
 $$
 
-For each newly infected individual, the source is sampled from the previously infected individuals present and infectious that day, with probabilities proportional to their contributions to the recipient's total hazard:
-
-$$
-\Pr(\text{source}=i\mid j\text{ infected on day }t)
-=\frac{h_{ij}(t)}{H_j(t)}
-$$
-
-This assignment is defined for $H_j(t)>0$, infection states are updated simultaneously at the end of each day, so newly infected individuals can begin transmitting on the following day.
-The simulation records each infected individual's identifier, infection date and transmission source. Initial cases have no assigned source.
-
-
-
-| Quantity | Interpretation |
-|---|---|
-| $T_i$ | Infection date of individual $i$. |
-| $R_i=2$ | Basic reprodcution number for individual $i$. Realised secondary infections may be lower |
-| $w(2)=0.3$ | 30% of baseline infectiousness is allocated to the second day after infection. |
-| $\lambda_i(t)=0.6$ | Source $i$ has 0.6 units of baseline infectiousness on day $t$. |
-| $L_{A,B}=2$, $L_{A,A}=1$ | A source in ward A allocates twice as much infectiousness to each individual in B as to each other individual in A, all else equal. |
-| $G_{\mathrm{patient,staff}}=2$, $G_{\mathrm{patient,patient}}=1$ | A patient allocates twice as much infectiousness to each staff member as to each other patient, all else equal. |
-| $m_{ij}(t)=6$, $m_{ik}(t)=1$ | Source $i$ allocates six times as much infectiousness to $j$ as to $k$, when both are present. |
-| $q_{ij}(t)=0.1$ | Recipient $j$ receives 10% of source $i$'s baseline infectiousness that day. |
-| $e_{ij}(t)=0.5$ | Intervention reduces the hazard from $i$ to $j$ by 50%. |
-| $h_{ij}(t)=0.06$ | Source $i$ contributes 0.06 to recipient $j$'s daily infection hazard. |
-| $H_j(t)=0.2$ | Total daily hazard of 0.2, corresponding to an infection probability of approximately 18.1%. |
-| $p_j(t)=0.2$ | A susceptible individual has a 20% probability of infection that day. |
-| $h_{ij}(t)/H_j(t)=0.3$ | Conditional on infection, source $i$ has a 30% probability of being assigned as the infector. |
+`outbreak$reproduction` contains these sums over the simulation dates, including
+intervention effects. This is cumulative outgoing FOI, not generally the expected
+number of successful secondary infections in a finite population.
+`offspring(outbreak)` counts realised secondary infections from the recorded
+transmission tree. `count_edges()` groups transmissions using source and
+recipient attributes on the contact date, one day before the recorded infection
+date.

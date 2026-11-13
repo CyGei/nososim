@@ -2,59 +2,14 @@ devtools::load_all()
 library(ggplot2)
 library(dplyr)
 
-set.seed(123)
-start <- as.Date("2026-01-01")
-dates <- start + 0:13
+source("inst/examples/outbreak.R")
+start <- dates[1]
 
-timeline <- make_timeline(
-  n = 40,
-  dates = dates,
-  attributes = list(
-    ward = c(A = 0.5, B = 0.5),
-    role = c(patient = 0.8, staff = 0.2)
-  ),
-  admission_delay = 0:4,
-  stay = 3:7,
-  R = rpois(40, 2.5)
-)
-summary(timeline)
+# Plot stays by ward and role.
+autoplot(population, aes(colour = ward)) +
+  facet_grid(rows = vars(role), scales = "free_y", space = "free_y")
 
-autoplot(timeline, aes(colour = ward)) +
-  facet_grid(
-    rows = vars(role),
-    scales = "free_y",
-    space = "free_y"
-  ) +
-  paletteer::scale_colour_paletteer_d("ltc::trio1")
-
-timeline <- timeline |>
-  #modify an ID timeline
-  set_attribute(
-    id = "ID_36",
-    from = start + 6,
-    attributes = list(ward = "A")
-  ) |>
-  #give 2 day breaks to a all staff members
-  group_by(id) |>
-  (\(x) {
-    set_schedule(
-      x,
-      id = unique(x$id[x$role == "staff"]),
-      weekdays = sample(1:7, 5)
-    )
-  })() |>
-  ungroup() |>
-  new_timeline()
-
-autoplot(timeline, aes(colour = ward)) +
-  facet_grid(
-    rows = vars(role),
-    scales = "free_y",
-    space = "free_y"
-  ) +
-  paletteer::scale_colour_paletteer_d("ltc::trio1")
-
-# Choose relative diffusion weights: rows are sources, columns are recipients.
+# Choose contact intensity weights: rows are sources, columns are recipients.
 ward_weights <- tribble(
   ~from , ~A   , ~B   ,
   "A"   , 1    , 0.25 ,
@@ -84,11 +39,10 @@ intervention <- function(present, date) {
 
 
 outbreak <- make_outbreak(
-  timeline = timeline,
-  imported = timeline |>
-    filter(date == start) |>
+  population = population,
+  imported = population |>
     slice_head(n = 1, by = ward) |>
-    select(id, date),
+    transmute(id, date_infection = start),
   w = distcrete::distcrete(
     "gamma",
     shape = 4,
@@ -97,18 +51,15 @@ outbreak <- make_outbreak(
   )$d(0:10) |>
     (\(w) w / sum(w))(),
   dates = dates,
-  intervention = intervention,
-  mixing = list(ward = ward_weights, role = role_weights)
+  contacts = function(present, date) {
+    get_contacts(present, date, by = "level_1",
+      weights = list(ward = ward_weights, role = role_weights)
+    )
+  },
+  intervention = intervention
 )
 outbreak
 
-# F. Overlay the transmission tree on the same timelines.
-autoplot(
-  outbreak,
-  aes(colour = ward, fill = ward, shape = role)
-) +
-  scale_shape_manual(values = c(patient = 21, staff = 24)) +
-  paletteer::scale_fill_paletteer_d("ltc::trio1") +
-  paletteer::scale_colour_paletteer_d("ltc::trio1")
-
-
+# Summarise transmissions using attributes on the contact date.
+count_edges(outbreak, by = c("ward", "role"))
+offspring(outbreak)

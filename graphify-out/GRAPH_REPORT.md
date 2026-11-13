@@ -1,17 +1,17 @@
-# Graph Report - nososim  (2026-11-11)
+# Graph Report - nososim  (2026-11-12)
 
 ## Corpus Check
-- 49 files · ~21,005 words
+- 49 files · ~19,151 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 24 file(s) not represented in the graph (top: .Rd 13, (none) 8, .Rmd 2)
 
 ## Summary
-- 263 nodes · 228 edges · 48 communities (33 shown, 15 thin omitted)
+- 273 nodes · 239 edges · 49 communities (33 shown, 16 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `93893a84`
+- Built from commit: `04871859`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -56,55 +56,57 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `autoplot.nososim_population()` - 7 edges
-2. `count_edges()` - 6 edges
-3. `get_contacts()` - 6 edges
-4. `collect_levels()` - 6 edges
-5. `make_population()` - 6 edges
-6. `Pairwise infection hazard` - 5 edges
-7. `population_positions()` - 4 edges
-8. `make_timeline()` - 4 edges
-9. `nososim` - 4 edges
-10. `Q: Which existing nososim conventions should guide a landscape API?` - 4 edges
+2. `count_edges()` - 7 edges
+3. `make_outbreak()` - 7 edges
+4. `get_contacts()` - 6 edges
+5. `collect_levels()` - 6 edges
+6. `make_population()` - 6 edges
+7. `add_attributes()` - 5 edges
+8. `Pairwise infection hazard` - 5 edges
+9. `population_positions()` - 4 edges
+10. `make_timeline()` - 4 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `get_contacts()` --calls--> `tibble::as_tibble()`  [EXTRACTED]
   R/get_contacts.R →   _Bridges community 1 → community 6_
+- `count_edges()` --calls--> `dplyr::mutate()`  [EXTRACTED]
+  R/count_edges.R →   _Bridges community 6 → community 38_
 - `make_population()` --calls--> `dplyr::mutate()`  [EXTRACTED]
-  R/population.R →   _Bridges community 1 → community 38_
+  R/population.R →   _Bridges community 38 → community 1_
 - `make_population()` --calls--> `tibble::new_tibble()`  [EXTRACTED]
   R/population.R →   _Bridges community 1 → community 23_
 
 ## Import Cycles
 - None detected.
 
-## Communities (48 total, 15 thin omitted)
+## Communities (49 total, 16 thin omitted)
 
 ### Community 0 - "test-make_outbreak.R"
-Cohesion: 0.17
-Nodes (11): blocked, dates, expected, ids, imported, outbreak, present, reduction (+3 more)
+Cohesion: 0.12
+Nodes (15): blocked, C, contacts, controlled, date, dates, E, expected (+7 more)
 
 ### Community 1 - "autoplot.nososim_population"
-Cohesion: 0.15
-Nodes (6): autoplot.nososim_population(), population_positions(), make_outbreak(), transmission_hazards(), check_individuals(), make_population()
+Cohesion: 0.12
+Nodes (6): autoplot.nososim_population(), population_positions(), align_pairwise(), make_outbreak(), check_individuals(), make_population()
 
 ### Community 2 - "Pairwise infection hazard"
 Cohesion: 0.16
 Nodes (10): Baseline daily infectiousness, Baseline reproduction number, Daily transmission simulation, Diffusion matrices, Generation time PMF, Time-varying intervention matrix, Pairwise diffusion weights, Pairwise infection hazard (+2 more)
 
 ### Community 3 - "draft.R"
-Cohesion: 0.20
-Nodes (6): dates, outbreak, role_weights, start, timeline, ward_weights
+Cohesion: 0.22
+Nodes (4): outbreak, role_weights, start, ward_weights
 
 ### Community 4 - "test-timeline.R"
 Cohesion: 0.50
 Nodes (3): dates, timeline, updated
 
 ### Community 5 - "examples/outbreak.R"
-Cohesion: 0.22
-Nodes (4): dates, imported, outbreak, timeline
+Cohesion: 0.29
+Nodes (3): dates, outbreak, population
 
 ### Community 6 - "count_edges"
-Cohesion: 0.17
+Cohesion: 0.13
 Nodes (4): count_edges(), add_attributes(), get_contacts(), pairwise_contacts()
 
 ### Community 8 - "test-autoplot.R"
@@ -213,19 +215,23 @@ Nodes (8): date, expected, matched, population, previous, reordered, reversed, w
 
 ## Knowledge Gaps
 - **9 isolated node(s):** `R-CMD-check workflow`, `R package check`, `Cyril Geismar`, `MIT License`, `Baseline reproduction number` (+4 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 191 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 200 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `make_population()` connect `autoplot.nososim_population` to `test-population.R`, `timeline.R`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
 - **What connects `R-CMD-check workflow`, `R package check`, `Cyril Geismar` to the rest of the system?**
   _9 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `test-make_outbreak.R` be split into smaller, more focused modules?**
+  _Cohesion score 0.11764705882352941 - nodes in this community are weakly interconnected._
+- **Why does `count_edges()` connect `count_edges` to `test-population.R`?**
+  _High betweenness centrality (0.012) - this node is a cross-community bridge._
 - **Should `autoplot.nososim_population` be split into smaller, more focused modules?**
-  _Cohesion score 0.14705882352941177 - nodes in this community are weakly interconnected._
-- **Why does `get_contacts()` connect `count_edges` to `autoplot.nososim_population`?**
-  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+  _Cohesion score 0.11904761904761904 - nodes in this community are weakly interconnected._
+- **Should `count_edges` be split into smaller, more focused modules?**
+  _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._
 - **Should `collect_levels` be split into smaller, more focused modules?**
   _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._

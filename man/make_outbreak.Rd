@@ -2,76 +2,66 @@
 % Please edit documentation in R/make_outbreak.R
 \name{make_outbreak}
 \alias{make_outbreak}
-\title{Simulate an outbreak}
+\title{Simulate a contact-driven outbreak}
 \usage{
-make_outbreak(timeline, imported, w, dates, intervention, mixing = NULL)
+make_outbreak(
+  population,
+  imported,
+  w,
+  dates,
+  contacts,
+  tau = population_tau,
+  intervention = NULL
+)
 }
 \arguments{
-\item{timeline}{A population timeline from \code{\link[=make_timeline]{make_timeline()}}.}
+\item{population}{Population records with \code{id}, \code{start}, \code{end}, and contact
+attributes. Repeated IDs represent separate stays or shifts; records for
+the same person must not overlap. IDs are stored as character strings.}
 
-\item{imported}{Data frame with \code{id} and \code{date} (infection date) for imported cases.}
+\item{imported}{Data frame with \code{id} and \code{date_infection} for imported cases.
+Cases before the first simulation day initialise infection history. Later
+imports occur on their date, unless the person has already been infected.}
 
-\item{w}{Probability mass function of the generation time distribution.}
+\item{w}{Generation-time PMF accepted by \code{\link[simulacr:make_pmf_delay]{simulacr::make_pmf_delay()}}: a
+function, a \code{distcrete} object, or numeric weights on delays 0, 1, etc.
+Numeric weights are normalised; the first weight applies at delay zero.}
 
-\item{dates}{Dates over which to simulate transmission.}
+\item{dates}{Consecutive daily contact dates. Contacts on date \code{t} produce
+infections dated \code{t + 1}, including the day after the final contact date.}
 
-\item{intervention}{Function of \code{present} and \code{date} returning the matrix
-E(t) of proportional hazard reductions (0 = none, 1 = complete),
-as defined in METHODS.md, Interventions. Rows represent
-sources and columns recipients. \code{present} contains the daily
-population, infection status, infection age, and infectiousness.}
+\item{contacts}{Function \verb{(present, date)} returning a non-negative contact
+matrix, with source IDs in rows and recipient IDs in columns. May be
+asymmetric. Self-contact is set to zero.}
 
-\item{mixing}{Named list of mixing matrices by population attribute.
-Rows represent source groups and columns recipient groups.
-Weights are multiplied across attributes. \code{NULL} assumes equal mixing.}
+\item{tau}{Function \verb{(present, date)} returning one finite, non-negative
+transmission rate per person, in row order. Defaults to the \code{tau} column.}
+
+\item{intervention}{Optional function \verb{(present, date)} returning a matrix
+of proportional hazard reductions, named by ID (0 = none, 1 = complete).
+\code{present} includes infection dates, \code{infection_age}, current \code{tau}, and
+\code{infectiousness}. \code{NULL} applies no reduction.}
 }
 \value{
-A \code{nososim_outbreak} containing the population timeline,
-infection records (\code{id}, \code{source}, \code{date_infection}), simulation
-dates, and parameters. Imported cases have \code{NA} sources.
+A \code{nososim_outbreak} containing \code{population}, \code{infections} (\code{id},
+\code{source}, \code{date_infection}), \code{dates}, \code{parameters}, and \code{reproduction}.
+Imported cases have \code{NA} sources. \code{reproduction} contains each person's
+summed outgoing FOI (\code{R_i}, equation 12), including intervention effects.
+This differs from realised secondary infections counted by \code{\link[=offspring]{offspring()}}.
 }
 \description{
-Simulates nosocomial outbreaks. Each individual can be infected once,
-and new cases become infectious from the following day.
+Each person can be infected once. Uses \code{\link[simulacr:simulate_outbreak_step]{simulacr::simulate_outbreak_step()}}
+to advance the epidemic from each contact date to the following day.
+Contact intensities multiply transmission rates without normalisation.
 }
 \examples{
 dates <- as.Date("2026-01-01") + 0:6
-timeline <- make_timeline(10, dates, stay = 7,
-attributes = list(
- ward = c(A = 0.5, B = 0.5),
-role = c(patient = 0.8, staff = 0.2)
-))
-
-imported <- data.frame(id = "ID_1", date = dates[1])
-
-global_ipc <- function(present, date) {
-  E_t <- matrix(
-    0, nrow(present), nrow(present),
-    dimnames = list(present$id, present$id)
-  )
-  if (date >= dates[4]) E_t[,] <- 0.9
-  E_t
-}
-
-staff_masking <- function(present, date) {
-  E_t <- matrix(
-    0, nrow(present), nrow(present),
-    dimnames = list(present$id, present$id)
-  )
-  E_t[present$role == "staff", ] <- 0.9
-  E_t
-}
-
-A_to_B_IPC <- function(present, date) {
-  E_t <- matrix(
-    0, nrow(present), nrow(present),
-    dimnames = list(present$id, present$id)
-  )
-  E_t[present$ward == "A", present$ward == "B"] <- 0.9
-  E_t
-}
-
-make_outbreak(timeline, imported, w = c(0.2, 0.5, 0.3),
-  dates, intervention = A_to_B_IPC
+population <- tibble::tibble(
+  id = c("a", "b", "c"), level_1 = "hospital",
+  start = dates[1], end = dates[7], tau = 0.5
+)
+make_outbreak(
+  population, data.frame(id = "a", date_infection = dates[1]),
+  w = c(0.2, 0.5, 0.3), dates = dates, contacts = get_contacts
 )
 }

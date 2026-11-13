@@ -16,12 +16,9 @@ importFrom(dplyr,
   all_of,
   arrange,
   bind_rows,
-  coalesce,
   filter,
-  if_else,
   left_join,
   mutate,
-  n,
   select,
   transmute
 )
@@ -36,12 +33,10 @@ importFrom(ggplot2,
   theme,
   theme_classic
 )
-importFrom(purrr,map_chr)
 importFrom(rlang,
   ":=",
   .data,
   .env
 )
-importFrom(stats,rbinom)
 importFrom(tibble,tibble)
 importFrom(utils,globalVariables)

@@ -3,11 +3,8 @@
 
 # nososim
 
-Simulate hospital outbreaks with changing patient populations, contact
-patterns, and interventions.
-
-Create a daily population, simulate transmission, and visualise who
-infected whom.
+Simulate hospital outbreaks with changing populations, weighted
+contacts, individual transmission rates, and optional interventions.
 
 ## Installation
 
@@ -20,9 +17,12 @@ pak::pak("CyGei/nososim")
 
 ## A first outbreak
 
-Simulate an outbreak in a population of 30 people, starting with one
-infection. Containment strategy starts on day 10 reducing transmission
-hazards by 50%.
+Create a population of 30 people, then simulate spread from one imported
+case. Contacts multiply per-contact transmission rates (`tau`) without
+normalisation. The intervention halves transmission hazards from contact
+day 10. The simulation uses `simulacr`: numeric `w` values refer to
+delays 0, 1, 2, etc., and contacts on each date produce infections
+recorded on the following day.
 
 ``` r
 library(nososim)
@@ -30,30 +30,35 @@ library(ggplot2)
 
 set.seed(123)
 dates <- as.Date("2026-01-01") + 0:20
-
-timeline <- make_timeline(n = 30, dates = dates, admission_delay = 0:4, R = 2)
-imported <- data.frame(id = "ID_1", date = dates[1])
-
-outbreak <- make_outbreak(
-  timeline,
-  imported,
-  w = dpois(0:10, 2),
-  dates = dates,
-  intervention = function(present, date) {
-    E_t <- matrix(
-      0,
-      nrow(present),
-      nrow(present),
-      dimnames = list(present$id, present$id)
+population <- make_population(
+  make_landscape(c(hospital = 30)), dates,
+  admissions = function(landscape, date) landscape$available,
+  individuals = function(admitted, date) {
+    dplyr::mutate(admitted,
+      id = paste0("ID_", dplyr::row_number()),
+      start = date, end = max(dates), tau = 0.1
     )
-    if (date >= dates[10]) {
-      E_t[,] <- 0.5
-    }
-    E_t
   }
 )
 
-autoplot(outbreak, aes(colour = I("#B8D8D3"), fill = I("#176B65")))
+outbreak <- make_outbreak(
+  population, data.frame(id = "ID_1", date_infection = dates[1]),
+  w = c(0.2, 0.5, 0.3), dates = dates, contacts = get_contacts,
+  intervention = function(present, date) {
+    matrix(
+      if (date >= dates[10]) 0.5 else 0,
+      nrow(present), nrow(present),
+      dimnames = list(present$id, present$id)
+    )
+  }
+)
+
+outbreak$infections |>
+  dplyr::count(date_infection) |>
+  ggplot(aes(date_infection, n)) +
+  geom_col(fill = "#176B65") +
+  labs(x = "Infection date", y = "New cases") +
+  theme_classic()
 ```
 
 <img src="man/figures/README-first-outbreak-1.png" alt="" width="100%" />
@@ -61,8 +66,8 @@ autoplot(outbreak, aes(colour = I("#B8D8D3"), fill = I("#176B65")))
 ## Go further
 
 The [getting started
-guide](https://CyGei.github.io/nososim/articles/nososim.html) starts with
-the physical landscape and its capacities (`n`).
-Browse the [function
+guide](https://CyGei.github.io/nososim/articles/nososim.html) walks
+through landscapes, patient admissions, staff attendance, and weighted
+contacts before simulating an outbreak. Browse the [function
 reference](https://CyGei.github.io/nososim/reference/index.html) for
 individual function arguments and examples.

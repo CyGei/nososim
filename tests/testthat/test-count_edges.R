@@ -1,8 +1,8 @@
 test_that("joint edge counts aggregate to single-attribute counts", {
   date <- as.Date("2026-01-01")
   outbreak <- structure(list(
-    timeline = tibble::tibble(
-      id = letters[1:5], date = date,
+    population = tibble::tibble(
+      id = letters[1:5], start = date - 1L, end = date + 2L,
       role = c("patient", "staff", "patient", "patient", "staff"),
       ward = c("A", "B", "A", "B", "A")
     ),
@@ -28,19 +28,20 @@ test_that("joint edge counts aggregate to single-attribute counts", {
 test_that("daily counts use wards on the transmission date", {
   dates <- as.Date("2026-01-01") + 0:1
   outbreak <- structure(list(
-    timeline = tibble::tibble(
-      id = rep(c("a", "b", "c"), 2), date = rep(dates, each = 3),
+    population = tibble::tibble(
+      id = rep(c("a", "b", "c"), 2),
+      start = rep(dates, each = 3), end = rep(dates, each = 3),
       ward = c("A", "B", "B", "B", "B", "A")
     ),
     infections = tibble::tibble(
       id = c("a", "b", "c"), source = c(NA, "a", "a"),
-      date_infection = c(dates[1] - 1, dates)
+      date_infection = c(dates[1] - 1, dates + 1L)
     )
   ), class = "nososim_outbreak")
 
   daily <- count_edges(outbreak, "ward", by_date = TRUE)
   expect_equal(daily, tibble::tibble(
-    date_infection = dates, source_ward = c("A", "B"),
+    date_infection = dates + 1L, source_ward = c("A", "B"),
     recipient_ward = c("B", "A"), transmissions = c(1L, 1L)
   ))
   totals <- daily |>

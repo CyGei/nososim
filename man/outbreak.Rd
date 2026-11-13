@@ -5,15 +5,16 @@
 \alias{outbreak}
 \title{Example nosocomial outbreak}
 \format{
-A \code{nososim_outbreak} list with population \code{timeline}, \code{infections},
-simulation \code{dates}, and \code{parameters}.
+A \code{nososim_outbreak} list with \code{population}, \code{infections},
+\code{reproduction}, simulation \code{dates}, and \code{parameters}.
 }
 \usage{
 outbreak
 }
 \description{
 A simulated outbreak in a population of 40 people over 21 days, with ward
-and role attributes, one imported case, and no intervention. Generated with
+and role attributes, per-contact transmission rates, one imported case,
+and no intervention. Generated with
 seed 123 by \code{inst/examples/outbreak.R}.
 }
 \examples{

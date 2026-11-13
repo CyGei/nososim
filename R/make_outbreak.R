@@ -1,146 +1,162 @@
-#' Simulate an outbreak
+#' Simulate a contact-driven outbreak
 #'
-#' Simulates nosocomial outbreaks. Each individual can be infected once,
-#' and new cases become infectious from the following day.
+#' Each person can be infected once. Uses [simulacr::simulate_outbreak_step()]
+#' to advance the epidemic from each contact date to the following day.
+#' Contact intensities multiply transmission rates without normalisation.
 #'
-#' @param timeline A population timeline from [make_timeline()].
-#' @param imported Data frame with `id` and `date` (infection date) for imported cases.
-#' @param w Probability mass function of the generation time distribution.
-#' @param dates Dates over which to simulate transmission.
-#' @param intervention Function of `present` and `date` returning the matrix
-#'   E(t) of proportional hazard reductions (0 = none, 1 = complete),
-#'   as defined in METHODS.md, Interventions. Rows represent
-#'   sources and columns recipients. `present` contains the daily
-#'   population, infection status, infection age, and infectiousness.
-#' @param mixing Named list of mixing matrices by population attribute.
-#'   Rows represent source groups and columns recipient groups.
-#'   Weights are multiplied across attributes. `NULL` assumes equal mixing.
-#'
-#' @return A `nososim_outbreak` containing the population timeline,
-#'   infection records (`id`, `source`, `date_infection`), simulation
-#'   dates, and parameters. Imported cases have `NA` sources.
-#'
-#'
+#' @param population Population records with `id`, `start`, `end`, and contact
+#'   attributes. Repeated IDs represent separate stays or shifts; records for
+#'   the same person must not overlap. IDs are stored as character strings.
+#' @param imported Data frame with `id` and `date_infection` for imported cases.
+#'   Cases before the first simulation day initialise infection history. Later
+#'   imports occur on their date, unless the person has already been infected.
+#' @param w Generation-time PMF accepted by [simulacr::make_pmf_delay()]: a
+#'   function, a `distcrete` object, or numeric weights on delays 0, 1, etc.
+#'   Numeric weights are normalised; the first weight applies at delay zero.
+#' @param dates Consecutive daily contact dates. Contacts on date `t` produce
+#'   infections dated `t + 1`, including the day after the final contact date.
+#' @param contacts Function `(present, date)` returning a non-negative contact
+#'   matrix, with source IDs in rows and recipient IDs in columns. May be
+#'   asymmetric. Self-contact is set to zero.
+#' @param tau Function `(present, date)` returning one finite, non-negative
+#'   transmission rate per person, in row order. Defaults to the `tau` column.
+#' @param intervention Optional function `(present, date)` returning a matrix
+#'   of proportional hazard reductions, named by ID (0 = none, 1 = complete).
+#'   `present` includes infection dates, `infection_age`, current `tau`, and
+#'   `infectiousness`. `NULL` applies no reduction.
+#' @return A `nososim_outbreak` containing `population`, `infections` (`id`,
+#'   `source`, `date_infection`), `dates`, `parameters`, and `reproduction`.
+#'   Imported cases have `NA` sources. `reproduction` contains each person's
+#'   summed outgoing FOI (`R_i`, equation 12), including intervention effects.
+#'   This differs from realised secondary infections counted by [offspring()].
 #' @export
 #' @examples
 #' dates <- as.Date("2026-01-01") + 0:6
-#' timeline <- make_timeline(10, dates, stay = 7,
-#' attributes = list(
-#'  ward = c(A = 0.5, B = 0.5),
-#' role = c(patient = 0.8, staff = 0.2)
-#' ))
-#'
-#' imported <- data.frame(id = "ID_1", date = dates[1])
-#'
-#' global_ipc <- function(present, date) {
-#'   E_t <- matrix(
-#'     0, nrow(present), nrow(present),
-#'     dimnames = list(present$id, present$id)
-#'   )
-#'   if (date >= dates[4]) E_t[,] <- 0.9
-#'   E_t
-#' }
-#'
-#' staff_masking <- function(present, date) {
-#'   E_t <- matrix(
-#'     0, nrow(present), nrow(present),
-#'     dimnames = list(present$id, present$id)
-#'   )
-#'   E_t[present$role == "staff", ] <- 0.9
-#'   E_t
-#' }
-#'
-#' A_to_B_IPC <- function(present, date) {
-#'   E_t <- matrix(
-#'     0, nrow(present), nrow(present),
-#'     dimnames = list(present$id, present$id)
-#'   )
-#'   E_t[present$ward == "A", present$ward == "B"] <- 0.9
-#'   E_t
-#' }
-#'
-#' make_outbreak(timeline, imported, w = c(0.2, 0.5, 0.3),
-#'   dates, intervention = A_to_B_IPC
+#' population <- tibble::tibble(
+#'   id = c("a", "b", "c"), level_1 = "hospital",
+#'   start = dates[1], end = dates[7], tau = 0.5
 #' )
-
+#' make_outbreak(
+#'   population, data.frame(id = "a", date_infection = dates[1]),
+#'   w = c(0.2, 0.5, 0.3), dates = dates, contacts = get_contacts
+#' )
 make_outbreak <- function(
-  timeline,
+  population,
   imported,
   w,
   dates,
-  intervention,
-  mixing = NULL
+  contacts,
+  tau = population_tau,
+  intervention = NULL
 ) {
+  population <- tibble::as_tibble(population) |>
+    mutate(id = as.character(id))
+  imported <- tibble::as_tibble(imported) |>
+    transmute(id = as.character(id), source = NA_character_, date_infection)
+  dates <- sort(dates, na.last = TRUE)
+  w <- simulacr::make_pmf_delay(w)
   stopifnot(
-    is.function(intervention),
-    !anyDuplicated(timeline[c("id", "date")]),
-    is.data.frame(imported),
-    all(c("id", "date") %in% names(imported))
+    inherits(dates, "Date"),
+    length(dates) > 0,
+    all(is.finite(dates)),
+    all(diff(dates) == 1),
+    inherits(imported$date_infection, "Date"),
+    all(is.finite(imported$date_infection)),
+    !anyDuplicated(imported$id),
+    all(imported$id %in% population$id),
+    !anyNA(population$id)
   )
 
-  imported <- tibble::as_tibble(imported)
-  dates <- sort(dates)
-  infections <- imported |>
-    transmute(id, date_infection = date) |>
-    arrange(date_infection, id) |>
-    mutate(source = NA_character_)
+  # Imports are scheduled cases; infections records cases that have occurred.
+  infections <- filter(imported, date_infection < dates[1])
+  ids <- unique(population$id)
+  cumulative_foi <- stats::setNames(numeric(length(ids)), ids)
 
   for (i in seq_along(dates)) {
     date <- dates[i]
-    present <- timeline |>
-      filter(date == .env$date) |>
+    infections <- bind_rows(
+      infections,
+      filter(imported, date_infection == .env$date, !id %in% .env$infections$id)
+    )
+    present <- population |>
+      filter(start <= .env$date, end >= .env$date) |>
       arrange(id) |>
       left_join(infections, by = "id") |>
+      mutate(infection_age = as.integer(.env$date - date_infection))
+    stopifnot(!anyDuplicated(present$id))
+
+    # simulacr uses integer dates and -1 for people not yet infected.
+    t <- as.integer(date)
+    S <- is.na(present$date_infection)
+    date_infection <- dplyr::if_else(S, -1L, as.integer(present$date_infection))
+    rates <- tau(present, date)
+    stopifnot(
+      is.numeric(rates), length(rates) == nrow(present),
+      all(is.finite(rates) & rates >= 0)
+    )
+    present <- present |>
       mutate(
-        # w[1] is the first day after infection; other lags contribute zero.
-        age = as.integer(.env$date - date_infection),
-        lambda = coalesce(R_i * .env$w[match(age, seq_along(.env$w))], 0)
+        tau = .env$rates,
+        infectiousness = as.numeric(!.env$S) * tau *
+          .env$w(.env$t - .env$date_infection)
       )
 
-    # METHODS.md: pairwise mixing, intervention E(t), and hazards h_ij(t).
-    m_t <- mixing_matrix(present, mixing)
-    E_t <- intervention(present, date)
-    h_t <- transmission_hazards(present, m_t, E_t)
+    C_effective <- align_pairwise(contacts(present, date), present$id)
+    diag(C_effective) <- 0
+    if (!is.null(intervention)) {
+      E_t <- align_pairwise(intervention(present, date), present$id, upper = 1)
+      C_effective <- C_effective * (1 - E_t)
+    }
+    cumulative_foi[present$id] <- cumulative_foi[present$id] +
+      present$infectiousness * rowSums(C_effective)
 
-    new <- present |>
-      mutate(p = -expm1(-colSums(.env$h_t))) |>
-      filter(is.na(date_infection)) |>
-      filter(rbinom(n(), 1, p) == 1) |>
+    step <- simulacr::simulate_outbreak_step(
+      t = t, labels = present$id, S = S, I = !S,
+      date_infection = date_infection, C = C_effective, tau = rates, w = w
+    )
+    new <- tibble::as_tibble(step$tree) |>
       transmute(
-        id,
-        source = map_chr(id, \(recipient) {
-          contributions <- .env$h_t[, recipient]
-          sample(
-            rownames(.env$h_t)[contributions > 0],
-            1,
-            prob = contributions[contributions > 0]
-          )
-        }),
-        date_infection = .env$date
+        id = .data$to, source = .data$from,
+        date_infection = as.Date(.data$date, origin = "1970-01-01")
       )
-
-    # Apply infections together, so new cases first transmit the following day.
     infections <- bind_rows(infections, new)
   }
 
-  infections <- infections |>
-    arrange(date_infection, id) |>
-    select(id, source, date_infection)
-
   structure(
     list(
-      timeline = timeline,
-      infections = infections,
+      population = population,
+      infections = arrange(infections, date_infection, id),
+      reproduction = tibble(
+        id = names(cumulative_foi), R_i = unname(cumulative_foi)
+      ),
       dates = dates,
       parameters = list(
-        imported = imported,
+        imported = select(imported, id, date_infection),
         w = w,
-        mixing = mixing,
+        contacts = contacts,
+        tau = tau,
         intervention = intervention
       )
     ),
     class = "nososim_outbreak"
   )
+}
+
+population_tau <- function(present, date) {
+  present$tau
+}
+
+# Align callback matrices once, checking only values and ID coverage.
+align_pairwise <- function(x, ids, upper = Inf) {
+  stopifnot(
+    is.matrix(x),
+    is.numeric(x),
+    identical(dim(x), c(length(ids), length(ids))),
+    setequal(rownames(x), ids),
+    setequal(colnames(x), ids),
+    all(is.finite(x) & x >= 0 & x <= upper)
+  )
+  x[ids, ids, drop = FALSE]
 }
 
 #' @export
@@ -149,35 +165,4 @@ print.nososim_outbreak <- function(x, ...) {
   cat("<nososim_outbreak>\n")
   print(unclass(x), ...)
   invisible(x)
-}
-
-#' Calculate daily transmission hazards
-#'
-#' @param present Daily population with `id` and `lambda` (infectiousness).
-#' @param m_t Pairwise mixing weights m_ij(t), named by ID. Source rows and
-#'   recipient columns; self-contact is removed before normalisation.
-#' @param E_t Intervention matrix E(t) with reductions between 0 and 1, named by
-#'   present IDs. See METHODS.md, Interventions.
-#' @return The hazard matrix h_ij(t), named by ID, with zero self-contact. Reductions apply
-#'   after row normalisation, without redistributing prevented transmission.
-#' @noRd
-transmission_hazards <- function(present, m_t, E_t) {
-  stopifnot(
-    is.matrix(E_t),
-    is.numeric(E_t),
-    identical(dim(E_t), c(nrow(present), nrow(present))),
-    setequal(rownames(E_t), present$id),
-    setequal(colnames(E_t), present$id),
-    all(is.finite(E_t) & E_t >= 0 & E_t <= 1)
-  )
-
-  E_t <- E_t[present$id, present$id, drop = FALSE]
-  m_t <- m_t[present$id, present$id, drop = FALSE]
-  # METHODS.md, Distribution of infectiousness: m_ii(t) = 0.
-  diag(m_t) <- 0
-  total <- rowSums(m_t)
-  q_t <- m_t / if_else(total > 0, total, 1)
-
-  # METHODS.md, Interventions: h_ij(t) = lambda_i(t) q_ij(t) [1 - e_ij(t)].
-  q_t * present$lambda * (1 - E_t)
 }

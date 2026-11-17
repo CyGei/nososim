@@ -4,12 +4,13 @@
 \alias{autoplot.nososim_population}
 \title{Plot population stays and available capacity}
 \usage{
-\method{autoplot}{nososim_population}(object, mapping = aes(), ...)
+\method{autoplot}{nososim_population}(object, mapping = aes(colour = labels), ...)
 }
 \arguments{
-\item{object}{A population from \code{\link[=make_population]{make_population()}}.}
+\item{object}{The population history returned by \code{\link[=make_outbreak]{make_outbreak()}}.}
 
-\item{mapping}{Aesthetic mappings passed to \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}}.}
+\item{mapping}{Aesthetic mappings for stays, passed to \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}}.
+Defaults to colouring by individual \code{labels}.}
 
 \item{...}{Unused.}
 }
@@ -18,4 +19,10 @@ A ggplot with one row per unit of capacity, grouped by location.
 }
 \description{
 Plot population stays and available capacity
+}
+\details{
+Each stay keeps one display row within its location until departure.
+Vacated rows may be reused; returning individuals retain their colour but
+may occupy a different row. The individual-colour legend is hidden to keep
+large populations readable; add \code{guides(colour = "legend")} to show it.
 }

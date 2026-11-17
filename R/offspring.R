@@ -4,15 +4,15 @@
 #' including those with no offspring.
 #'
 #' @param x An object of class `nososim_outbreak`.
-#' @return A tibble with `id` and `offspring` counts.
+#' @return A tibble with `labels` and `offspring` counts.
 #' @export
 offspring <- function(x) {
   infections <- x$infections
 
   tibble::tibble(
-    id = infections$id,
+    labels = infections$to,
     offspring = tabulate(
-      match(infections$source, infections$id),
+      match(infections$from, infections$to),
       nbins = nrow(infections)
     )
   )

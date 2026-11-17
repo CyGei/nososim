@@ -2,54 +2,53 @@
 % Please edit documentation in R/population.R
 \name{make_population}
 \alias{make_population}
-\title{Create a population}
+\title{Define a population model}
 \usage{
-make_population(landscape, dates, admissions, individuals)
+make_population(landscape, arrivals, attributes, update = NULL)
 }
 \arguments{
-\item{landscape}{A table from \code{\link[=make_landscape]{make_landscape()}}, with a \code{capacity} column per location.}
+\item{landscape}{A location table from \code{\link[=make_landscape]{make_landscape()}}.}
 
-\item{dates}{Consecutive daily dates.}
+\item{arrivals}{Function \verb{(data, t)} returning a non-negative integer
+vector of arrivals per location, not exceeding \code{data$available}.}
 
-\item{admissions}{Function \verb{(landscape, date)} returning one non-negative
-integer admission count per location, in row order, no greater than
-its available capacity.}
+\item{attributes}{Function \verb{(data, t)} returning one row per new arrival,
+preserving the input columns and adding \code{stay} (length of stay in days)
+and \code{tau} (non-negative transmission rate).}
 
-\item{individuals}{Function \verb{(admitted, date)} returning one record per admitted
-person, in the same order. Preserve location columns and supply \code{start}
-(the current date) and \code{end} (the last day present, on or after \code{start}). All other columns are yours.}
+\item{update}{Optional function \verb{(data, t)} returning updated attributes
+for current occupants, preserving their identities, locations,
+and infection history.}
 }
 \value{
-A population tibble of admitted records, with location and date
-metadata for \code{\link[=autoplot]{autoplot()}}.
+A \code{nososim_population}.
 }
 \description{
-Draws admissions from available capacity, then generates only the
-admitted records. Each stay starts today and includes \code{end}; capacity is free the next day.
+Define how agents arrive, their attributes, and how these
+attributes update over time. Rules are evaluated by
+\code{\link[=make_outbreak]{make_outbreak()}}.
 }
 \details{
-Each day, \code{make_population()} calls your functions with the tables and
-date they need. It passes a daily copy of \code{landscape} to \code{admissions()},
-with an \code{available} column giving today's free capacity; \code{capacity} remains
-the total capacity. Admission counts exceeding availability are errors.
-The \code{available} column is calculated each day, replacing any input column
-with that name. It then creates \code{admitted}, with one row per admitted person, and passes
-it to \code{individuals()}. It contains the
-landscape columns except \code{capacity}. Keep both arguments in your function definitions,
-even if your rule does not use the date.
-In the example, \code{filling_rate} is a per-available-bed daily rate,
-converted to a filling probability with \code{1 - exp(-filling_rate)}.
+For \code{arrivals}, \code{data} is the landscape with an additional \code{available}
+column giving free capacity at time \code{t}.
+
+For \code{attributes}, \code{data} contains one row per new arrival, with
+location attributes but without \code{capacity} or \code{available}.
+\code{stay} must be a positive integer or \code{Inf}; \code{tau} must be finite
+and non-negative. Optional \code{labels} identify returning individuals.
+
+For \code{update}, \code{data} contains one row per current occupant.
+Changes to attributes persist until updated again.
+
+\code{stay} includes the admission day. Reusing a label across stays
+preserves infection history.
 }
 \examples{
-landscape <- dplyr::mutate(make_landscape(c(A = 1, B = 2)), filling_rate = 0.5)
-make_population(
-  landscape, as.Date("2026-01-01") + 0:4,
-  admissions = function(landscape, date) {
-    stats::rbinom(nrow(landscape), size = landscape$available,
-      prob = 1 - exp(-landscape$filling_rate))
-  },
-  individuals = function(admitted, date) {
-    dplyr::mutate(admitted, start = date, end = date + 2L)
+population <- make_population(
+  make_landscape(list(A = 10)),
+  arrivals = function(data, t) data$available,
+  attributes = function(data, t) {
+    dplyr::mutate(data, stay = 5L, tau = 0.1)
   }
 )
 }

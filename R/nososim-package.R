@@ -1,6 +1,6 @@
-#' nososim: Nosocomial Outbreak Simulation
+#' nososim: Outbreak Simulation in Structured Populations
 #'
-#' Create daily populations, simulate transmission, and plot outbreaks.
+#' Define population rules, simulate transmission, and explore daily presence.
 #'
 #' @importFrom dplyr all_of arrange bind_rows filter left_join
 #' @importFrom dplyr mutate select transmute

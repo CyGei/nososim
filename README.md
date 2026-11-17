@@ -3,12 +3,10 @@
 
 # nososim
 
-Simulate hospital outbreaks with changing populations, weighted
-contacts, individual transmission rates, and optional interventions.
+Simulate outbreaks with changing occupancy, individual attributes, and
+weighted contacts in hospitals, farms, or other structured populations.
 
 ## Installation
-
-Install the development version from GitHub:
 
 ``` r
 # install.packages("pak")
@@ -17,45 +15,40 @@ pak::pak("CyGei/nososim")
 
 ## A first outbreak
 
-Create a population of 30 people, then simulate spread from one imported
-case. Contacts multiply per-contact transmission rates (`tau`) without
-normalisation. The intervention halves transmission hazards from contact
-day 10. The simulation uses `simulacr`: numeric `w` values refer to
-delays 0, 1, 2, etc., and contacts on each date produce infections
-recorded on the following day.
+Define locations and population rules, then simulate transmission.
 
 ``` r
 library(nososim)
+library(dplyr)
 library(ggplot2)
 
-set.seed(123)
-dates <- as.Date("2026-01-01") + 0:20
+landscape <- make_landscape(list(hospital = 30))
+
 population <- make_population(
-  make_landscape(c(hospital = 30)), dates,
-  admissions = function(landscape, date) landscape$available,
-  individuals = function(admitted, date) {
-    dplyr::mutate(admitted,
-      id = paste0("ID_", dplyr::row_number()),
-      start = date, end = max(dates), tau = 0.1
-    )
+  landscape,
+  arrivals = function(data, t) data$available,
+  attributes = function(data, t) {
+    data |>
+      mutate(stay = sample(5:10, n(), replace = TRUE), tau = 0.2)
   }
 )
 
+dates <- as.Date("2026-01-01") + 0:20
+
+set.seed(123)
 outbreak <- make_outbreak(
-  population, data.frame(id = "ID_1", date_infection = dates[1]),
-  w = c(0.2, 0.5, 0.3), dates = dates, contacts = get_contacts,
-  intervention = function(present, date) {
-    matrix(
-      if (date >= dates[10]) 0.5 else 0,
-      nrow(present), nrow(present),
-      dimnames = list(present$id, present$id)
-    )
-  }
+  population,
+  dates = dates,
+  w = c(0, 0.5, 0.3, 0.2),
+  imported = function(data, t) {
+    if (t == dates[1]) head(data$labels, 1) else character()
+  },
+  contacts = function(data, t) get_contacts(data)
 )
 
 outbreak$infections |>
-  dplyr::count(date_infection) |>
-  ggplot(aes(date_infection, n)) +
+  count(date) |>
+  ggplot(aes(date, n)) +
   geom_col(fill = "#176B65") +
   labs(x = "Infection date", y = "New cases") +
   theme_classic()
@@ -63,11 +56,17 @@ outbreak$infections |>
 
 <img src="man/figures/README-first-outbreak-1.png" alt="" width="100%" />
 
-## Go further
+`stay` counts days from admission; places refill the day after
+departure. `tau` sets the per-contact transmission rate. `w` gives
+generation-time weights for delays 0, 1, 2, …; a leading zero prevents
+transmission on the infection day.
 
-The [getting started
-guide](https://CyGei.github.io/nososim/articles/nososim.html) walks
-through landscapes, patient admissions, staff attendance, and weighted
-contacts before simulating an outbreak. Browse the [function
+Results: `outbreak$population` holds daily snapshots before local
+infections and updates; `outbreak$infections` records `from`, `to`, and
+`date` (`from = NA` for imported cases).
+
+See the [getting started
+guide](https://CyGei.github.io/nososim/articles/nososim.html) for staff
+schedules, changing stays, and weighted contacts, or the [function
 reference](https://CyGei.github.io/nososim/reference/index.html) for
-individual function arguments and examples.
+arguments.

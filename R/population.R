@@ -1,101 +1,194 @@
-#' Create a population
+#' Define a population model
 #'
-#' Draws admissions from available capacity, then generates only the
-#' admitted records. Each stay starts today and includes `end`; capacity is free the next day.
+#' Define how agents arrive, their attributes, and how these
+#' attributes update over time. Rules are evaluated by
+#' [make_outbreak()].
 #'
-#' @param landscape A table from [make_landscape()], with a `capacity` column per location.
-#' @param dates Consecutive daily dates.
-#' @param admissions Function `(landscape, date)` returning one non-negative
-#'   integer admission count per location, in row order, no greater than
-#'   its available capacity.
-#' @param individuals Function `(admitted, date)` returning one record per admitted
-#'   person, in the same order. Preserve location columns and supply `start`
-#'   (the current date) and `end` (the last day present, on or after `start`). All other columns are yours.
-#' @details Each day, `make_population()` calls your functions with the tables and
-#'   date they need. It passes a daily copy of `landscape` to `admissions()`,
-#'   with an `available` column giving today's free capacity; `capacity` remains
-#'   the total capacity. Admission counts exceeding availability are errors.
-#'   The `available` column is calculated each day, replacing any input column
-#'   with that name. It then creates `admitted`, with one row per admitted person, and passes
-#'   it to `individuals()`. It contains the
-#'   landscape columns except `capacity`. Keep both arguments in your function definitions,
-#'   even if your rule does not use the date.
-#'   In the example, `filling_rate` is a per-available-bed daily rate,
-#'   converted to a filling probability with `1 - exp(-filling_rate)`.
-#' @return A population tibble of admitted records, with location and date
-#'   metadata for [autoplot()].
+#'
+#' @param landscape A location table from [make_landscape()].
+#' @param arrivals Function `(data, t)` returning a non-negative integer
+#'   vector of arrivals per location, not exceeding `data$available`.
+#' @param attributes Function `(data, t)` returning one row per new arrival,
+#'   preserving the input columns and adding `stay` (length of stay in days)
+#'   and `tau` (non-negative transmission rate).
+#' @param update Optional function `(data, t)` returning updated attributes
+#'   for current occupants, preserving their identities, locations,
+#'   and infection history.
+#'
+#' @details
+#' For `arrivals`, `data` is the landscape with an additional `available`
+#' column giving free capacity at time `t`.
+#'
+#' For `attributes`, `data` contains one row per new arrival, with
+#' location attributes but without `capacity` or `available`.
+#' `stay` must be a positive integer or `Inf`; `tau` must be finite
+#' and non-negative. Optional `labels` identify returning individuals.
+#'
+#' For `update`, `data` contains one row per current occupant.
+#' Changes to attributes persist until updated again.
+#'
+#' `stay` includes the admission day. Reusing a label across stays
+#' preserves infection history.
+#'
+#' @return A `nososim_population`.
 #' @export
+#'
 #' @examples
-#' landscape <- dplyr::mutate(make_landscape(c(A = 1, B = 2)), filling_rate = 0.5)
-#' make_population(
-#'   landscape, as.Date("2026-01-01") + 0:4,
-#'   admissions = function(landscape, date) {
-#'     stats::rbinom(nrow(landscape), size = landscape$available,
-#'       prob = 1 - exp(-landscape$filling_rate))
-#'   },
-#'   individuals = function(admitted, date) {
-#'     dplyr::mutate(admitted, start = date, end = date + 2L)
+#' population <- make_population(
+#'   make_landscape(list(A = 10)),
+#'   arrivals = function(data, t) data$available,
+#'   attributes = function(data, t) {
+#'     dplyr::mutate(data, stay = 5L, tau = 0.1)
 #'   }
 #' )
-make_population <- function(landscape, dates, admissions, individuals) {
+make_population <- function(landscape, arrivals, attributes, update = NULL) {
   landscape <- tibble::as_tibble(landscape)
-  dates <- sort(dates, na.last = TRUE)
-  stopifnot(
-    inherits(dates, "Date"),
-    length(dates) > 0,
-    all(is.finite(dates)),
-    all(diff(dates) == 1)
+  keys <- level_columns(landscape)
+  reserved <- c(
+    "labels",
+    "start",
+    "t",
+    "population",
+    "date_infection",
+    ".location"
   )
-
-  # Track each admitted person's location and departure date.
-  where <- integer()
-  ends <- dates[0]
-  records <- list()
-
-  for (i in seq_along(dates)) {
-    date <- dates[i]
-
-    # Count people still present and find free capacity.
-    occupied <- tabulate(where[ends >= date], nrow(landscape))
-    available <- landscape$capacity - occupied
-
-    daily_landscape <- dplyr::mutate(landscape, available = .env$available)
-    counts <- admissions(daily_landscape, date)
-    check_counts(counts, nrow(landscape), available)
-    if (sum(counts) == 0) {
-      next
-    }
-
-    # Generate records only for admitted people.
-    admitted <- landscape |>
-      mutate(capacity = .env$counts) |>
-      tidyr::uncount(capacity)
-    population <- individuals(admitted, date)
-    check_individuals(population, admitted, date)
-
-    # Keep the records and track occupancy for subsequent days.
-    where <- c(where, rep(seq_len(nrow(landscape)), counts))
-    ends <- c(ends, population$end)
-    records[[length(records) + 1L]] <- population
-  }
-
-  population <- bind_rows(records)
-  tibble::new_tibble(
-    as.list(population),
-    nrow = nrow(population),
-    landscape = landscape,
-    dates = dates,
+  # Validate the location table once; callbacks are evaluated during simulation.
+  stopifnot(
+    length(keys) > 0,
+    "capacity" %in% names(landscape),
+    !anyDuplicated(landscape[keys]),
+    !any(reserved %in% names(landscape)),
+    is.function(arrivals),
+    is.function(attributes),
+    is.null(update) || is.function(update)
+  )
+  check_counts(landscape$capacity)
+  structure(
+    list(
+      landscape = landscape,
+      arrivals = arrivals,
+      attributes = attributes,
+      update = update
+    ),
     class = "nososim_population"
   )
 }
+#' Admit people into available locations
+#'
+#' Apply arrival and attribute rules, then assign labels and admission dates.
+#' @param model Population rules from [make_population()].
+#' @param current Current occupants of this population.
+#' @param t Current Date.
+#' @param known_labels All person labels previously used in the simulation.
+#' @return A tibble of new arrivals with an internal `.location` row index.
+#' @noRd
+admit_individuals <- function(model, current, t, known_labels) {
+  # .location is an internal landscape row index, used to count occupants.
+  landscape <- model$landscape |>
+    mutate(
+      available = capacity -
+        tabulate(.env$current$.location, nbins = dplyr::n())
+    )
+  counts <- model$arrivals(landscape, t)
+  check_counts(counts, nrow(landscape), landscape$available)
+  if (sum(counts) == 0) {
+    return(current[0, ])
+  }
 
-check_individuals <- function(population, admitted, date) {
-  keys <- level_columns(admitted)
+  location_indices <- rep(seq_len(nrow(model$landscape)), times = counts)
+  # Copy those rows so each person inherits their location's attributes.
+  admitted <- model$landscape |>
+    dplyr::slice(.env$location_indices) |>
+    select(-capacity)
+  data <- admitted |>
+    model$attributes(t) |>
+    tibble::as_tibble()
+  reserved <- c("start", "t", "population", "date_infection", ".location")
   stopifnot(
-    identical(as.list(population[keys]), as.list(admitted[keys])),
-    inherits(population$start, "Date"),
-    inherits(population$end, "Date"),
-    all(population$start == date),
-    all(is.finite(population$end) & population$end >= date)
+    purrr::every(
+      level_columns(admitted),
+      \(column) identical(data[[column]], admitted[[column]])
+    ),
+    !any(reserved %in% names(data))
   )
+  check_attributes(data)
+  if (!"labels" %in% names(data)) {
+    # Generated identifiers must not collide with any previously seen person.
+    data <- data |>
+      mutate(
+        labels = c(.env$known_labels, simulacr::draw_labels(dplyr::n())) |>
+          make.unique() |>
+          utils::tail(dplyr::n())
+      )
+  }
+  data <- data |>
+    mutate(
+      labels = as.character(labels),
+      start = .env$t,
+      .location = .env$location_indices
+    )
+  stopifnot(
+    !anyNA(data$labels),
+    all(nzchar(data$labels)),
+    !anyDuplicated(data$labels)
+  )
+  data
+}
+
+# Apply each model's updates without changing identity or infection records.
+update_population <- function(current, models, t) {
+  bind_rows(lapply(names(models), function(group) {
+    residents <- current[current$population == group, ]
+    update <- models[[group]]$update
+    if (!nrow(residents) || is.null(update)) {
+      return(residents)
+    }
+
+    # Callbacks see public attributes; retain the internal index separately.
+    data <- select(residents, -.location)
+    updated <- tibble::as_tibble(update(data, t))
+    fixed <- c(
+      "labels",
+      "start",
+      "population",
+      "date_infection",
+      level_columns(data)
+    )
+    stopifnot(
+      identical(as.list(updated[fixed]), as.list(data[fixed])),
+      !any(c("t", ".location") %in% names(updated))
+    )
+    check_attributes(updated)
+    updated$.location <- residents$.location
+    updated
+  }))
+}
+
+# These are the two attributes used directly by the simulation loop.
+check_attributes <- function(data) {
+  stopifnot(
+    is.numeric(data$stay),
+    all(data$stay >= 1 & data$stay == floor(data$stay)),
+    is.numeric(data$tau),
+    all(is.finite(data$tau) & data$tau >= 0)
+  )
+}
+
+#' @export
+#' @noRd
+print.nososim_population <- function(x, ...) {
+  cat("<nososim_population>\n")
+  cat(
+    nrow(x$landscape),
+    "locations;",
+    sum(x$landscape$capacity),
+    "total capacity\n"
+  )
+  cat(
+    "Rules: arrivals, attributes",
+    if (!is.null(x$update)) ", update",
+    "\n",
+    sep = ""
+  )
+  invisible(x)
 }

@@ -4,53 +4,56 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(error = FALSE, collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(
+  error = FALSE,
+  message = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
 ```
 
 ```{r}
 library(nososim)
 devtools::load_all()
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 ```
 
-## Define patient and staff landscapes
+`nososim` simulates outbreaks with changing populations and contacts.
 
-`make_landscape()` gives one row per location, with a `capacity` column.
-Patients occupy beds in rooms, so their landscape has three levels: hospital,
-ward, and room.
+## Landscape
+
+Create nested locations with a capacity value.
 
 ```{r}
-hospital <- list(
+# Patient capacity at the room level.
+patient_landscape <- make_landscape(list(
   Geneva = list(
-    ICU = c(a = 2, b = 3),
-    General = c(a = 1, b = 4, c = 2)
+    ICU = list(a = 2, b = 3),
+    General = list(a = 1, b = 4, c = 2)
   ),
   Gallen = list(
-    ICU = c(a = 3, b = 5),
-    General = c(a = 2, b = 4, c = 1)
+    ICU = list(a = 3, b = 5),
+    General = list(a = 2, b = 4, c = 1)
   )
-)
-patient_landscape <- make_landscape(hospital)
-patient_landscape
-```
-
-Staff are assigned to wards, so their landscape stops at the second level.
-Here, capacity represents staff positions rather than patient beds.
-
-```{r}
-staff_landscape <- make_landscape(list(
-  Geneva = c(ICU = 2, General = 3),
-  Gallen = c(ICU = 3, General = 4)
 ))
+
+# Staff capacity at the ward level.
+staff_landscape <- make_landscape(list(
+  Geneva = list(ICU = 2, General = 3),
+  Gallen = list(ICU = 3, General = 4)
+))
+
 staff_landscape
 ```
 
-## Define patient admissions and individuals
+## Populations
 
-Each day, the admission function receives the landscape with an `available`
-column and returns one integer count per row, between 0 and `available`.
-Here, each free bed fills with probability `filling_prob`.
+`make_population()` defines rules; `make_outbreak()` runs them each day.
+Use `arrivals` to choose how many people enter available places, `attributes` to assign their initial attributes, and `update` to apply rules to current occupants at the end of each day.
+All rules use `(data, t)`. For `arrivals`, `data` is the landscape with today's free places in `available`; `capacity` remains the total capacity.
+
+### Patients
+Here, we define a bed filling probability for each ward and assign attributes such as age, length of stay, and a transmission parameter `tau`. We extend the length of stay once when a patient becomes infected. The occupied bed therefore remains unavailable for new admissions.
 
 ```{r}
 patient_landscape <- patient_landscape |>
@@ -63,154 +66,86 @@ patient_landscape <- patient_landscape |>
     )
   )
 
-patient_admissions <- function(landscape, date) {
-  rbinom(
-    nrow(landscape),
-    size = landscape$available,
-    prob = landscape$filling_prob
-  )
-}
+patients <- make_population(
+  patient_landscape,
+  arrivals = function(data, t) {
+    rbinom(nrow(data), size = data$available, prob = data$filling_prob)
+  },
+  attributes = function(data, t) {
+    data |>
+      mutate(
+        role = "patient",
+        age = sample(18:90, n(), replace = TRUE),
+        stay = case_when(
+          level_2 == "ICU" ~ sample(3:7, n(), replace = TRUE),
+          level_2 == "General" ~ sample(5:10, n(), replace = TRUE)
+        ),
+        tau = 0.2
+      )
+  },
+  update = function(data, t) {
+    data |>
+      mutate(
+        stay = stay + if_else(date_infection == .env$t, 3L, 0L, missing = 0L)
+      )
+  }
+)
+
+patients
 ```
 
-The `individuals()` argument takes a function that adds attributes and dates to
-one row per admitted person. It preserves their location columns and supplies
-`start` (today) and `end` (the last day present, inclusive). Here, each admission
-gets a unique patient ID and a length of stay depending on the ward.
+## Staff
+
+Schedule five one-day shifts per person each week. Reuse `labels` across shifts.
 
 ```{r}
-patient_individuals <- function(admitted, date) {
-  admitted |>
-    mutate(
-      id = paste0("patient_", format(date, "%Y%m%d"), "_", row_number()),
-      age = sample(18:90, n(), replace = TRUE),
-      role = "patient",
-      los = case_when(
-        level_2 == "ICU" ~ sample(3:7, n(), replace = TRUE),
-        level_2 == "General" ~ sample(5:10, n(), replace = TRUE)
-      ),
-      start = date,
-      end = start + los - 1L
-    )
-}
-```
-
-## Define staff attendance and individuals
-
-Create a fixed roster, then randomly choose two days off per person in each
-Monday–Sunday week. Staff keep the same ID across shifts.
-
-```{r}
-dates <- seq(as.Date("2024-01-01"), as.Date("2024-01-30"), by = "day")
+dates <- as.Date("2026-01-01") + 0:29
 
 set.seed(123)
 staff_schedule <- staff_landscape |>
-  tidyr::uncount(capacity) |>
-  mutate(id = paste0("staff_", row_number())) |>
-  tidyr::crossing(week = unique(as.Date(cut(dates, "week"))), weekday = 1:7) |>
-  slice_sample(n = 5, by = c(id, week)) |>
-  transmute(level_1, level_2, id, date = week + weekday - 1L)
+  uncount(capacity) |>
+  mutate(labels = paste0("S_", row_number())) |>
+  crossing(week = unique(as.Date(cut(dates, "week")))) |>
+  reframe(
+    t = week + sample(0:6, 5),
+    .by = c(level_1, level_2, labels, week)
+  ) |>
+  select(-week)
 
-staff_on_duty <- function(date) {
+staff_on_duty <- function(t) {
   staff_schedule |>
-    filter(date == .env$date) |>
-    select(level_1, level_2, id)
+    filter(t == .env$t) |>
+    select(level_1, level_2, labels)
 }
-```
-
-Five working days per full week give each person two days off. Only shifts
-within `dates` are simulated.
-
-```{r}
-staff_attendance <- function(landscape, date) {
-  landscape |>
-    left_join(
-      count(staff_on_duty(date), level_1, level_2),
-      by = c("level_1", "level_2")
-    ) |>
-    mutate(n = coalesce(n, 0L)) |>
-    pull(n)
-}
-
-staff_individuals <- function(admitted, date) {
-  admitted |>
-    distinct(level_1, level_2) |>
-    left_join(staff_on_duty(date), by = c("level_1", "level_2")) |>
-    mutate(role = "staff", start = date, end = date)
-}
-```
-
-## Generate the populations
-
-`make_population()` calls the attendance and individual functions on each day.
-Capacity becomes available on the day after `end`. The two groups have their
-own capacities and attendance rules.
-
-```{r}
-set.seed(123)
-patients <- make_population(
-  patient_landscape,
-  dates,
-  admissions = patient_admissions,
-  individuals = patient_individuals
-)
 
 staff <- make_population(
   staff_landscape,
-  dates,
-  admissions = staff_attendance,
-  individuals = staff_individuals
+  arrivals = function(data, t) {
+    data |>
+      left_join(
+        count(staff_on_duty(t), level_1, level_2),
+        by = c("level_1", "level_2")
+      ) |>
+      mutate(n = coalesce(n, 0L)) |>
+      pull(n)
+  },
+  attributes = function(data, t) {
+    data |>
+      distinct() |>
+      left_join(staff_on_duty(t), by = c("level_1", "level_2")) |>
+      mutate(role = "staff", stay = 1L, tau = 0.2)
+  }
 )
+staff
 ```
 
-## Plot stays and shifts
+## Contacts
 
-Each plot row represents one unit of capacity, grouped by location. Patient
-stays and staff shifts run from `start` through `end` (inclusive); grey lines
-show unused capacity. Plot each population using its own landscape.
-
-```{r, fig.width=9, fig.height=8}
-autoplot(patients, aes(colour = id)) +
-  theme(legend.position = "none")
-```
-
-```{r, fig.width=9, fig.height=6}
-ggplot(staff, aes(x = start, y = id, colour = id)) +
-  geom_segment(aes(xend = end + 1, yend = id), linewidth = 2) +
-  facet_grid(
-    rows = vars(level_1, level_2),
-    scales = "free_y",
-    space = "free_y"
-  ) +
-  theme_classic() +
-  theme(legend.position = "none")
-```
-
-## Combine patient and staff records
+`get_contacts()` defaults to matching all location levels. This rule allows
+patient contacts within rooms and staff contacts throughout their hospital.
+Matrix rows are sources, columns are recipients.
 
 ```{r}
-population <- bind_rows(
-  tibble::as_tibble(patients),
-  tibble::as_tibble(staff)
-)
-
-population |>
-  select(id, starts_with("level_"), age, role, start, end) |>
-  group_by(role) |>
-  slice_head(n = 3) |>
-  ungroup()
-```
-
-## Define daily contacts and weights
-
-`get_contacts()` selects the people present on a date. In this example:
-
-- Two patients can contact only when sharing the same hospital, ward, and room.
-- Any pair involving staff can contact anywhere within the same hospital.
-- People in different hospitals cannot contact.
-
-```{r}
-contact_date <- dates[1]
-
 contact_rule <- function(i, j) {
   same_hospital <- i$level_1 == j$level_1
   same_ward <- i$level_2 == j$level_2
@@ -219,14 +154,7 @@ contact_rule <- function(i, j) {
 
   same_hospital & (either_staff | (same_ward & same_room))
 }
-```
 
-Weights set the intensity of allowed contacts. Here, `level_2` weights wards
-and `role` weights patients and staff. Matrix rows are sources; columns are
-recipients. The ward and role coefficients multiply without normalisation.
-Excluded contacts always remain zero.
-
-```{r}
 weights <- list(
   level_2 = matrix(
     c(2, 1, 3, 1),
@@ -241,6 +169,89 @@ weights <- list(
     dimnames = list(c("patient", "staff"), c("patient", "staff"))
   )
 )
+```
+
+Weights multiply allowed contacts. General staff to an ICU patient has weight `3 * 1 = 3`; the reverse has weight `1 * 2 = 2`.
+
+## Simulate
+
+A named list keeps patient and staff capacities separate. `imported()` returns
+susceptible labels to infect; `character()` introduces none.
+
+```{r}
+set.seed(123)
+debugonce(make_outbreak)
+outbreak <- make_outbreak(
+  list(patients = patients, staff = staff),
+  dates = dates,
+  w = c(0, 0.5, 0.3, 0.2),
+  imported = function(data, t) {
+    if (t == dates[1]) {
+      return(head(data$labels, 1))
+    }
+
+    if (t == dates[10]) {
+      staff_ids <- data$labels[data$role == "staff"]
+      return(sample(staff_ids, size = min(1L, length(staff_ids))))
+    }
+
+    character()
+  },
+  contacts = function(data, t) {
+    get_contacts(data, by = contact_rule, weights = weights)
+  }
+)
+
+outbreak$infections
+```
+
+
+## Results
+
+Count secondary infections per person and transmissions between groups.
+
+```{r}
+offspring(outbreak)
+count_edges(outbreak, by = c("role", "level_2"))
+```
+
+Plot occupancy: one row per capacity unit; grey marks vacancies.
+
+```{r, fig.width=9, fig.height=8}
+autoplot(outbreak)
+
+autoplot(outbreak$population, aes(colour = population)) +
+  theme(legend.position = "none")
+
+autoplot(outbreak$population, aes(colour = labels, fill = labels)) +
+  theme(legend.position = "none")
+```
+
+
+
+Plot staff attendance by person.
+
+```{r, fig.width=9, fig.height=6}
+outbreak$population |>
+  filter(population == "staff") |>
+  ggplot(aes(t, labels, colour = labels)) +
+  geom_segment(aes(xend = t + 1, yend = labels), linewidth = 2) +
+  facet_grid(
+    rows = vars(level_1, level_2),
+    scales = "free_y",
+    space = "free_y"
+  ) +
+  labs(x = "Date", y = "Staff") +
+  theme_classic() +
+  theme(legend.position = "none")
+```
+
+Compare contact weights for the same day's occupants.
+
+```{r contact-comparison, fig.width=10, fig.height=9}
+present <- outbreak$population |>
+  filter(t == dates[1]) |>
+  arrange(level_1, level_2, role, labels)
 
 contact_matrices <- list(
   unweighted = NULL,
@@ -248,27 +259,7 @@ contact_matrices <- list(
   location_weighted = weights["level_2"],
   all_weighted = weights
 ) |>
-  purrr::map(function(w) {
-    get_contacts(population, contact_date, by = contact_rule, weights = w)
-  })
-```
-
-For example, a contact from General staff to an ICU patient in the same hospital
-has weight `3 * 1 = 3`; the reverse direction has weight `1 * 2 = 2`.
-These cross-ward weights affect only pairs involving staff, since patients in
-different wards cannot contact each other.
-
-## Compare contact weights
-
-The four panels share the same people, ordering, and colour scale.
-Nested axis labels group people by ward and hospital.
-
-```{r contact-comparison, fig.width=13, fig.height=14}
-labels <- population |>
-  filter(start <= contact_date, end >= contact_date) |>
-  arrange(level_1, level_2, role, level_3, id) |>
-  transmute(id, label = paste(id, level_2, level_1, sep = "\r")) |>
-  tibble::deframe()
+  purrr::map(function(w) get_contacts(present, by = contact_rule, weights = w))
 
 contact_matrices |>
   purrr::imap_dfr(function(values, label) {
@@ -279,90 +270,18 @@ contact_matrices |>
   ggplot(aes(recipient, source, fill = intensity)) +
   geom_tile() +
   facet_wrap(~matrix, ncol = 2) +
-  scale_x_discrete(
-    limits = names(labels),
-    labels = labels,
-    guide = legendry::guide_axis_nested(
-      key = "\r",
-      drop_zero = FALSE,
-      levels_text = list(
-        element_text(angle = 90, hjust = 1, vjust = 0.5),
-        element_text(angle = 0, hjust = 0.5, vjust = 1),
-        element_text(angle = 0, hjust = 0.5, vjust = 1)
-      )
-    )
-  ) +
-  scale_y_discrete(
-    limits = rev(names(labels)),
-    labels = labels,
-    guide = legendry::guide_axis_nested(key = "\r", drop_zero = FALSE)
-  ) +
-  scale_fill_gradient(
-    low = "white",
-    high = "#2166AC",
-    name = "Contact intensity"
-  ) +
+  scale_x_discrete(limits = present$labels) +
+  scale_y_discrete(limits = rev(present$labels)) +
+  scale_fill_gradient(low = "white", high = "#2166AC", name = "Intensity") +
   coord_fixed() +
   labs(x = "Recipient", y = "Source") +
   theme_minimal() +
   theme(
     panel.grid = element_blank(),
-    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 6),
-    axis.text.y = element_text(size = 6),
+    axis.text.x = element_text(angle = 90, hjust = 1, size = 5),
+    axis.text.y = element_text(size = 5),
     legend.position = "bottom"
   )
 ```
 
-## Simulate an outbreak
 
-Add a per-contact transmission rate, `tau`, to each person. `make_outbreak()`
-uses `simulacr::make_pmf_delay()` for `w`: numeric weights refer to delays
-0, 1, 2, etc. A function or `distcrete` object can also be supplied.
-Contacts multiply these rates directly, without normalisation.
-
-The epidemic advances with `simulacr::simulate_outbreak_step()`: contacts on
-a date produce infections recorded on the following day. The final step can
-therefore produce cases dated the day after the last date in `dates`.
-
-Here, one person is infected on the first day. The optional intervention halves
-all transmission hazards from day 15; omit `intervention` for no reduction.
-
-`tau` changes a source’s transmission rate; `E_t` changes particular routes.
-```{r}
-population <- population |>
-  mutate(tau = 0.2)
-imported <- tibble::tibble(id = population$id[1], date_infection = dates[1])
-
-set.seed(123)
-outbreak <- make_outbreak(
-  population,
-  imported,
-  w = c(0.2, 0.5, 0.3),
-  dates = dates,
-  contacts = function(present, date) {
-    get_contacts(present, date, by = contact_rule, weights = weights)
-  },
-  intervention = function(present, date) {
-    matrix(
-      if (date >= dates[15]) 0.5 else 0,
-      nrow(present),
-      nrow(present),
-      dimnames = list(present$id, present$id)
-    )
-  }
-)
-
-outbreak$infections
-
-count_edges(outbreak, by = c("role", "level_2"))
-```
-
-Infection history follows each person's ID across stays and shifts.
-For time-varying rates, supply `tau = function(present, date) ...` returning
-one rate per person. Both callbacks can use `present$infection_age` and
-`present$date_infection`; the intervention also receives current infectiousness.
-`outbreak$reproduction` records summed outgoing FOI (equation 12), while
-`offspring(outbreak)` counts successful secondary infections.
-
-`count_edges()` uses attributes on the contact date, one day before the recorded
-infection date.

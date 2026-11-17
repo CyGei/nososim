@@ -4,10 +4,7 @@ local({
   on.exit(grDevices::dev.off())
   source("inst/examples/outbreak.R", local = TRUE)
 
-  # These callbacks need only base functions and a qualified nososim call.
-  environment(outbreak$parameters$contacts) <- baseenv()
-  outbreak$parameters$tau <- utils::removeSource(outbreak$parameters$tau)
-  environment(outbreak$parameters$tau) <- baseenv()
+  # The example captures callback dependencies in its local environment.
   dir.create("data", showWarnings = FALSE)
   save(outbreak, file = "data/outbreak.rda", compress = "xz", version = 2)
 })

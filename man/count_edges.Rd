@@ -15,11 +15,11 @@ count_edges(x, by, by_date = FALSE)
 }
 \value{
 A tibble with source and recipient attributes and transmission counts,
-plus \code{date_infection} when \code{by_date = TRUE}.
+plus \code{date} when \code{by_date = TRUE}.
 }
 \description{
 Count edges between source and recipient groups, using their
-attributes on the contact date (the day before the recorded infection date).
+attributes on the transmission date.
 Imported cases are excluded.
 }
 \examples{

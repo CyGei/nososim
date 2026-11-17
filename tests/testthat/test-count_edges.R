@@ -2,13 +2,13 @@ test_that("joint edge counts aggregate to single-attribute counts", {
   date <- as.Date("2026-01-01")
   outbreak <- structure(list(
     population = tibble::tibble(
-      id = letters[1:5], start = date - 1L, end = date + 2L,
+      labels = letters[1:5], t = date,
       role = c("patient", "staff", "patient", "patient", "staff"),
       ward = c("A", "B", "A", "B", "A")
     ),
     infections = tibble::tibble(
-      id = letters[1:5], source = c(NA, NA, "a", "a", "b"),
-      date_infection = date + c(-1, -1, 0, 0, 0)
+      to = letters[1:5], from = c(NA, NA, "a", "a", "b"),
+      date = date + c(-1, -1, 0, 0, 0)
     )
   ), class = "nososim_outbreak")
 
@@ -29,19 +29,18 @@ test_that("daily counts use wards on the transmission date", {
   dates <- as.Date("2026-01-01") + 0:1
   outbreak <- structure(list(
     population = tibble::tibble(
-      id = rep(c("a", "b", "c"), 2),
-      start = rep(dates, each = 3), end = rep(dates, each = 3),
+      labels = rep(c("a", "b", "c"), 2), t = rep(dates, each = 3),
       ward = c("A", "B", "B", "B", "B", "A")
     ),
     infections = tibble::tibble(
-      id = c("a", "b", "c"), source = c(NA, "a", "a"),
-      date_infection = c(dates[1] - 1, dates + 1L)
+      to = c("a", "b", "c"), from = c(NA, "a", "a"),
+      date = c(dates[1] - 1, dates)
     )
   ), class = "nososim_outbreak")
 
   daily <- count_edges(outbreak, "ward", by_date = TRUE)
   expect_equal(daily, tibble::tibble(
-    date_infection = dates + 1L, source_ward = c("A", "B"),
+    date = dates, source_ward = c("A", "B"),
     recipient_ward = c("B", "A"), transmissions = c(1L, 1L)
   ))
   totals <- daily |>
@@ -51,5 +50,17 @@ test_that("daily counts use wards on the transmission date", {
   outbreak$infections <- outbreak$infections[1, ]
   empty <- count_edges(outbreak, "ward", by_date = TRUE)
   expect_equal(nrow(empty), 0L)
-  expect_s3_class(empty$date_infection, "Date")
+  expect_s3_class(empty$date, "Date")
+})
+
+test_that("offspring includes imports and individuals with no secondary cases", {
+  outbreak <- list(infections = tibble::tibble(
+    from = c(NA, "a", "a", "b"), to = letters[1:4],
+    date = as.Date("2026-01-01") + 0:3
+  ))
+  expect_equal(offspring(outbreak), tibble::tibble(
+    labels = letters[1:4], offspring = c(2L, 1L, 0L, 0L)
+  ))
+  outbreak$infections <- outbreak$infections[0, ]
+  expect_equal(nrow(offspring(outbreak)), 0L)
 })

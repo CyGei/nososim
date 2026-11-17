@@ -1,12 +1,140 @@
 {
-  "generated_at": "2026-11-06T16:29:53.156431+00:00",
+  "generated_at": "2026-11-17T13:20:56.987019+00:00",
   "nodes": {
-    "r_landscape_r_make_landscape": {
-      "code_fingerprint": "337276213d4450e5f35d4c04b73c3259ea7ede194d1b0413f0c41d0a326a22f8",
-      "label": "make_landscape()",
-      "last": "2026-11-06T16:15:49.777869+00:00",
+    "r_autoplot_r_autoplot_nososim_outbreak": {
+      "code_fingerprint": "fea355d700aa947afa96f8383ae6b65039e08ea17b2bdcdc9fd418587ea0f752",
+      "label": "autoplot.nososim_outbreak()",
+      "last": "2026-11-16T19:30:18.167918+00:00",
       "neg": 1,
       "provenance": [
+        {
+          "date": "2026-11-16T19:30:18.167918+00:00",
+          "outcome": "corrected",
+          "q": "Why does the transmission overlay look disconnected? Dots should be at infection dates."
+        },
+        {
+          "date": "2026-11-16T19:12:10.879733+00:00",
+          "outcome": "useful",
+          "q": "Implement autoplot(outbreak) with individual colours and fixed rows throughout consecutive stays."
+        }
+      ],
+      "score": -0.000285767,
+      "source_file": "R/autoplot.R",
+      "status": "contested",
+      "uses": 1,
+      "verdict": "dead end"
+    },
+    "r_autoplot_r_autoplot_nososim_population": {
+      "code_fingerprint": "fea355d700aa947afa96f8383ae6b65039e08ea17b2bdcdc9fd418587ea0f752",
+      "label": "autoplot.nososim_population()",
+      "last": "2026-11-16T19:12:10.879733+00:00",
+      "provenance": [
+        {
+          "date": "2026-11-16T19:12:10.879733+00:00",
+          "outcome": "useful",
+          "q": "Implement autoplot(outbreak) with individual colours and fixed rows throughout consecutive stays."
+        },
+        {
+          "date": "2026-11-16T19:03:39.176636+00:00",
+          "outcome": "useful",
+          "q": "Can autoplot(outbreak) show ward stays with the transmission tree overlaid?"
+        },
+        {
+          "date": "2026-11-08T14:54:07.749178+00:00",
+          "outcome": "useful",
+          "q": "Restore the nested landscape stay plot for autoplot using the current make_population output, keeping code concise."
+        }
+      ],
+      "score": 2.778697889,
+      "source_file": "R/autoplot.R",
+      "status": "preferred",
+      "uses": 3
+    },
+    "r_autoplot_r_population_positions": {
+      "code_fingerprint": "fea355d700aa947afa96f8383ae6b65039e08ea17b2bdcdc9fd418587ea0f752",
+      "label": "population_positions()",
+      "last": "2026-11-16T19:12:10.879733+00:00",
+      "provenance": [
+        {
+          "date": "2026-11-16T19:12:10.879733+00:00",
+          "outcome": "useful",
+          "q": "Implement autoplot(outbreak) with individual colours and fixed rows throughout consecutive stays."
+        },
+        {
+          "date": "2026-11-16T19:03:39.176636+00:00",
+          "outcome": "useful",
+          "q": "Can autoplot(outbreak) show ward stays with the transmission tree overlaid?"
+        },
+        {
+          "date": "2026-11-08T14:54:07.749178+00:00",
+          "outcome": "useful",
+          "q": "Restore the nested landscape stay plot for autoplot using the current make_population output, keeping code concise."
+        }
+      ],
+      "score": 2.778697889,
+      "source_file": "R/autoplot.R",
+      "status": "preferred",
+      "uses": 3
+    },
+    "r_get_contacts_r_get_contacts": {
+      "code_fingerprint": "2deb872503447c3bec41fb548414056c774da7d488ad72ea15ec1629e0ba2261",
+      "label": "get_contacts()",
+      "last": "2026-11-16T00:51:22.776201+00:00",
+      "neg": 1,
+      "provenance": [
+        {
+          "date": "2026-11-16T00:51:22.776201+00:00",
+          "outcome": "useful",
+          "q": "Summarise current nososim functions and workflow, compare with the previous commit, and recommend the simplest clear maintainable user API."
+        },
+        {
+          "date": "2026-11-16T00:19:12.824575+00:00",
+          "outcome": "useful",
+          "q": "Why did make_outbreak become complicated, and how can landscape -> population -> outbreak be simplified around a final population on entry?"
+        },
+        {
+          "date": "2026-11-15T21:54:46.158167+00:00",
+          "outcome": "corrected",
+          "q": "Independently review the minimal proposed API and use infection dates from simulate_outbreak_step instead of newly_infected."
+        },
+        {
+          "date": "2026-11-13T13:54:02.264049+00:00",
+          "outcome": "useful",
+          "q": "Review the suggestions for strictly minimal requirements and provide the final API from A to Z."
+        },
+        {
+          "date": "2026-11-13T12:34:50.009207+00:00",
+          "outcome": "useful",
+          "q": "Can you do a complete analysis of the current codebase."
+        }
+      ],
+      "score": 2.79096678,
+      "source_file": "R/get_contacts.R",
+      "status": "contested",
+      "uses": 4,
+      "verdict": "useful"
+    },
+    "r_landscape_r_make_landscape": {
+      "code_fingerprint": "d2d4c2dd987ecc4804813d90c731c3a78f2908dbddf156db169edd5067602703",
+      "label": "make_landscape()",
+      "last": "2026-11-08T14:05:38.940699+00:00",
+      "neg": 2,
+      "provenance": [
+        {
+          "date": "2026-11-08T14:05:38.940699+00:00",
+          "outcome": "corrected",
+          "q": "Generate individuals only when places are available; avoid computing rejected people while keeping user-defined complete records."
+        },
+        {
+          "date": "2026-11-06T16:45:30.175899+00:00",
+          "outcome": "useful",
+          "q": "Update the vignette and documentation around the agreed clean workflow, clearly separating user inputs from generated population fields."
+        },
+        {
+          "date": "2026-11-06T16:32:31.973291+00:00",
+          "outcome": "useful",
+          "q": "Review the current vignette and user workflow for API cleanliness: are admissions columns defaults, or are location columns and admission/individual functions user defined?"
+        },
         {
           "date": "2026-11-06T16:15:49.777869+00:00",
           "outcome": "useful",
@@ -16,59 +144,16 @@
           "date": "2026-11-06T15:46:30.688795+00:00",
           "outcome": "useful",
           "q": "Show an executable vignette example of the proposed make_population with user-customizable admissions and explain how individuals are generated."
-        },
-        {
-          "date": "2026-11-06T15:37:43.779023+00:00",
-          "outcome": "useful",
-          "q": "How would you construct make_population? Be clear concise and tidy."
-        },
-        {
-          "date": "2026-11-06T15:30:06.532372+00:00",
-          "outcome": "useful",
-          "q": "Implement admission rates as location-table columns in the vignette and show the next step."
-        },
-        {
-          "date": "2026-11-06T15:27:10.443319+00:00",
-          "outcome": "useful",
-          "q": "Use n instead of capacity. Should admission rates belong to make_landscape or elsewhere, and what is the most elegant approach?"
         }
       ],
-      "score": 5.995009009,
+      "score": 5.406926945,
       "source_file": "R/landscape.R",
       "status": "contested",
-      "uses": 7,
+      "uses": 9,
       "verdict": "useful"
     },
-    "r_make_outbreak_r_make_outbreak": {
-      "code_fingerprint": "73e20e2aa22ba12bc2712f2b12fa4c65c0e15cbf4c608a4ef5afc18de93bc1e7",
-      "label": "make_outbreak()",
-      "last": "2026-11-06T15:09:32.987103+00:00",
-      "neg": 1,
-      "provenance": [
-        {
-          "date": "2026-11-06T15:09:32.987103+00:00",
-          "outcome": "corrected",
-          "q": "What is the best architecture for generating people through time from the current landscape, with location-specific admissions, lengths of stay and dynamically drawn attributes?"
-        },
-        {
-          "date": "2026-11-06T15:01:01.881186+00:00",
-          "outcome": "useful",
-          "q": "Review the current code against main and suggest a very concise simple landscape and population implementation matching the whiteboard."
-        },
-        {
-          "date": "2026-11-05T12:34:34.269644+00:00",
-          "outcome": "useful",
-          "q": "Which existing nososim conventions should guide a landscape API?"
-        }
-      ],
-      "score": 0.973341024,
-      "source_file": "R/make_outbreak.R",
-      "status": "contested",
-      "uses": 2,
-      "verdict": "useful"
-    },
-    "r_make_outbreak_r_mixing_matrix": {
-      "code_fingerprint": "73e20e2aa22ba12bc2712f2b12fa4c65c0e15cbf4c608a4ef5afc18de93bc1e7",
+    "r_mixing_r_mixing_matrix": {
+      "code_fingerprint": "4b115989c412383026e29da40ead4a9136d215247c469663c254a609d0b14c9d",
       "label": "mixing_matrix()",
       "last": "2026-11-05T12:34:34.269644+00:00",
       "provenance": [
@@ -78,92 +163,191 @@
           "q": "Which existing nososim conventions should guide a landscape API?"
         }
       ],
-      "score": 0.973477517,
-      "source_file": "R/make_outbreak.R",
+      "score": 0.757294534,
+      "source_file": "R/mixing.R",
       "status": "tentative",
       "uses": 1
     },
-    "r_make_outbreak_r_transmission_hazards": {
-      "code_fingerprint": "73e20e2aa22ba12bc2712f2b12fa4c65c0e15cbf4c608a4ef5afc18de93bc1e7",
-      "label": "transmission_hazards()",
-      "last": "2026-11-05T12:34:34.269644+00:00",
+    "r_offspring_r_offspring": {
+      "code_fingerprint": "e746500b3940ab9c8d9e7996b190a09574afe7c198886d171bac10dff7414a31",
+      "label": "offspring()",
+      "last": "2026-11-16T00:51:22.776201+00:00",
       "provenance": [
         {
-          "date": "2026-11-05T12:34:34.269644+00:00",
+          "date": "2026-11-16T00:51:22.776201+00:00",
           "outcome": "useful",
-          "q": "Which existing nososim conventions should guide a landscape API?"
+          "q": "Summarise current nososim functions and workflow, compare with the previous commit, and recommend the simplest clear maintainable user API."
         }
       ],
-      "score": 0.973477517,
-      "source_file": "R/make_outbreak.R",
+      "score": 0.965478144,
+      "source_file": "R/offspring.R",
+      "status": "tentative",
+      "uses": 1
+    },
+    "r_outbreak_r_align_contacts": {
+      "code_fingerprint": "30b0bf3bff10e898dabe5d78b1e19cc0655cb6ca74f496785b105378518bbb17",
+      "label": "align_contacts()",
+      "last": "2026-11-16T17:27:12.679897+00:00",
+      "provenance": [
+        {
+          "date": "2026-11-16T17:27:12.679897+00:00",
+          "outcome": "useful",
+          "q": "Is outbreak.R the cleanest, simplest, most readable code with as much pipe use and as few non-tidy operations and intermediate objects as possible?"
+        }
+      ],
+      "score": 0.981028644,
+      "source_file": "R/outbreak.R",
+      "status": "tentative",
+      "uses": 1
+    },
+    "r_outbreak_r_make_outbreak": {
+      "code_fingerprint": "30b0bf3bff10e898dabe5d78b1e19cc0655cb6ca74f496785b105378518bbb17",
+      "label": "make_outbreak()",
+      "last": "2026-11-16T19:03:39.176636+00:00",
+      "neg": 3,
+      "provenance": [
+        {
+          "date": "2026-11-16T19:03:39.176636+00:00",
+          "outcome": "useful",
+          "q": "Can autoplot(outbreak) show ward stays with the transmission tree overlaid?"
+        },
+        {
+          "date": "2026-11-16T17:27:12.679897+00:00",
+          "outcome": "useful",
+          "q": "Is outbreak.R the cleanest, simplest, most readable code with as much pipe use and as few non-tidy operations and intermediate objects as possible?"
+        },
+        {
+          "date": "2026-11-16T00:51:22.776201+00:00",
+          "outcome": "useful",
+          "q": "Summarise current nososim functions and workflow, compare with the previous commit, and recommend the simplest clear maintainable user API."
+        },
+        {
+          "date": "2026-11-16T00:31:31.683934+00:00",
+          "outcome": "useful",
+          "q": "Implement and independently assess a simpler dynamic simulation while retaining the patient and staff vignette as reference."
+        },
+        {
+          "date": "2026-11-16T00:23:24.697775+00:00",
+          "outcome": "corrected",
+          "q": "Can we simplify the population and outbreak workflow while retaining attributes and stays that change during the outbreak?"
+        }
+      ],
+      "score": 6.423179914,
+      "source_file": "R/outbreak.R",
+      "status": "contested",
+      "uses": 10,
+      "verdict": "useful"
+    },
+    "r_population_r_admit_individuals": {
+      "code_fingerprint": "399073827ef82df9dcadedfe222af278fb54ccaf0a503d069ade43d92332df7b",
+      "label": "admit_individuals()",
+      "last": "2026-11-16T18:05:55.950299+00:00",
+      "provenance": [
+        {
+          "date": "2026-11-16T18:05:55.950299+00:00",
+          "outcome": "useful",
+          "q": "Do you see any similar improvements we could do in admit_individuals()?"
+        },
+        {
+          "date": "2026-11-16T17:27:12.679897+00:00",
+          "outcome": "useful",
+          "q": "Is outbreak.R the cleanest, simplest, most readable code with as much pipe use and as few non-tidy operations and intermediate objects as possible?"
+        },
+        {
+          "date": "2026-11-16T01:09:27.252710+00:00",
+          "outcome": "useful",
+          "q": "Implement arrivals(data, t) with available in data, and clarify whether update can apply any rule checked at time t."
+        },
+        {
+          "date": "2026-11-16T00:31:31.683934+00:00",
+          "outcome": "useful",
+          "q": "Implement and independently assess a simpler dynamic simulation while retaining the patient and staff vignette as reference."
+        }
+      ],
+      "score": 3.893595824,
+      "source_file": "R/population.R",
+      "status": "preferred",
+      "uses": 4
+    },
+    "r_population_r_check_attributes": {
+      "code_fingerprint": "399073827ef82df9dcadedfe222af278fb54ccaf0a503d069ade43d92332df7b",
+      "label": "check_attributes()",
+      "last": "2026-11-16T18:05:55.950299+00:00",
+      "provenance": [
+        {
+          "date": "2026-11-16T18:05:55.950299+00:00",
+          "outcome": "useful",
+          "q": "Do you see any similar improvements we could do in admit_individuals()?"
+        }
+      ],
+      "score": 0.981638331,
+      "source_file": "R/population.R",
       "status": "tentative",
       "uses": 1
     },
     "r_population_r_make_population": {
-      "code_fingerprint": "e9abc1b56c1dd4dfe479875b64c5c46cc1a19a781119fd8b6f894a0a9ae1a1f9",
+      "code_fingerprint": "399073827ef82df9dcadedfe222af278fb54ccaf0a503d069ade43d92332df7b",
       "label": "make_population()",
-      "last": "2026-11-06T16:15:49.777869+00:00",
-      "neg": 2,
+      "last": "2026-11-16T01:09:27.252710+00:00",
+      "neg": 5,
       "provenance": [
         {
-          "date": "2026-11-06T16:15:49.777869+00:00",
+          "date": "2026-11-16T01:09:27.252710+00:00",
           "outcome": "useful",
-          "q": "Insert the agreed make_population into the package and update the vignette with clean concise generic R code and documentation."
+          "q": "Implement arrivals(data, t) with available in data, and clarify whether update can apply any rule checked at time t."
         },
         {
-          "date": "2026-11-06T15:09:32.987103+00:00",
+          "date": "2026-11-16T00:51:22.776201+00:00",
+          "outcome": "useful",
+          "q": "Summarise current nososim functions and workflow, compare with the previous commit, and recommend the simplest clear maintainable user API."
+        },
+        {
+          "date": "2026-11-16T00:31:31.683934+00:00",
+          "outcome": "useful",
+          "q": "Implement and independently assess a simpler dynamic simulation while retaining the patient and staff vignette as reference."
+        },
+        {
+          "date": "2026-11-16T00:23:24.697775+00:00",
           "outcome": "corrected",
-          "q": "What is the best architecture for generating people through time from the current landscape, with location-specific admissions, lengths of stay and dynamically drawn attributes?"
+          "q": "Can we simplify the population and outbreak workflow while retaining attributes and stays that change during the outbreak?"
         },
         {
-          "date": "2026-11-06T15:01:01.881186+00:00",
+          "date": "2026-11-16T00:19:12.824575+00:00",
           "outcome": "useful",
-          "q": "Review the current code against main and suggest a very concise simple landscape and population implementation matching the whiteboard."
-        },
-        {
-          "date": "2026-11-06T10:03:04.379419+00:00",
-          "outcome": "corrected",
-          "q": "Use one concise consistent sampler interface for population generation."
-        },
-        {
-          "date": "2026-11-06T09:50:34.296712+00:00",
-          "outcome": "useful",
-          "q": "Implement landscape-conditioned population generation with hierarchical admission_rate and los specifications."
+          "q": "Why did make_outbreak become complicated, and how can landscape -> population -> outbreak be simplified around a final population on entry?"
         }
       ],
-      "score": 1.978737186,
+      "score": 7.764201189,
       "source_file": "R/population.R",
       "status": "contested",
-      "uses": 4,
+      "uses": 14,
       "verdict": "useful"
     },
-    "r_timeline_r_make_timeline": {
-      "code_fingerprint": "e7ca0821d158a93896c4406111027b900dd52b0715b57ea64959a3b1b5b8c4ee",
-      "label": "make_timeline()",
-      "last": "2026-11-06T15:09:32.987103+00:00",
-      "neg": 1,
+    "r_population_r_update_population": {
+      "code_fingerprint": "399073827ef82df9dcadedfe222af278fb54ccaf0a503d069ade43d92332df7b",
+      "label": "update_population()",
+      "last": "2026-11-16T01:09:27.252710+00:00",
       "provenance": [
         {
-          "date": "2026-11-06T15:09:32.987103+00:00",
-          "outcome": "corrected",
-          "q": "What is the best architecture for generating people through time from the current landscape, with location-specific admissions, lengths of stay and dynamically drawn attributes?"
+          "date": "2026-11-16T01:09:27.252710+00:00",
+          "outcome": "useful",
+          "q": "Implement arrivals(data, t) with available in data, and clarify whether update can apply any rule checked at time t."
         },
         {
-          "date": "2026-11-06T15:01:01.881186+00:00",
+          "date": "2026-11-16T00:51:22.776201+00:00",
           "outcome": "useful",
-          "q": "Review the current code against main and suggest a very concise simple landscape and population implementation matching the whiteboard."
+          "q": "Summarise current nososim functions and workflow, compare with the previous commit, and recommend the simplest clear maintainable user API."
         },
         {
-          "date": "2026-11-05T18:46:08.149800+00:00",
+          "date": "2026-11-16T00:31:31.683934+00:00",
           "outcome": "useful",
-          "q": "How does our current landscape, timeline and population generation compare with an arrivals-driven, capacity-constrained hospital ward model, and what is the simplest clear robust generic approach?"
+          "q": "Implement and independently assess a simpler dynamic simulation while retaining the patient and staff vignette as reference."
         }
       ],
-      "score": 0.97916202,
-      "source_file": "R/timeline.R",
-      "status": "contested",
-      "uses": 2,
-      "verdict": "useful"
+      "score": 2.896406994,
+      "source_file": "R/population.R",
+      "status": "preferred",
+      "uses": 3
     }
   },
   "version": 1

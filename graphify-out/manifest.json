@@ -6,33 +6,21 @@
     "semantic_hash": "dc4b2409b20a8b257ebbab77d59c6c9f"
   },
   "R/autoplot.R": {
-    "mtime": 1794409594.5471084,
-    "seen": 1794410003.421514,
-    "ast_hash": "f69edcde64aaeb9c000d705d549d3935",
+    "mtime": 1794857405.1770754,
+    "seen": 1794857418.549841,
+    "ast_hash": "b1c9fa9d815f871407491129f46f3ba3",
     "semantic_hash": ""
   },
   "R/globals.R": {
-    "mtime": 1794512294.715655,
-    "seen": 1794512646.9540732,
-    "ast_hash": "32560fc3a75a01a4c76d6b11bcfc48a5",
-    "semantic_hash": ""
-  },
-  "R/make_outbreak.R": {
-    "mtime": 1794512554.760998,
-    "seen": 1794512646.9540741,
-    "ast_hash": "51acbcb11eb772a5fc25d1cc40a2503c",
+    "mtime": 1794781164.9900331,
+    "seen": 1794781413.7195132,
+    "ast_hash": "6ecb3ec87d6a918bbe2da092894e5b88",
     "semantic_hash": ""
   },
   "R/nososim-package.R": {
-    "mtime": 1794512294.5715415,
-    "seen": 1794512646.9540749,
-    "ast_hash": "938403618f09bec592bd684011b3ad48",
-    "semantic_hash": ""
-  },
-  "R/timeline.R": {
-    "mtime": 1794175387.296026,
-    "seen": 1794175404.515367,
-    "ast_hash": "34b55646e44d96a6bb8f6112a27be982",
+    "mtime": 1794781164.9745424,
+    "seen": 1794781413.7195158,
+    "ast_hash": "3b77d2a597586c88fb9e9fcd212acae2",
     "semantic_hash": ""
   },
   "dev/draft.R": {
@@ -42,9 +30,9 @@
     "semantic_hash": ""
   },
   "inst/examples/outbreak.R": {
-    "mtime": 1794484937.8347516,
-    "seen": 1794484960.637346,
-    "ast_hash": "830be0a2a112261f6d6748d98415ae7a",
+    "mtime": 1794856241.2017443,
+    "seen": 1794856312.256012,
+    "ast_hash": "4989e86cb96e5e476b487879c0fddacd",
     "semantic_hash": ""
   },
   "tests/testthat.R": {
@@ -54,21 +42,15 @@
     "semantic_hash": "19a0d66ee9268cb98f2071d86b640f30"
   },
   "tests/testthat/test-autoplot.R": {
-    "mtime": 1794409997.579237,
-    "seen": 1794410003.421524,
-    "ast_hash": "3fc43b6df6ec3efd30af90716a3dfc7b",
+    "mtime": 1794857405.19659,
+    "seen": 1794857418.549851,
+    "ast_hash": "0ea00684090f5c7b01b272f825fe2911",
     "semantic_hash": ""
   },
   "tests/testthat/test-make_outbreak.R": {
-    "mtime": 1794512415.3312516,
-    "seen": 1794512646.954081,
-    "ast_hash": "ef7cb17b6d17620e7a049e5f62733f45",
-    "semantic_hash": ""
-  },
-  "tests/testthat/test-timeline.R": {
-    "mtime": 1794409997.5786588,
-    "seen": 1794410003.4215271,
-    "ast_hash": "6a4c7f6c12fc5a873709557213749864",
+    "mtime": 1794846682.803758,
+    "seen": 1794846684.340179,
+    "ast_hash": "fd468f167dff026f067b344a0619c808",
     "semantic_hash": ""
   },
   ".github/workflows/R-CMD-check.yaml": {
@@ -89,12 +71,6 @@
     "ast_hash": "5fae70e49e4ea78f63a9afb887d1a55e",
     "semantic_hash": "5fae70e49e4ea78f63a9afb887d1a55e"
   },
-  "METHODS.md": {
-    "mtime": 1794512554.7608476,
-    "seen": 1794512646.9540842,
-    "ast_hash": "5fc2cab55dd379d68fff9f173773c3dd",
-    "semantic_hash": ""
-  },
   "graphify-out/memory/query_20261021_174241_26ab279b_explain_the_link_between_reduction_and_interventio.md": {
     "mtime": 1792604561.7017832,
     "seen": 1792604802.947307,
@@ -102,9 +78,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1794512557.6087537,
-    "seen": 1794512646.9540842,
-    "ast_hash": "0f14490d31f2e4b6f11c735afbf0de30",
+    "mtime": 1794846658.5655026,
+    "seen": 1794846684.340182,
+    "ast_hash": "d2df3548a77fad15a1d526b789b90e79",
     "semantic_hash": ""
   },
   "man/figures/README-unnamed-chunk-2-1.png": {
@@ -120,9 +96,9 @@
     "semantic_hash": ""
   },
   "tests/testthat/helper-outbreak.R": {
-    "mtime": 1794484937.834902,
-    "seen": 1794484960.6373482,
-    "ast_hash": "6b81b5778ae3b212f5ce2f2e539e5e7b",
+    "mtime": 1794846658.5636165,
+    "seen": 1794846684.3401768,
+    "ast_hash": "5677e85b97775f4ba6192727b902c35d",
     "semantic_hash": ""
   },
   ".github/workflows/pkgdown.yaml": {
@@ -132,21 +108,21 @@
     "semantic_hash": ""
   },
   "_pkgdown.yml": {
-    "mtime": 1793981620.6147602,
-    "seen": 1793981692.398655,
-    "ast_hash": "5d9b8e1d56144771ccf22122248f25df",
+    "mtime": 1794781084.3449197,
+    "seen": 1794781413.719527,
+    "ast_hash": "5f70caf7b8ff7cd52f26774c872c89c0",
     "semantic_hash": ""
   },
   "man/figures/README-first-outbreak-1.png": {
-    "mtime": 1794512557.408931,
-    "seen": 1794512646.954092,
-    "ast_hash": "a2bf885a55e4a06e76b0185ab426efda",
+    "mtime": 1794783948.738228,
+    "seen": 1794783956.856699,
+    "ast_hash": "2780323150af91db12c692289f31d37b",
     "semantic_hash": ""
   },
   "R/offspring.R": {
-    "mtime": 1794409594.5479445,
-    "seen": 1794410003.4215198,
-    "ast_hash": "384797d0727eb99e77c83ebdd58d7f85",
+    "mtime": 1794780956.1015067,
+    "seen": 1794781413.719517,
+    "ast_hash": "d05ea41ddf7c1dfb8206d83ed382a17c",
     "semantic_hash": ""
   },
   "dev/nososim_validation.qmd": {
@@ -156,27 +132,27 @@
     "semantic_hash": ""
   },
   "R/count_edges.R": {
-    "mtime": 1794512294.7151232,
-    "seen": 1794512646.954071,
-    "ast_hash": "a9d4c72a7e407ab3a4730e9f162dcf13",
+    "mtime": 1794780956.0881798,
+    "seen": 1794781413.719511,
+    "ast_hash": "b8404a455e9b8ae6ce66af74f4b85d89",
     "semantic_hash": ""
   },
   "tests/testthat/test-count_edges.R": {
-    "mtime": 1794512415.331598,
-    "seen": 1794512646.95408,
-    "ast_hash": "5ff68ee7e2110658f645f0e6ce626ede",
+    "mtime": 1794781041.0253248,
+    "seen": 1794781413.719521,
+    "ast_hash": "aae6dc72c6b3d8a4f0d8f483f890bd69",
     "semantic_hash": ""
   },
   "R/data.R": {
-    "mtime": 1794482174.8227832,
-    "seen": 1794482439.140921,
-    "ast_hash": "dd1a27443bc9a543781d0e03341519c5",
+    "mtime": 1794783925.1417093,
+    "seen": 1794783956.856679,
+    "ast_hash": "37c4d7f144325c1dc39473c6e02abcdf",
     "semantic_hash": ""
   },
   "data-raw/outbreak.R": {
-    "mtime": 1794482437.4656007,
-    "seen": 1794482439.140926,
-    "ast_hash": "1315f05a62cdf00424210504c7f16392",
+    "mtime": 1794781084.3747509,
+    "seen": 1794781413.719518,
+    "ast_hash": "ccd56ab806e2e53dcad7e6ac8ceac806",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20261105_123434_482bb752_which_existing_nososim_conventions_should_guide_a.md": {
@@ -198,15 +174,15 @@
     "semantic_hash": ""
   },
   "R/landscape.R": {
-    "mtime": 1794409903.547188,
-    "seen": 1794410003.421518,
-    "ast_hash": "8fc9b880610ed9e33423f2ad934f2f06",
+    "mtime": 1794828091.0174396,
+    "seen": 1794828588.945187,
+    "ast_hash": "58a8356b198a5c271d4100727da7df50",
     "semantic_hash": ""
   },
   "tests/testthat/test-landscape.R": {
-    "mtime": 1794409843.5836895,
-    "seen": 1794410003.421526,
-    "ast_hash": "38ab17b9cf7ac25faf485325ba41ab23",
+    "mtime": 1794827984.7540345,
+    "seen": 1794827988.8824372,
+    "ast_hash": "ba4eebf1965a67ca81c2d47077e0188f",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20261106_100304_bc9c18d5_use_one_concise_consistent_sampler_interface_for_p.md": {
@@ -252,15 +228,15 @@
     "semantic_hash": ""
   },
   "R/population.R": {
-    "mtime": 1794410066.9730046,
-    "seen": 1794410104.303589,
-    "ast_hash": "5d4cedd3bd5cddb49399acebe58dc5f3",
+    "mtime": 1794853096.1940565,
+    "seen": 1794853105.4454799,
+    "ast_hash": "49dd57e608fb46ffb0823bc41dc13751",
     "semantic_hash": ""
   },
   "tests/testthat/test-population.R": {
-    "mtime": 1794410102.7517972,
-    "seen": 1794410104.3035939,
-    "ast_hash": "4eea93b9f5cd6f64203dfd754f390922",
+    "mtime": 1794846658.5620275,
+    "seen": 1794846684.34018,
+    "ast_hash": "ecfeaafadea0f202c2080682482ebfb9",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20261106_154630_d1a1d3fd_show_an_executable_vignette_example_of_the_propose.md": {
@@ -300,33 +276,123 @@
     "semantic_hash": ""
   },
   "R/get_contacts.R": {
-    "mtime": 1794410066.9733474,
-    "seen": 1794410104.303585,
-    "ast_hash": "4702aa69cbeec9792f396a4080f4b754",
+    "mtime": 1794783925.1415584,
+    "seen": 1794783956.856679,
+    "ast_hash": "1fa89bf70495668e33d4f8f2f5ef4a08",
     "semantic_hash": ""
   },
   "tests/testthat/test-get_contacts.R": {
-    "mtime": 1794409997.5780215,
-    "seen": 1794410003.421525,
-    "ast_hash": "1711265003e344a6bbb0067a5d7c1dfe",
+    "mtime": 1794781040.9906602,
+    "seen": 1794781413.719522,
+    "ast_hash": "2948247a9ad4c3a278955c6d52c5f6b8",
     "semantic_hash": ""
   },
   "tests/testthat/test-get_contacts-weights.R": {
-    "mtime": 1794409997.5782828,
-    "seen": 1794410003.421525,
-    "ast_hash": "6491ac271a458d8d3c54045eeaa8bed3",
+    "mtime": 1794781041.0095081,
+    "seen": 1794781413.719522,
+    "ast_hash": "3f794a131bdddedba457a5d325119696",
     "semantic_hash": ""
   },
   "R/mixing.R": {
-    "mtime": 1794409997.577157,
-    "seen": 1794410003.421519,
-    "ast_hash": "c6aea088f37c682da1be4e7766d6bf91",
+    "mtime": 1794780956.073654,
+    "seen": 1794781413.7195148,
+    "ast_hash": "91cdc9d648c651778462f38017504762",
     "semantic_hash": ""
   },
   "R/utils.R": {
     "mtime": 1794409997.5769176,
     "seen": 1794410003.421521,
     "ast_hash": "3afda70995526f617ec195adefc6959f",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261113_123450_9fd9a7ce_can_you_do_a_complete_analysis_of_the_current_code.md": {
+    "mtime": 1794573290.0095487,
+    "seen": 1794781413.719536,
+    "ast_hash": "f8b3da4eeffbe6830608f6d133850108",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261113_125336_542fe962_how_should_make_population_connect_before_and_duri.md": {
+    "mtime": 1794574416.3761861,
+    "seen": 1794781413.719536,
+    "ast_hash": "2f87b24588425a3f88ae1adf6431364d",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261113_135402_a5180bde_review_the_suggestions_for_strictly_minimal_requir.md": {
+    "mtime": 1794830231.0430882,
+    "seen": 1794833628.6298618,
+    "ast_hash": "e5a7730f0938254d5ef176a53c3b1cdb",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261115_215446_36892160_independently_review_the_minimal_proposed_api_and.md": {
+    "mtime": 1794779686.1585124,
+    "seen": 1794781413.7195368,
+    "ast_hash": "447b5813f41502065e246b9042a411ad",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_001912_dac0bf21_why_did_make_outbreak_become_complicated__and_how.md": {
+    "mtime": 1794788352.8249087,
+    "seen": 1794789064.9380338,
+    "ast_hash": "06e1a8b9d0e90dc43f7466ae60f82610",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_002324_d5a942f7_can_we_simplify_the_population_and_outbreak_workfl.md": {
+    "mtime": 1794788604.6981266,
+    "seen": 1794789064.9380338,
+    "ast_hash": "c19b6aa90394d5839835556e76d268aa",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_003131_702fa5a7_implement_and_independently_assess_a_simpler_dynam.md": {
+    "mtime": 1794789091.6842508,
+    "seen": 1794791344.083638,
+    "ast_hash": "923b9ff6207066bbc4e46740a9f43c88",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_005122_1447867d_summarise_current_nososim_functions_and_workflow.md": {
+    "mtime": 1794790282.776533,
+    "seen": 1794791344.083638,
+    "ast_hash": "650bc0e332f3aebac1a16750fbc762b8",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_010927_106afd41_implement_arrivals_data__t__with_available_in_data.md": {
+    "mtime": 1794791367.2530525,
+    "seen": 1794827988.882452,
+    "ast_hash": "691149b57a14b374c2566d49a7516ebf",
+    "semantic_hash": ""
+  },
+  "R/outbreak.R": {
+    "mtime": 1794850209.1966908,
+    "seen": 1794850215.263564,
+    "ast_hash": "c39c4b0c20d7b13433642bafedf52bf9",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_172712_98a03e42_is_outbreak_r_the_cleanest__simplest__most_readabl.md": {
+    "mtime": 1794850032.680583,
+    "seen": 1794850215.2635891,
+    "ast_hash": "6086556c3203717b58b6b204599d968a",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_180555_acd25846_do_you_see_any_similar_improvements_we_could_do_in.md": {
+    "mtime": 1794852355.950623,
+    "seen": 1794853105.4455,
+    "ast_hash": "beda7daaa1a7f48d1fc0cdee8e0dc314",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_190339_e9f7ea2f_can_autoplot_outbreak__show_ward_stays_with_the_tr.md": {
+    "mtime": 1794855819.1769576,
+    "seen": 1794856312.256029,
+    "ast_hash": "3af418ddba0048001a39995add306304",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_191210_585f67b2_implement_autoplot_outbreak__with_individual_colou.md": {
+    "mtime": 1794856330.8800488,
+    "seen": 1794856331.1923468,
+    "ast_hash": "74de74af1f9eae213aff8e1e40d82548",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_193018_ab8017c2_why_does_the_transmission_overlay_look_disconnecte.md": {
+    "mtime": 1794857418.1682482,
+    "seen": 1794857418.549868,
+    "ast_hash": "a4fdc3cba7ecb63a91425e6168211ca0",
     "semantic_hash": ""
   }
 }

@@ -2,56 +2,46 @@
 % Please edit documentation in R/get_contacts.R
 \name{get_contacts}
 \alias{get_contacts}
-\title{Find daily contacts}
+\title{Build a contact matrix}
 \usage{
-get_contacts(population, date, by = level_columns(population), weights = NULL)
+get_contacts(data, by = level_columns(data), weights = NULL)
 }
 \arguments{
-\item{population}{A table with unique \code{id}, \code{start}, \code{end}, and grouping columns.}
+\item{data}{Current occupants, with unique \code{labels} and grouping columns.}
 
-\item{date}{A single Date. Both \code{start} and \code{end} are included.}
+\item{by}{Columns to match (default: all \verb{level_*} columns), or a vectorised
+function \verb{(i, j)} comparing corresponding rows of two tables. Column matching
+treats missing values as equal. Functions must return symmetric logical
+results; \code{NA} means no contact. Self-pairs are excluded; functions are skipped
+with fewer than two occupants.}
 
-\item{by}{A character vector of columns to match, or a vectorised function
-\verb{(i, j)} returning one logical value per pair. \code{i} and \code{j} are tables whose
-corresponding rows are the people being compared. Defaults to all
-\verb{level_*} columns. For column matching, missing values match missing values.
-For functions, \code{NA} results mean no contact, and results must be symmetric.
-Self-pairs are excluded; the function is not called with fewer than two
-people present.}
-
-\item{weights}{Optional named list of numeric matrices. List names identify
-population columns; matrix row names identify source categories and column
-names identify recipient categories. Coefficients must be finite and
-non-negative, with unique category names covering everyone present on both
-axes. Missing values in weighted attributes are errors. Coefficients multiply
-across attributes. \code{NULL} or an empty list leaves contacts unweighted.}
+\item{weights}{Optional named list of numeric matrices, one per attribute.
+Rows name source categories; columns name recipient categories. Names must
+be unique and cover all observed categories on both axes. Values must be
+finite and non-negative; missing attributes are errors. Weights multiply
+across attributes without normalisation. \code{NULL} or an empty list means no
+weighting. Excluded contacts remain zero.}
 }
 \value{
-A matrix named by the IDs present on \code{date}, in population row order.
-Without weights, entries are symmetric 0s and 1s. With weights, entries are
-non-negative contact intensities and may be asymmetric. Rows are sources
-and columns recipients. The diagonal is zero; no people present gives a
+A matrix in \code{data} row order, with source labels in rows, recipient
+labels in columns, and a zero diagonal. Unweighted contacts are symmetric
+0s and 1s; weighted intensities may be asymmetric. Empty input returns a
 0-by-0 matrix.
 }
 \description{
-Define contacts using matching columns or a pairwise function, then optionally
-multiply them by attribute-specific weights without normalisation.
+Match individuals by location or a pairwise rule, then apply optional weights.
 }
 \examples{
-population <- tibble::tibble(
-  id = c("a", "b", "c"),
+data <- tibble::tibble(
+  labels = c("a", "b", "c"),
   level_1 = c("A", "A", "B"),
-  role = c("patient", "staff", "patient"),
-  start = as.Date("2026-01-01"),
-  end = as.Date("2026-01-03")
+  role = c("patient", "staff", "patient")
 )
-get_contacts(population, as.Date("2026-01-02"))
-get_contacts(population, as.Date("2026-01-02"),
-  by = c("level_1", "role"))
-get_contacts(population, as.Date("2026-01-02"),
-  by = function(i, j) i$level_1 == j$level_1)
+get_contacts(data)
+get_contacts(data, by = c("level_1", "role"))
+get_contacts(data, by = function(i, j) i$level_1 == j$level_1)
 role_weights <- matrix(c(1, 2, 1, 1), 2, byrow = TRUE,
   dimnames = list(c("patient", "staff"), c("patient", "staff")))
-get_contacts(population, as.Date("2026-01-02"), by = "level_1",
+get_contacts(data, by = "level_1",
   weights = list(role = role_weights))
 }

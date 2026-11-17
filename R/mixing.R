@@ -11,7 +11,7 @@ mixing_matrix <- function(present, mixing = NULL) {
 
   result <- matrix(
     1, nrow(present), nrow(present),
-    dimnames = list(present$id, present$id)
+    dimnames = list(present$labels, present$labels)
   )
   for (attribute in names(mixing)) {
     weights <- mixing[[attribute]]

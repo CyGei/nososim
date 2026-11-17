@@ -1,19 +1,19 @@
 Package: nososim
-Title: Nosocomial Outbreak Simulation
+Title: Outbreak Simulation in Structured Populations
 Version: 0.0.0.9000
 Authors@R: person("Cyril", "Geismar", email = "cyrilgeismar@gmail.com",
     role = c("aut", "cre"))
-Description: Simulate nosocomial outbreaks in populations with changing
-    attendance and attributes. Model transmission using contact intensities,
-    individual transmission rates, and optional interventions, and plot stays.
+Description: Simulate outbreaks with location capacities, changing occupancy,
+    individual attributes, and weighted contacts. Track daily presence and
+    transmission histories.
 URL: https://CyGei.github.io/nososim/, https://github.com/CyGei/nososim, https://cygei.github.io/nososim/
 BugReports: https://github.com/CyGei/nososim/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 4.1.0)
+Depends: R (>= 4.2.0)
 Imports:
-    dplyr (>= 1.1.0),
+    dplyr (>= 1.1.1),
     ggplot2 (>= 3.4.0),
     legendry (>= 0.3.0),
     purrr,
@@ -29,7 +29,7 @@ Suggests:
     testthat (>= 3.0.0),
     withr
 Remotes:
-    thibautjombart/simulacr@f260d8dc6a55b4c8dce004c0f81af378959938f6
+    thibautjombart/simulacr@865331f657c4d748652584404f114727c7333444
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.1.1
 Roxygen: list(markdown = TRUE)

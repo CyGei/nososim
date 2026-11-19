@@ -4,9 +4,9 @@
 \name{nososim-package}
 \alias{nososim}
 \alias{nososim-package}
-\title{nososim: Nosocomial Outbreak Simulation}
+\title{nososim: Outbreak Simulation in Structured Populations}
 \description{
-Create daily populations, simulate transmission, and plot outbreaks.
+Define population rules, simulate transmission, and explore daily presence.
 }
 \seealso{
 Useful links:

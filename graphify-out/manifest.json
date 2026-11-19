@@ -6,51 +6,33 @@
     "semantic_hash": "dc4b2409b20a8b257ebbab77d59c6c9f"
   },
   "R/autoplot.R": {
-    "mtime": 1792601706.414169,
-    "seen": 1792604387.765373,
-    "ast_hash": "1a8b4965b9b429b4ca9d4b064fdcbea6",
-    "semantic_hash": "1a8b4965b9b429b4ca9d4b064fdcbea6"
+    "mtime": 1795099076.7501154,
+    "seen": 1795099113.066633,
+    "ast_hash": "346b0e6800b7ac38b28c1e7abfe4208d",
+    "semantic_hash": ""
   },
   "R/globals.R": {
-    "mtime": 1792597869.3628664,
-    "seen": 1792604387.765374,
-    "ast_hash": "1fe7e359213e07c559d0dda0dc35ecb6",
-    "semantic_hash": "1fe7e359213e07c559d0dda0dc35ecb6"
-  },
-  "R/make_outbreak.R": {
-    "mtime": 1792751644.650474,
-    "seen": 1792751651.9571981,
-    "ast_hash": "9e4dc341d8187f108e9e2755d769f2cc",
+    "mtime": 1794781164.9900331,
+    "seen": 1794781413.7195132,
+    "ast_hash": "6ecb3ec87d6a918bbe2da092894e5b88",
     "semantic_hash": ""
   },
   "R/nososim-package.R": {
-    "mtime": 1792602659.7814736,
-    "seen": 1792604387.765375,
-    "ast_hash": "401b5c46fccc3422d72ee034e40dd8d8",
-    "semantic_hash": "401b5c46fccc3422d72ee034e40dd8d8"
-  },
-  "R/summary.R": {
-    "mtime": 1792602135.889589,
-    "seen": 1792604387.765376,
-    "ast_hash": "21c79ebda2839055bb4ff3054548369b",
-    "semantic_hash": "21c79ebda2839055bb4ff3054548369b"
-  },
-  "R/timeline.R": {
-    "mtime": 1792602715.2715409,
-    "seen": 1792604387.765376,
-    "ast_hash": "417882ba19564473816feee63b6ea84e",
-    "semantic_hash": "417882ba19564473816feee63b6ea84e"
+    "mtime": 1794781164.9745424,
+    "seen": 1794781413.7195158,
+    "ast_hash": "3b77d2a597586c88fb9e9fcd212acae2",
+    "semantic_hash": ""
   },
   "dev/draft.R": {
-    "mtime": 1792751644.6502817,
-    "seen": 1792751651.957201,
-    "ast_hash": "80a389d9bdaa5d7b9c7c88cf13b694e4",
+    "mtime": 1795100634.797362,
+    "seen": 1795102641.609635,
+    "ast_hash": "f572c88001077545c70da60d6fd36fed",
     "semantic_hash": ""
   },
   "inst/examples/outbreak.R": {
-    "mtime": 1792751319.766407,
-    "seen": 1792751330.570955,
-    "ast_hash": "e73c4800999a4d416449acfbb946c515",
+    "mtime": 1794856241.2017443,
+    "seen": 1794856312.256012,
+    "ast_hash": "4989e86cb96e5e476b487879c0fddacd",
     "semantic_hash": ""
   },
   "tests/testthat.R": {
@@ -60,27 +42,15 @@
     "semantic_hash": "19a0d66ee9268cb98f2071d86b640f30"
   },
   "tests/testthat/test-autoplot.R": {
-    "mtime": 1792609451.530285,
-    "seen": 1792609459.137374,
-    "ast_hash": "ea815095038d620d134e9ed53a449374",
+    "mtime": 1795099098.8752472,
+    "seen": 1795099113.066644,
+    "ast_hash": "275592436a32b432e333e5cf593b8dca",
     "semantic_hash": ""
   },
   "tests/testthat/test-make_outbreak.R": {
-    "mtime": 1792751157.4012759,
-    "seen": 1792751166.071748,
-    "ast_hash": "9683e81ff94e794d61b28aed6fc41580",
-    "semantic_hash": ""
-  },
-  "tests/testthat/test-summary.R": {
-    "mtime": 1792751136.2092075,
-    "seen": 1792751149.773431,
-    "ast_hash": "2406bd706e9bf23f6e8fe4190dff06e1",
-    "semantic_hash": ""
-  },
-  "tests/testthat/test-timeline.R": {
-    "mtime": 1792751644.651062,
-    "seen": 1792751651.9572039,
-    "ast_hash": "2b2abf8788a3b21b57028323f0df771f",
+    "mtime": 1794930353.2938783,
+    "seen": 1794930425.589393,
+    "ast_hash": "3e87465a3b09feb4451c800a082b7f4f",
     "semantic_hash": ""
   },
   ".github/workflows/R-CMD-check.yaml": {
@@ -101,12 +71,6 @@
     "ast_hash": "5fae70e49e4ea78f63a9afb887d1a55e",
     "semantic_hash": "5fae70e49e4ea78f63a9afb887d1a55e"
   },
-  "METHODS.md": {
-    "mtime": 1792751644.6513078,
-    "seen": 1792751651.957206,
-    "ast_hash": "3d11a1eed9d874216a53e776f75ba0f8",
-    "semantic_hash": ""
-  },
   "graphify-out/memory/query_20261021_174241_26ab279b_explain_the_link_between_reduction_and_interventio.md": {
     "mtime": 1792604561.7017832,
     "seen": 1792604802.947307,
@@ -114,9 +78,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1792751136.2081738,
-    "seen": 1792751149.7734342,
-    "ast_hash": "aa9ec1c17b23b612fcf0b65c07a0d6b4",
+    "mtime": 1794846658.5655026,
+    "seen": 1794846684.340182,
+    "ast_hash": "d2df3548a77fad15a1d526b789b90e79",
     "semantic_hash": ""
   },
   "man/figures/README-unnamed-chunk-2-1.png": {
@@ -132,9 +96,9 @@
     "semantic_hash": ""
   },
   "tests/testthat/helper-outbreak.R": {
-    "mtime": 1792751136.2091343,
-    "seen": 1792751149.773429,
-    "ast_hash": "2035ea387e848d8185387d8a995bcabe",
+    "mtime": 1794930411.6877894,
+    "seen": 1794930425.58939,
+    "ast_hash": "85d5e2c4ad295a952c6a37a61710af85",
     "semantic_hash": ""
   },
   ".github/workflows/pkgdown.yaml": {
@@ -144,51 +108,363 @@
     "semantic_hash": ""
   },
   "_pkgdown.yml": {
-    "mtime": 1792751405.4233909,
-    "seen": 1792751651.957207,
-    "ast_hash": "315ffe20fa9d3f1b789f6e0ff3fd9271",
+    "mtime": 1794934251.1312463,
+    "seen": 1794934317.0239549,
+    "ast_hash": "e2e30c0e8e15cc94180e0a34e5106689",
     "semantic_hash": ""
   },
   "man/figures/README-first-outbreak-1.png": {
-    "mtime": 1792610841.970347,
-    "seen": 1792663834.9102342,
-    "ast_hash": "7082319200dbcb2b759aa466e6f4e127",
+    "mtime": 1794783948.738228,
+    "seen": 1794783956.856699,
+    "ast_hash": "2780323150af91db12c692289f31d37b",
     "semantic_hash": ""
   },
   "R/offspring.R": {
-    "mtime": 1792672472.965188,
-    "seen": 1792672559.950583,
-    "ast_hash": "70cad02902f1d73afe258e5b2caf498a",
+    "mtime": 1794780956.1015067,
+    "seen": 1794781413.719517,
+    "ast_hash": "d05ea41ddf7c1dfb8206d83ed382a17c",
     "semantic_hash": ""
   },
   "dev/nososim_validation.qmd": {
-    "mtime": 1792751136.20875,
-    "seen": 1792751149.7734349,
-    "ast_hash": "662cee5bce953eb14682baa9a3836f7b",
+    "mtime": 1795100634.7968438,
+    "seen": 1795102641.609643,
+    "ast_hash": "9efb4d9511e2b38f1263475072ace245",
     "semantic_hash": ""
   },
   "R/count_edges.R": {
-    "mtime": 1792680311.9864104,
-    "seen": 1792680373.106689,
-    "ast_hash": "c426c075e8f343d4115038fec43664d6",
+    "mtime": 1794780956.0881798,
+    "seen": 1794781413.719511,
+    "ast_hash": "b8404a455e9b8ae6ce66af74f4b85d89",
     "semantic_hash": ""
   },
   "tests/testthat/test-count_edges.R": {
-    "mtime": 1792751644.6508355,
-    "seen": 1792751651.957203,
-    "ast_hash": "5dd1c343b66f754cf573400b08f377ab",
+    "mtime": 1794930355.5549068,
+    "seen": 1794930425.589391,
+    "ast_hash": "a874353cf72e5d3b0798628e042a6045",
     "semantic_hash": ""
   },
   "R/data.R": {
-    "mtime": 1792751319.7666507,
-    "seen": 1792751330.5709498,
-    "ast_hash": "534c39e1459c084172dfd16fef677b0b",
+    "mtime": 1794925513.8118324,
+    "seen": 1794925547.273952,
+    "ast_hash": "74e5fe080436774b4e99f83c5b11d295",
     "semantic_hash": ""
   },
   "data-raw/outbreak.R": {
-    "mtime": 1792751319.766581,
-    "seen": 1792751330.570954,
-    "ast_hash": "27c79ad67c9ddd3c18546ac05c235e67",
+    "mtime": 1794781084.3747509,
+    "seen": 1794781413.719518,
+    "ast_hash": "ccd56ab806e2e53dcad7e6ac8ceac806",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261105_123434_482bb752_which_existing_nososim_conventions_should_guide_a.md": {
+    "mtime": 1793882074.2700112,
+    "seen": 1793883859.060063,
+    "ast_hash": "4357a0aec8a7147fead1a4471f3907c0",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261105_184608_3c993ec2_how_does_our_current_landscape__timeline_and_popul.md": {
+    "mtime": 1793904368.1504395,
+    "seen": 1793958541.411069,
+    "ast_hash": "5c5cdd1c6ca737707ab326bab46e2183",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_095034_5cee6403_implement_landscape_conditioned_population_generat.md": {
+    "mtime": 1793958634.2970026,
+    "seen": 1793959346.384416,
+    "ast_hash": "b4e9894d18e311bf5141ed260ea0f1ff",
+    "semantic_hash": ""
+  },
+  "R/landscape.R": {
+    "mtime": 1794828091.0174396,
+    "seen": 1794828588.945187,
+    "ast_hash": "58a8356b198a5c271d4100727da7df50",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-landscape.R": {
+    "mtime": 1794930315.428209,
+    "seen": 1794930425.589392,
+    "ast_hash": "43e42a688a28a89f706a72692f56557a",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_100304_bc9c18d5_use_one_concise_consistent_sampler_interface_for_p.md": {
+    "mtime": 1793959384.3797796,
+    "seen": 1793978306.879,
+    "ast_hash": "1bdb9040a48398fb12300dfdd5bf83fa",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_150101_a8650532_review_the_current_code_against_main_and_suggest_a.md": {
+    "mtime": 1793977261.8814774,
+    "seen": 1793978306.8790011,
+    "ast_hash": "1ad1eaaad861a5bf59fd5e98d17ee07b",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_150932_a34601f0_what_is_the_best_architecture_for_generating_peopl.md": {
+    "mtime": 1793977772.9874432,
+    "seen": 1793978306.8790011,
+    "ast_hash": "e2d86fc2e87c3b81e7ea2f56e90566aa",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_151916_2aa014f7_focus_only_on_make_landscape_from_the_vignette_nes.md": {
+    "mtime": 1793978356.1697996,
+    "seen": 1793978784.045289,
+    "ast_hash": "77ef45bc33f3a2f3607e53bd5f84fcb8",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_152710_28a24148_use_n_instead_of_capacity__should_admission_rates.md": {
+    "mtime": 1793978830.4436433,
+    "seen": 1793978978.149458,
+    "ast_hash": "88eff202a871678a5242ca20bc88b849",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_153006_c06aacf8_implement_admission_rates_as_location_table_column.md": {
+    "mtime": 1793979006.5326648,
+    "seen": 1793979937.3421881,
+    "ast_hash": "50238fdeb5675b8ecc9af4201c5437fd",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_153743_85800311_how_would_you_construct_make_population__be_clear.md": {
+    "mtime": 1793979463.7795649,
+    "seen": 1793979937.342189,
+    "ast_hash": "898792495491ac4b1b0d9bba88ccc539",
+    "semantic_hash": ""
+  },
+  "R/population.R": {
+    "mtime": 1794925489.4589374,
+    "seen": 1794925547.273957,
+    "ast_hash": "fe0ebf3f47043792941aded1fd62795c",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-population.R": {
+    "mtime": 1794930346.822964,
+    "seen": 1794930425.589393,
+    "ast_hash": "93632f863021c06006b4083c0878fb59",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_154630_d1a1d3fd_show_an_executable_vignette_example_of_the_propose.md": {
+    "mtime": 1793979990.6890862,
+    "seen": 1793981692.3986602,
+    "ast_hash": "2aacc28b553e5b3b6c26c4ab9528e745",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_161549_585ef38f_insert_the_agreed_make_population_into_the_package.md": {
+    "mtime": 1793981749.7781515,
+    "seen": 1793983530.057615,
+    "ast_hash": "43f417969edf2ed830b1ed1f7aa977ba",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_163231_ffeb8f19_review_the_current_vignette_and_user_workflow_for.md": {
+    "mtime": 1793982751.9737263,
+    "seen": 1793983530.0576158,
+    "ast_hash": "1ff6a6d6dcd45ceeed1aa31d21e9c36c",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_164530_fce3fe64_update_the_vignette_and_documentation_around_the_a.md": {
+    "mtime": 1793983530.176351,
+    "seen": 1794146648.270685,
+    "ast_hash": "3f0af98c534666dab237ca415c62c380",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261108_140538_3add0663_generate_individuals_only_when_places_are_availabl.md": {
+    "mtime": 1794146738.9410346,
+    "seen": 1794149503.9785469,
+    "ast_hash": "e5a6cf640b8662ef0d29ce62adf22349",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261108_145407_7197d943_restore_the_nested_landscape_stay_plot_for_autoplo.md": {
+    "mtime": 1794149647.7495105,
+    "seen": 1794150123.770904,
+    "ast_hash": "bd5bacc0886d6c67b3f292371b145b11",
+    "semantic_hash": ""
+  },
+  "R/get_contacts.R": {
+    "mtime": 1795100634.795294,
+    "seen": 1795102641.609628,
+    "ast_hash": "6dcfa249ad7fdf04e58fdf2f2ad8f9ec",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-get_contacts.R": {
+    "mtime": 1794930377.346158,
+    "seen": 1794930425.589392,
+    "ast_hash": "a0d9c5d00dfe4277b74ccb42b66c60bd",
+    "semantic_hash": ""
+  },
+  "R/mixing.R": {
+    "mtime": 1795100634.7956753,
+    "seen": 1795102641.6096299,
+    "ast_hash": "c3a9d6a4832e458829b5e50d3ca58a0d",
+    "semantic_hash": ""
+  },
+  "R/utils.R": {
+    "mtime": 1795100634.795783,
+    "seen": 1795102641.6096342,
+    "ast_hash": "14d988846be93d8197a3fc09f8ef7e4a",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261113_123450_9fd9a7ce_can_you_do_a_complete_analysis_of_the_current_code.md": {
+    "mtime": 1794573290.0095487,
+    "seen": 1794781413.719536,
+    "ast_hash": "f8b3da4eeffbe6830608f6d133850108",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261113_125336_542fe962_how_should_make_population_connect_before_and_duri.md": {
+    "mtime": 1794574416.3761861,
+    "seen": 1794781413.719536,
+    "ast_hash": "2f87b24588425a3f88ae1adf6431364d",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261113_135402_a5180bde_review_the_suggestions_for_strictly_minimal_requir.md": {
+    "mtime": 1794830231.0430882,
+    "seen": 1794833628.6298618,
+    "ast_hash": "e5a7730f0938254d5ef176a53c3b1cdb",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261115_215446_36892160_independently_review_the_minimal_proposed_api_and.md": {
+    "mtime": 1794779686.1585124,
+    "seen": 1794781413.7195368,
+    "ast_hash": "447b5813f41502065e246b9042a411ad",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_001912_dac0bf21_why_did_make_outbreak_become_complicated__and_how.md": {
+    "mtime": 1794788352.8249087,
+    "seen": 1794789064.9380338,
+    "ast_hash": "06e1a8b9d0e90dc43f7466ae60f82610",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_002324_d5a942f7_can_we_simplify_the_population_and_outbreak_workfl.md": {
+    "mtime": 1794788604.6981266,
+    "seen": 1794789064.9380338,
+    "ast_hash": "c19b6aa90394d5839835556e76d268aa",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_003131_702fa5a7_implement_and_independently_assess_a_simpler_dynam.md": {
+    "mtime": 1794789091.6842508,
+    "seen": 1794791344.083638,
+    "ast_hash": "923b9ff6207066bbc4e46740a9f43c88",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_005122_1447867d_summarise_current_nososim_functions_and_workflow.md": {
+    "mtime": 1794790282.776533,
+    "seen": 1794791344.083638,
+    "ast_hash": "650bc0e332f3aebac1a16750fbc762b8",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_010927_106afd41_implement_arrivals_data__t__with_available_in_data.md": {
+    "mtime": 1794791367.2530525,
+    "seen": 1794827988.882452,
+    "ast_hash": "691149b57a14b374c2566d49a7516ebf",
+    "semantic_hash": ""
+  },
+  "R/outbreak.R": {
+    "mtime": 1794925545.548442,
+    "seen": 1794925547.273956,
+    "ast_hash": "a19bb51f091e1deaf4b9c292dcda1962",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_172712_98a03e42_is_outbreak_r_the_cleanest__simplest__most_readabl.md": {
+    "mtime": 1794850032.680583,
+    "seen": 1794850215.2635891,
+    "ast_hash": "6086556c3203717b58b6b204599d968a",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_180555_acd25846_do_you_see_any_similar_improvements_we_could_do_in.md": {
+    "mtime": 1794852355.950623,
+    "seen": 1794853105.4455,
+    "ast_hash": "beda7daaa1a7f48d1fc0cdee8e0dc314",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_190339_e9f7ea2f_can_autoplot_outbreak__show_ward_stays_with_the_tr.md": {
+    "mtime": 1794855819.1769576,
+    "seen": 1794856312.256029,
+    "ast_hash": "3af418ddba0048001a39995add306304",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_191210_585f67b2_implement_autoplot_outbreak__with_individual_colou.md": {
+    "mtime": 1794856330.8800488,
+    "seen": 1794856331.1923468,
+    "ast_hash": "74de74af1f9eae213aff8e1e40d82548",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_193018_ab8017c2_why_does_the_transmission_overlay_look_disconnecte.md": {
+    "mtime": 1794857418.1682482,
+    "seen": 1794857418.549868,
+    "ast_hash": "a4fdc3cba7ecb63a91425e6168211ca0",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261117_132228_200a8679_audit_with_agents_the_codebase_and_evaluate_how_ea.md": {
+    "mtime": 1794921748.3233795,
+    "seen": 1794923234.552376,
+    "ast_hash": "970a91cfd7a78a5c810ef218785ee5a9",
+    "semantic_hash": ""
+  },
+  "R/plot_tmat.R": {
+    "mtime": 1794934251.076576,
+    "seen": 1794934317.0239449,
+    "ast_hash": "56803209aa2c83dbf96fa4a72e2eff92",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-plot_tmat.R": {
+    "mtime": 1794931586.7056296,
+    "seen": 1794931601.870392,
+    "ast_hash": "85a918b91badac3875418f0d753b2a1c",
+    "semantic_hash": ""
+  },
+  "tests/testthat/Rplots.pdf": {
+    "mtime": 1795099100.1608877,
+    "seen": 1795099113.066664,
+    "ast_hash": "d5a4c411eacab5d6df3cad75452ae596",
+    "semantic_hash": ""
+  },
+  "R/plot_sankey.R": {
+    "mtime": 1795097311.9000347,
+    "seen": 1795099113.0666392,
+    "ast_hash": "937ed469668bc0b84cf2873705e5d0c1",
+    "semantic_hash": ""
+  },
+  "R/transmission_groups.R": {
+    "mtime": 1794934251.0766785,
+    "seen": 1794934317.023947,
+    "ast_hash": "e37f53645d7543b9d6e2c41cee2ff25b",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-plot_sankey.R": {
+    "mtime": 1795102641.1662962,
+    "seen": 1795102641.609639,
+    "ast_hash": "df8a2d0e34cd8ad57c65fbdfe72d9993",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261117_163638_d6e711b2_akin_to_plot_tmat____could_we_use_the_same_legendr.md": {
+    "mtime": 1794933398.911118,
+    "seen": 1794934317.023967,
+    "ast_hash": "2e98ac4d9cfa545135af8fee6d27bf5c",
+    "semantic_hash": ""
+  },
+  "R/sankey_layout.R": {
+    "mtime": 1795097111.8048856,
+    "seen": 1795097127.3821929,
+    "ast_hash": "61f8a669dfc12535b096ce047a06c308",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261117_171058_b3a9e714_how_should_plot_sankey_support_generic_by___c_xxx.md": {
+    "mtime": 1794935458.7931242,
+    "seen": 1794935459.2935581,
+    "ast_hash": "1b3d3a87a1cdf328268fb2d5146f297c",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261119_143332_251d264e_think_of_the_most_elegant_approach_for_autoplot_he.md": {
+    "mtime": 1795098812.5808642,
+    "seen": 1795099113.066663,
+    "ast_hash": "9572572d4ba2afcbe14a45b5ebbf0937",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-get_contacts-multipliers.R": {
+    "mtime": 1795100634.7962227,
+    "seen": 1795102641.609637,
+    "ast_hash": "e4533f280cdb283a369e03a281c4431a",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261119_143841_7ec52495_keep_nodes_white__colour_timelines__shape_nodes__l.md": {
+    "mtime": 1795099121.3194685,
+    "seen": 1795102641.609656,
+    "ast_hash": "182c92e987cd2eab6868dd7614684d4e",
     "semantic_hash": ""
   }
 }

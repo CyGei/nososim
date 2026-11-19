@@ -1,0 +1,1 @@
+{"nodes": [{"id": "$graphify-root$_r_data_r", "label": "data.R", "file_type": "code", "source_location": "L1", "metadata": {"language": "r", "kind": "file"}, "source_file": "R/data.R"}], "edges": [], "raw_calls": []}

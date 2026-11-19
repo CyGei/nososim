@@ -10,7 +10,7 @@ offspring(x)
 \item{x}{An object of class \code{nososim_outbreak}.}
 }
 \value{
-A tibble with \code{id} and \code{offspring} counts.
+A tibble with \code{labels} and \code{offspring} counts.
 }
 \description{
 Count the direct secondary infections caused by each infected individual,

@@ -1,5 +1,5 @@
-# Columns resolved by dplyr and ggplot2 data masks in the unchanged source.
+# Columns resolved by dplyr and ggplot2 data masks.
 utils::globalVariables(c(
-  "R_i", "admission", "age", "date", "date_infection", "discharge", "id",
-  "p", "source", "source_date", "stay"
+  ".location", ".y", "capacity", "date", "date_infection", "first", "from",
+  "labels", "last", "level", "population", "start", "stay", "t", "tau", "to"
 ))

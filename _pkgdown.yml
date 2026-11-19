@@ -27,18 +27,20 @@ navbar:
     - search
     - github
 reference:
-- title: Create a population
-  contents:
-  - make_timeline
-  - set_attribute
-  - set_schedule
+- title: Define the landscape
+  contents: make_landscape
+- title: Define population rules
+  contents: make_population
 - title: Simulate transmission
-  contents: make_outbreak
+  contents:
+  - make_outbreak
+  - get_contacts
 - title: Explore results
   contents:
   - starts_with("autoplot")
-  - starts_with("summary")
   - count_edges
+  - plot_tmat
+  - plot_sankey
   - offspring
 - title: Example data
   contents:

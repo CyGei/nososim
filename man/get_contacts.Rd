@@ -4,7 +4,7 @@
 \alias{get_contacts}
 \title{Build a contact matrix}
 \usage{
-get_contacts(data, by = level_columns(data), weights = NULL)
+get_contacts(data, by = level_columns(data), multipliers = NULL)
 }
 \arguments{
 \item{data}{Current occupants, with unique \code{labels} and grouping columns.}
@@ -15,10 +15,10 @@ treats missing values as equal. Functions must return symmetric logical
 results; \code{NA} means no contact. Self-pairs are excluded; functions are skipped
 with fewer than two occupants.}
 
-\item{weights}{Optional named list of numeric matrices, one per attribute.
+\item{multipliers}{Optional named list of numeric matrices, one per attribute.
 Rows name source categories; columns name recipient categories. Names must
 be unique and cover all observed categories on both axes. Values must be
-finite and non-negative; missing attributes are errors. Weights multiply
+finite and non-negative; missing attributes are errors. Multipliers multiply
 across attributes without normalisation. \code{NULL} or an empty list means no
 weighting. Excluded contacts remain zero.}
 }
@@ -29,7 +29,7 @@ labels in columns, and a zero diagonal. Unweighted contacts are symmetric
 0-by-0 matrix.
 }
 \description{
-Match individuals by location or a pairwise rule, then apply optional weights.
+Match individuals by location or a pairwise rule, then apply optional multipliers.
 }
 \examples{
 data <- tibble::tibble(
@@ -40,8 +40,8 @@ data <- tibble::tibble(
 get_contacts(data)
 get_contacts(data, by = c("level_1", "role"))
 get_contacts(data, by = function(i, j) i$level_1 == j$level_1)
-role_weights <- matrix(c(1, 2, 1, 1), 2, byrow = TRUE,
+role_multipliers <- matrix(c(1, 2, 1, 1), 2, byrow = TRUE,
   dimnames = list(c("patient", "staff"), c("patient", "staff")))
 get_contacts(data, by = "level_1",
-  weights = list(role = role_weights))
+  multipliers = list(role = role_multipliers))
 }

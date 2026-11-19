@@ -26,9 +26,10 @@ Return a zero matrix for no contacts. Self-contact is set to zero.}
 \value{
 A \code{nososim_outbreak} list with:
 \itemize{
-\item \code{population}: daily snapshots before local infections and updates, including
-\code{labels}, \code{t}, and \code{population} (the capacity pool).
+\item \code{population}: a tibble of daily snapshots before local infections and
+updates, including \code{labels}, \code{t}, and \code{population} (the capacity pool).
 \item \code{infections}: \code{from}, \code{to}, and \code{date}; imported cases have \code{from = NA}.
+\item \code{landscape}: location capacities for each population.
 \item \code{dates} and \code{parameters}: simulation settings.
 }
 }

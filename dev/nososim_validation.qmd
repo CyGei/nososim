@@ -6,11 +6,11 @@ execute:
   message: false
 ---
 
-Three questions: **Do per-contact rates give the expected offspring distribution? Do contact weights give the expected assortativity? Do interventions reduce transmission?**
+Three questions: **Do per-contact rates give the expected offspring distribution? Do contact multipliers give the expected assortativity? Do interventions reduce transmission?**
 
 ## Scenarios
 
-Define each family once, varying baseline transmission pressure, within-group contact weights, or IPC intervention. Here `R` sets the baseline cumulative FOI for an isolated source with unit contacts: `tau = R / (n - 1)`. This calibration is specific to these examples; the engine does not normalise contacts. Each scenario uses 200 replicates; mixing scenarios start with eight cases per group.
+Define each family once, varying baseline transmission pressure, within-group contact multipliers, or IPC intervention. Here `R` sets the baseline cumulative FOI for an isolated source with unit contacts: `tau = R / (n - 1)`. This calibration is specific to these examples; the engine does not normalise contacts. Each scenario uses 200 replicates; mixing scenarios start with eight cases per group.
 
 ```{r}
 library(tidyverse)
@@ -120,7 +120,7 @@ simulate <- function(s, seed) {
     population, imported, w = s$w, dates = dates,
     contacts = function(present, date) {
       get_contacts(present, date, by = "level_1",
-        weights = if (is.null(s$mixing)) NULL else list(group = s$mixing)
+        multipliers = if (is.null(s$mixing)) NULL else list(group = s$mixing)
       )
     },
     intervention = intervention

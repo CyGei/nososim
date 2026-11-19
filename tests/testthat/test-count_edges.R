@@ -1,56 +1,29 @@
-test_that("joint edge counts aggregate to single-attribute counts", {
-  date <- as.Date("2026-01-01")
-  outbreak <- structure(list(
-    population = tibble::tibble(
-      labels = letters[1:5], t = date,
-      role = c("patient", "staff", "patient", "patient", "staff"),
-      ward = c("A", "B", "A", "B", "A")
-    ),
-    infections = tibble::tibble(
-      to = letters[1:5], from = c(NA, NA, "a", "a", "b"),
-      date = date + c(-1, -1, 0, 0, 0)
-    )
-  ), class = "nososim_outbreak")
-
-  joint <- count_edges(outbreak, by = c("role", "ward"))
-
-  expect_equal(sum(joint$transmissions), 3L)
-  for (attribute in c("role", "ward")) {
-    columns <- paste0(c("source_", "recipient_"), attribute)
-    aggregated <- joint |>
-      dplyr::group_by(dplyr::across(dplyr::all_of(columns))) |>
-      dplyr::summarise(transmissions = sum(transmissions), .groups = "drop")
-
-    expect_equal(aggregated, count_edges(outbreak, by = attribute))
-  }
-})
-
-test_that("daily counts use wards on the transmission date", {
+test_that("edge counts use transmission-day attributes and exclude imports", {
   dates <- as.Date("2026-01-01") + 0:1
-  outbreak <- structure(list(
+  outbreak <- list(
     population = tibble::tibble(
-      labels = rep(c("a", "b", "c"), 2), t = rep(dates, each = 3),
-      ward = c("A", "B", "B", "B", "B", "A")
+      labels = rep(letters[1:4], 2), t = rep(dates, each = 4),
+      ward = c("A", "B", "B", "B", "B", "B", "A", "B"),
+      role = rep(c("staff", "staff", "patient", "patient"), 2)
     ),
     infections = tibble::tibble(
-      to = c("a", "b", "c"), from = c(NA, "a", "a"),
-      date = c(dates[1] - 1, dates)
+      to = c("a", "b", "d", "c"), from = c(NA, "a", "a", "a"),
+      date = c(dates[1] - 1, dates[c(1, 1, 2)])
     )
-  ), class = "nososim_outbreak")
+  )
 
-  daily <- count_edges(outbreak, "ward", by_date = TRUE)
-  expect_equal(daily, tibble::tibble(
-    date = dates, source_ward = c("A", "B"),
-    recipient_ward = c("B", "A"), transmissions = c(1L, 1L)
+  expect_equal(count_edges(outbreak, c("ward", "role"), by_date = TRUE), tibble::tibble(
+    date = dates[c(1, 1, 2)], source_ward = c("A", "A", "B"),
+    source_role = "staff", recipient_ward = c("B", "B", "A"),
+    recipient_role = c("patient", "staff", "patient"), transmissions = 1L
   ))
-  totals <- daily |>
-    dplyr::count(source_ward, recipient_ward, wt = transmissions, name = "transmissions")
-  expect_equal(totals, count_edges(outbreak, "ward"))
+  expect_equal(count_edges(outbreak, "ward"), tibble::tibble(
+    source_ward = c("A", "B"), recipient_ward = c("B", "A"),
+    transmissions = c(2L, 1L)
+  ))
 
   outbreak$infections <- outbreak$infections[1, ]
-  empty <- count_edges(outbreak, "ward", by_date = TRUE)
-  expect_equal(nrow(empty), 0L)
-  expect_s3_class(empty$date, "Date")
+  expect_equal(nrow(count_edges(outbreak, "ward")), 0L)
 })
 
 test_that("offspring includes imports and individuals with no secondary cases", {

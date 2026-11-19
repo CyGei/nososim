@@ -14,6 +14,7 @@ LazyData: true
 Depends: R (>= 4.2.0)
 Imports:
     dplyr (>= 1.1.1),
+    ggalluvial (>= 0.12.5),
     ggplot2 (>= 3.4.0),
     legendry (>= 0.3.0),
     purrr,

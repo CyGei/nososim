@@ -5,7 +5,7 @@
 \alias{outbreak}
 \title{Example nosocomial outbreak}
 \format{
-A \code{nososim_outbreak} list with \code{population}, \code{infections},
+A \code{nososim_outbreak} list with \code{population}, \code{landscape}, \code{infections},
 simulation \code{dates}, and \code{parameters}. \code{population} contains daily contact-time
 snapshots; \code{infections} contains transmission edges (\code{from}, \code{to}, \code{date}).
 }

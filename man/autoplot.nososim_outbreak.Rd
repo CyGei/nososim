@@ -2,32 +2,43 @@
 % Please edit documentation in R/autoplot.R
 \name{autoplot.nososim_outbreak}
 \alias{autoplot.nososim_outbreak}
-\title{Plot stays with an outbreak's transmission history}
+\title{Plot stays and an outbreak's transmission tree}
 \usage{
 \method{autoplot}{nososim_outbreak}(object, mapping = aes(colour = labels), ...)
 }
 \arguments{
 \item{object}{An outbreak returned by \code{\link[=make_outbreak]{make_outbreak()}}.}
 
-\item{mapping}{Aesthetic mappings for stays, passed to \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}}.
-Defaults to colouring by individual \code{labels}.}
+\item{mapping}{Aesthetic mappings. \code{colour} controls stays, \code{shape} controls
+infection nodes, and \code{label} adds text beside infection nodes. Node mappings
+use the person's attributes at infection. Defaults to colouring stays by
+individual \code{labels}, with no node text.}
 
 \item{...}{Unused.}
 }
 \value{
-A ggplot of stays with transmission arrows and infection points.
+A ggplot of stays, available capacity, and the transmission tree.
 }
 \description{
-Plot stays with an outbreak's transmission history
+Plot stays and an outbreak's transmission tree
 }
 \details{
-Reuses \code{\link[=autoplot.nososim_population]{autoplot.nososim_population()}} for the stays. Arrows connect
-the source's infection point to the recipient's infection point, using each
-person's date and location at infection. These show ancestry even if the
-source later changes location. Diamonds mark imported cases, which have
-no source arrow.
+A location with capacity X gets X horizontal rows.
+Returning agents reuse their previous row in that location when available;
+otherwise, they take the first free row. They keep it until departure,
+after which another agent can reuse it.
+
+Arrows connect the source's infection point to the recipient's infection
+point, using each person's date and location at infection. Nodes have white
+fill and dark outlines. By default, diamonds mark imported cases, which have
+no source arrow, and circles mark local cases. A \code{shape} mapping replaces
+this distinction with up to five filled shapes; use
+\code{\link[ggplot2:scale_shape_manual]{ggplot2::scale_shape_manual()}} to customise them.
 }
 \examples{
 autoplot(outbreak)
 autoplot(outbreak, ggplot2::aes(colour = role))
+autoplot(outbreak, ggplot2::aes(
+  colour = labels, shape = population, label = labels
+))
 }

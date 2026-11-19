@@ -39,6 +39,8 @@ reference:
   contents:
   - starts_with("autoplot")
   - count_edges
+  - plot_tmat
+  - plot_sankey
   - offspring
 - title: Example data
   contents:

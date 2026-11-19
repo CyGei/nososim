@@ -30,7 +30,7 @@
 #' `stay` includes the admission day. Reusing a label across stays
 #' preserves infection history.
 #'
-#' @return A `nososim_population`.
+#' @return A `nososim_population` containing the landscape and rules.
 #' @export
 #'
 #' @examples
@@ -104,12 +104,12 @@ admit_individuals <- function(model, current, t, known_labels) {
     model$attributes(t) |>
     tibble::as_tibble()
   reserved <- c("start", "t", "population", "date_infection", ".location")
+  keys <- level_columns(admitted)
   stopifnot(
-    purrr::every(
-      level_columns(admitted),
-      \(column) identical(data[[column]], admitted[[column]])
-    ),
-    !any(reserved %in% names(data))
+    "`attributes()` must preserve the allocated rows and locations." =
+      identical(as.list(data[keys]), as.list(admitted[keys])),
+    "`attributes()` must not set simulation-owned columns." =
+      !any(reserved %in% names(data))
   )
   check_attributes(data)
   if (!"labels" %in% names(data)) {
@@ -127,11 +127,6 @@ admit_individuals <- function(model, current, t, known_labels) {
       start = .env$t,
       .location = .env$location_indices
     )
-  stopifnot(
-    !anyNA(data$labels),
-    all(nzchar(data$labels)),
-    !anyDuplicated(data$labels)
-  )
   data
 }
 
@@ -155,23 +150,15 @@ update_population <- function(current, models, t) {
       level_columns(data)
     )
     stopifnot(
-      identical(as.list(updated[fixed]), as.list(data[fixed])),
-      !any(c("t", ".location") %in% names(updated))
+      "`update()` must preserve rows, identities, locations and infection history." =
+        identical(as.list(updated[fixed]), as.list(data[fixed])),
+      "`update()` must not set `t` or `.location`." =
+        !any(c("t", ".location") %in% names(updated))
     )
     check_attributes(updated)
     updated$.location <- residents$.location
     updated
   }))
-}
-
-# These are the two attributes used directly by the simulation loop.
-check_attributes <- function(data) {
-  stopifnot(
-    is.numeric(data$stay),
-    all(data$stay >= 1 & data$stay == floor(data$stay)),
-    is.numeric(data$tau),
-    all(is.finite(data$tau) & data$tau >= 0)
-  )
 }
 
 #' @export

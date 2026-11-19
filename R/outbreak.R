@@ -22,9 +22,10 @@
 #'   Updates run after transmission and before departures. Callbacks requiring
 #'   occupants are skipped for empty inputs.
 #' @return A `nososim_outbreak` list with:
-#'   * `population`: daily snapshots before local infections and updates, including
-#'     `labels`, `t`, and `population` (the capacity pool).
+#'   * `population`: a tibble of daily snapshots before local infections and
+#'     updates, including `labels`, `t`, and `population` (the capacity pool).
 #'   * `infections`: `from`, `to`, and `date`; imported cases have `from = NA`.
+#'   * `landscape`: location capacities for each population.
 #'   * `dates` and `parameters`: simulation settings.
 #' @export
 #' @examples
@@ -60,6 +61,9 @@ make_outbreak <- function(population, dates, w, imported, contacts) {
     is.function(imported),
     is.function(contacts)
   )
+  if (is.numeric(w)) {
+    stopifnot("`w` must have a positive total weight." = sum(w) > 0)
+  }
   w <- simulacr::make_pmf_delay(w)
 
   landscape <- models |>
@@ -105,7 +109,7 @@ make_outbreak <- function(population, dates, w, imported, contacts) {
     # Keep model order, then existing residents before entrants within each model.
     current <- current |>
       arrange(match(population, names(.env$models)))
-    stopifnot(!anyDuplicated(current$labels))
+    check_labels(current$labels)
 
     # Introduce infections before building today's contacts.
     susceptible <- current |>
@@ -114,10 +118,9 @@ make_outbreak <- function(population, dates, w, imported, contacts) {
     if (nrow(susceptible)) {
       introductions <- imported(susceptible, t)
       stopifnot(
-        is.character(introductions),
-        !anyNA(introductions),
-        !anyDuplicated(introductions),
-        all(introductions %in% susceptible$labels)
+        "`imported()` must return unique labels of susceptible occupants." =
+          is.character(introductions) && !anyDuplicated(introductions) &&
+          all(introductions %in% susceptible$labels)
       )
       current <- current |>
         mutate(
@@ -170,17 +173,10 @@ make_outbreak <- function(population, dates, w, imported, contacts) {
       filter(as.integer(.env$t - start) + 1L < stay)
   }
 
-  population_history <- bind_rows(history)
-  population_history <- tibble::new_tibble(
-    as.list(population_history),
-    nrow = nrow(population_history),
-    landscape = landscape,
-    dates = dates,
-    class = "nososim_population"
-  )
   structure(
     list(
-      population = population_history,
+      population = bind_rows(history),
+      landscape = landscape,
       infections = arrange(infections, date, to),
       dates = dates,
       parameters = list(
@@ -196,13 +192,10 @@ make_outbreak <- function(population, dates, w, imported, contacts) {
 
 # Align the matrix with the supplied labels, preserving directed intensities.
 align_contacts <- function(x, labels) {
+  check_matrix(x, labels)
   stopifnot(
-    is.matrix(x),
-    is.numeric(x),
-    identical(dim(x), c(length(labels), length(labels))),
-    setequal(rownames(x), labels),
-    setequal(colnames(x), labels),
-    all(is.finite(x) & x >= 0)
+    "`contacts()` must return one row and column per occupant." =
+      identical(dim(x), rep(length(labels), 2))
   )
   x[labels, labels, drop = FALSE]
 }

@@ -1,17 +1,41 @@
-#' Plot population stays and available capacity
+#' Plot stays and an outbreak's transmission tree
 #'
-#' @param object The population history returned by [make_outbreak()].
-#' @param mapping Aesthetic mappings for stays, passed to [ggplot2::ggplot()].
-#'   Defaults to colouring by individual `labels`.
+#' @param object An outbreak returned by [make_outbreak()].
+#' @param mapping Aesthetic mappings. `colour` controls stays, `shape` controls
+#'   infection nodes, and `label` adds text beside infection nodes. Node mappings
+#'   use the person's attributes at infection. Defaults to colouring stays by
+#'   individual `labels`, with no node text.
 #' @param ... Unused.
-#' @details Each stay keeps one display row within its location until departure.
-#'   Vacated rows may be reused; returning individuals retain their colour but
-#'   may occupy a different row. The individual-colour legend is hidden to keep
-#'   large populations readable; add `guides(colour = "legend")` to show it.
-#' @return A ggplot with one row per unit of capacity, grouped by location.
+#' @details A location with capacity X gets X horizontal rows.
+#'   Returning agents reuse their previous row in that location when available;
+#'   otherwise, they take the first free row. They keep it until departure,
+#'   after which another agent can reuse it.
+#'
+#'   Arrows connect the source's infection point to the recipient's infection
+#'   point, using each person's date and location at infection. Nodes have white
+#'   fill and dark outlines. By default, diamonds mark imported cases, which have
+#'   no source arrow, and circles mark local cases. A `shape` mapping replaces
+#'   this distinction with up to five filled shapes; use
+#'   [ggplot2::scale_shape_manual()] to customise them.
+#' @return A ggplot of stays, available capacity, and the transmission tree.
 #' @export
-autoplot.nososim_population <- function(object, mapping = aes(colour = labels), ...) {
+#' @examples
+#' autoplot(outbreak)
+#' autoplot(outbreak, ggplot2::aes(colour = role))
+#' autoplot(outbreak, ggplot2::aes(
+#'   colour = labels, shape = population, label = labels
+#' ))
+autoplot.nososim_outbreak <- function(
+  object,
+  mapping = aes(colour = labels),
+  ...
+) {
   rlang::check_dots_empty()
+  node_mapping <- aes(x = date, y = .y)
+  node_mapping$shape <- mapping$shape
+  text_mapping <- aes(x = date, y = .y)
+  text_mapping$label <- mapping$label
+  mapping$shape <- mapping$label <- NULL
   positions <- population_positions(object)
   data <- positions$data
   slots <- positions$slots
@@ -22,13 +46,15 @@ autoplot.nososim_population <- function(object, mapping = aes(colour = labels), 
   labels <- apply(slots[keys], 1, function(x) {
     paste(c(" ", rev(replace(x, is.na(x), " "))), collapse = "\r")
   })
-  colour_guide <- if (rlang::is_symbol(rlang::get_expr(mapping$colour), "labels")) {
+  colour_guide <- if (
+    rlang::is_symbol(rlang::get_expr(mapping$colour), "labels")
+  ) {
     "none"
   } else {
     "legend"
   }
 
-  ggplot(data, mapping) +
+  plot <- ggplot(data, mapping) +
     aes(y = .y) +
     ggplot2::geom_hline(
       data = slots,
@@ -52,38 +78,20 @@ autoplot.nososim_population <- function(object, mapping = aes(colour = labels), 
       }
     ) +
     scale_x_date(
-      limits = range(c(attr(object, "dates"), data$t + 1))
+      limits = range(c(object$dates, data$t + 1))
     ) +
     ggplot2::guides(colour = colour_guide) +
     labs(x = "Date", y = NULL) +
     theme_classic() +
     theme(axis.ticks.y = element_blank(), legend.position = "top")
-}
-
-#' Plot stays with an outbreak's transmission history
-#'
-#' @param object An outbreak returned by [make_outbreak()].
-#' @inheritParams autoplot.nososim_population
-#' @details Reuses [autoplot.nososim_population()] for the stays. Arrows connect
-#'   the source's infection point to the recipient's infection point, using each
-#'   person's date and location at infection. These show ancestry even if the
-#'   source later changes location. Diamonds mark imported cases, which have
-#'   no source arrow.
-#' @return A ggplot of stays with transmission arrows and infection points.
-#' @export
-#' @examples
-#' autoplot(outbreak)
-#' autoplot(outbreak, ggplot2::aes(colour = role))
-autoplot.nososim_outbreak <- function(object, mapping = aes(colour = labels), ...) {
-  rlang::check_dots_empty()
-  plot <- autoplot(object$population, mapping)
   if (!nrow(object$infections)) {
     return(plot)
   }
-  positions <- plot$data[c("labels", "t", ".y")]
   infections <- object$infections |>
-    left_join(positions,
+    left_join(
+      data,
       by = c("to" = "labels", "date" = "t"),
+      keep = TRUE,
       relationship = "many-to-one"
     )
   edges <- infections |>
@@ -94,36 +102,58 @@ autoplot.nososim_outbreak <- function(object, mapping = aes(colour = labels), ..
       relationship = "many-to-one"
     )
 
-  plot +
+  if (is.null(node_mapping$shape)) {
+    node_mapping$shape <- aes(shape = ifelse(is.na(from), "Imported", "Local"))$shape
+    shape_scale <- ggplot2::scale_shape_manual(
+      name = "Infection", values = c(Imported = 23, Local = 21)
+    )
+  } else {
+    shape_scale <- ggplot2::scale_shape_manual(values = 21:25)
+  }
+
+  plot <- plot +
     geom_segment(
       data = edges,
       aes(x = .data$.date, xend = date, y = .data$.from, yend = .y),
-      linewidth = 0.35, colour = "grey20",
+      linewidth = 0.35,
+      colour = "grey20",
       arrow = ggplot2::arrow(length = ggplot2::unit(2, "mm"), type = "closed"),
       inherit.aes = FALSE
     ) +
     ggplot2::geom_point(
       data = infections,
-      aes(x = date, y = .y, shape = ifelse(is.na(from), "Imported", "Local")),
-      size = 2, fill = "white", colour = "grey20",
+      node_mapping,
+      size = 2,
+      fill = "white",
+      colour = "grey20",
       inherit.aes = FALSE
     ) +
-    ggplot2::scale_shape_manual(
-      name = "Infection", values = c(Imported = 23, Local = 21)
+    shape_scale
+  if (!is.null(text_mapping$label)) {
+    plot <- plot + ggplot2::geom_text(
+      data = infections,
+      text_mapping,
+      colour = "grey20",
+      size = 3,
+      vjust = -1,
+      show.legend = FALSE,
+      inherit.aes = FALSE
     )
+  }
+  plot
 }
 
 #' Assign stays to available display rows within each location
 #' @noRd
 population_positions <- function(object) {
-  landscape <- attr(object, "landscape")
+  landscape <- object$landscape
   keys <- c("population", level_columns(landscape))
   slots <- tidyr::uncount(landscape[c(keys, "capacity")], capacity)
   slots$.y <- factor(
     seq_len(nrow(slots)),
     levels = rev(seq_len(nrow(slots)))
   )
-  data <- tibble::as_tibble(object)
+  data <- object$population
   lookup <- landscape[keys]
   lookup$.location <- seq_len(nrow(landscape))
   episodes <- data |>
@@ -138,6 +168,11 @@ population_positions <- function(object) {
   where <- rep(seq_len(nrow(landscape)), landscape$capacity)
   until <- rep(-Inf, nrow(slots))
   slot <- integer(nrow(episodes))
+  # Remember each person's previous row separately for each location.
+  person_location <- episodes |>
+    dplyr::group_by(labels, .location) |>
+    dplyr::group_indices()
+  last_slot <- integer(nrow(episodes))
   for (i in order(episodes$first)) {
     free <- which(
       where == episodes$.location[i] & until < as.numeric(episodes$first[i])
@@ -145,7 +180,9 @@ population_positions <- function(object) {
     if (!length(free)) {
       stop("Stays exceed the available capacity.")
     }
-    slot[i] <- free[1L]
+    previous <- last_slot[person_location[i]]
+    slot[i] <- if (previous %in% free) previous else free[1L]
+    last_slot[person_location[i]] <- slot[i]
     until[slot[i]] <- as.numeric(episodes$last[i])
   }
   episodes$.y <- slots$.y[slot]

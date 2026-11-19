@@ -1,6 +1,6 @@
 #' Build a contact matrix
 #'
-#' Match individuals by location or a pairwise rule, then apply optional weights.
+#' Match individuals by location or a pairwise rule, then apply optional multipliers.
 #'
 #' @param data Current occupants, with unique `labels` and grouping columns.
 #' @param by Columns to match (default: all `level_*` columns), or a vectorised
@@ -8,10 +8,10 @@
 #'   treats missing values as equal. Functions must return symmetric logical
 #'   results; `NA` means no contact. Self-pairs are excluded; functions are skipped
 #'   with fewer than two occupants.
-#' @param weights Optional named list of numeric matrices, one per attribute.
+#' @param multipliers Optional named list of numeric matrices, one per attribute.
 #'   Rows name source categories; columns name recipient categories. Names must
 #'   be unique and cover all observed categories on both axes. Values must be
-#'   finite and non-negative; missing attributes are errors. Weights multiply
+#'   finite and non-negative; missing attributes are errors. Multipliers multiply
 #'   across attributes without normalisation. `NULL` or an empty list means no
 #'   weighting. Excluded contacts remain zero.
 #' @return A matrix in `data` row order, with source labels in rows, recipient
@@ -28,19 +28,17 @@
 #' get_contacts(data)
 #' get_contacts(data, by = c("level_1", "role"))
 #' get_contacts(data, by = function(i, j) i$level_1 == j$level_1)
-#' role_weights <- matrix(c(1, 2, 1, 1), 2, byrow = TRUE,
+#' role_multipliers <- matrix(c(1, 2, 1, 1), 2, byrow = TRUE,
 #'   dimnames = list(c("patient", "staff"), c("patient", "staff")))
 #' get_contacts(data, by = "level_1",
-#'   weights = list(role = role_weights))
+#'   multipliers = list(role = role_multipliers))
 get_contacts <- function(
   data,
   by = level_columns(data),
-  weights = NULL
+  multipliers = NULL
 ) {
+  check_labels(data$labels)
   stopifnot(
-    "labels" %in% names(data),
-    !anyNA(data$labels),
-    !anyDuplicated(data$labels),
     is.function(by) || (is.character(by) && length(by) > 0)
   )
   data <- tibble::as_tibble(data)
@@ -57,8 +55,8 @@ get_contacts <- function(
   }
   diag(contacts) <- 0L
   dimnames(contacts) <- list(data$labels, data$labels)
-  if (length(weights)) {
-    contacts <- contacts * mixing_matrix(data, weights)
+  if (length(multipliers)) {
+    contacts <- contacts * mixing_matrix(data, multipliers)
   }
   contacts
 }
@@ -73,8 +71,11 @@ pairwise_contacts <- function(present, by) {
   # Compare both directions, leaving out self-pairs.
   pairs <- which(row(contacts) != col(contacts), arr.ind = TRUE)
   matches <- by(present[pairs[, 1], ], present[pairs[, 2], ])
-  stopifnot(is.logical(matches), length(matches) == nrow(pairs))
+  stopifnot(
+    "`by()` must return one logical value per pair." =
+      is.logical(matches) && length(matches) == nrow(pairs)
+  )
   contacts[pairs] <- as.integer(!is.na(matches) & matches)
-  stopifnot(isSymmetric(contacts))
+  stopifnot("`by()` must give symmetric contacts." = isSymmetric(contacts))
   contacts
 }

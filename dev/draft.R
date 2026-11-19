@@ -9,8 +9,8 @@ start <- dates[1]
 autoplot(population, aes(colour = ward)) +
   facet_grid(rows = vars(role), scales = "free_y", space = "free_y")
 
-# Choose contact intensity weights: rows are sources, columns are recipients.
-ward_weights <- tribble(
+# Choose contact intensity multipliers: rows are sources, columns are recipients.
+ward_multipliers <- tribble(
   ~from , ~A   , ~B   ,
   "A"   , 1    , 0.25 ,
   "B"   , 0.25 , 1
@@ -18,7 +18,7 @@ ward_weights <- tribble(
   tibble::column_to_rownames("from") |>
   as.matrix()
 
-role_weights <- tribble(
+role_multipliers <- tribble(
   ~from     , ~patient , ~staff ,
   "patient" ,        1 ,      2 ,
   "staff"   ,        2 ,      1
@@ -53,7 +53,7 @@ outbreak <- make_outbreak(
   dates = dates,
   contacts = function(present, date) {
     get_contacts(present, date, by = "level_1",
-      weights = list(ward = ward_weights, role = role_weights)
+      multipliers = list(ward = ward_multipliers, role = role_multipliers)
     )
   },
   intervention = intervention

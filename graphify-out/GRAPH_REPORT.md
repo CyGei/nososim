@@ -1,17 +1,17 @@
-# Graph Report - nososim  (2026-11-16)
+# Graph Report - nososim  (2026-11-19)
 
 ## Corpus Check
-- 60 files · ~23,502 words
+- 71 files · ~25,244 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 22 file(s) not represented in the graph (top: .Rd 11, (none) 8, .Rmd 2)
+- Unclassified: 23 file(s) not represented in the graph (top: .Rd 12, (none) 8, .Rmd 2)
 
 ## Summary
-- 348 nodes · 296 edges · 63 communities (44 shown, 19 thin omitted)
+- 415 nodes · 372 edges · 71 communities (49 shown, 22 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `916c7be2`
+- Built from commit: `93e46130`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -20,10 +20,10 @@
 - make_outbreak
 - Q: Implement arrivals(data, t) with available in data, and clarify whether update can apply any rule checked at time t.
 - draft.R
-- autoplot.nososim_population
+- plot_sankey
 - examples/outbreak.R
-- count_edges
-- test-autoplot.R
+- transmission_groups
+- test-plot_sankey.R
 - Graphify knowledge graph
 - R-CMD-check workflow
 - Cyril Geismar
@@ -52,7 +52,7 @@
 - Q: Insert the agreed make_population into the package and update the vignette with clean concise generic R code and documentation.
 - Q: Review the current vignette and user workflow for API cleanliness: are admissions columns defaults, or are location columns and admission/individual functions user defined?
 - Q: Update the vignette and documentation around the agreed clean workflow, clearly separating user inputs from generated population fields.
-- test-get_contacts-weights.R
+- test-get_contacts-multipliers.R
 - Q: Review the suggestions for strictly minimal requirements and provide the final API from A to Z.
 - Q: Independently review the minimal proposed API and use infection dates from simulate_outbreak_step instead of newly_infected.
 - Q: Why did make_outbreak become complicated, and how can landscape -> population -> outbreak be simplified around a final population on entry?
@@ -63,43 +63,52 @@
 - Q: Is outbreak.R the cleanest, simplest, most readable code with as much pipe use and as few non-tidy operations and intermediate objects as possible?
 - Q: Can autoplot(outbreak) show ward stays with the transmission tree overlaid?
 - Q: Implement autoplot(outbreak) with individual colours and fixed rows throughout consecutive stays.
-- collect
+- test-autoplot.R
 - Q: Why does the transmission overlay look disconnected? Dots should be at infection dates.
+- Q: Audit with agents the codebase and evaluate how easy it is for a new user to understand the code and use the API.
+- population_positions
+- Q: Akin to plot_tmat(), could we use the same legendry::guide_axis_nested architecture to make a sankey plot?
+- Q: How should plot_sankey support generic by = c(xxx, yyy, zzz) hierarchies with clear interpretation?
+- autoplot.nososim_outbreak
+- Q: Think of the most elegant approach for autoplot here? Should population be a shape aes and their label a label aes?
+- Q: Keep nodes white, colour timelines, shape nodes, label nodes, and preserve default aes.
 
 ## God Nodes (most connected - your core abstractions)
-1. `autoplot.nososim_population()` - 11 edges
-2. `make_outbreak()` - 11 edges
-3. `population_positions()` - 8 edges
-4. `admit_individuals()` - 8 edges
-5. `autoplot.nososim_outbreak()` - 6 edges
-6. `count_edges()` - 6 edges
-7. `get_contacts()` - 6 edges
-8. `collect()` - 5 edges
-9. `Q: Which existing nososim conventions should guide a landscape API?` - 4 edges
-10. `Q: How does our current landscape, timeline and population generation compare with an arrivals-driven, capacity-constrained hospital ward model, and what is the simplest clear robust generic approach?` - 4 edges
+1. `autoplot.nososim_outbreak()` - 16 edges
+2. `plot_sankey()` - 14 edges
+3. `transmission_groups()` - 13 edges
+4. `make_outbreak()` - 10 edges
+5. `population_positions()` - 9 edges
+6. `plot_tmat()` - 9 edges
+7. `sankey_layout()` - 9 edges
+8. `count_edges()` - 6 edges
+9. `get_contacts()` - 6 edges
+10. `admit_individuals()` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `population_positions()` --calls--> `tibble::as_tibble()`  [EXTRACTED]
-  R/autoplot.R →   _Bridges community 4 → community 1_
-- `get_contacts()` --calls--> `tibble::as_tibble()`  [EXTRACTED]
-  R/get_contacts.R →   _Bridges community 1 → community 6_
-- `collect()` --calls--> `tibble::tibble()`  [EXTRACTED]
-  R/landscape.R →   _Bridges community 61 → community 8_
-- `make_outbreak()` --calls--> `rlang::is_named()`  [EXTRACTED]
-  R/outbreak.R →   _Bridges community 61 → community 1_
+- `autoplot.nososim_outbreak()` --calls--> `population_positions()`  [EXTRACTED]
+  R/autoplot.R → R/autoplot.R  _Bridges community 68 → community 64_
+- `autoplot.nososim_outbreak()` --calls--> `ggplot2::guides()`  [EXTRACTED]
+  R/autoplot.R →   _Bridges community 68 → community 4_
+- `autoplot.nososim_outbreak()` --calls--> `stats::setNames()`  [EXTRACTED]
+  R/autoplot.R →   _Bridges community 68 → community 6_
+- `transmission_groups()` --calls--> `dplyr::arrange()`  [EXTRACTED]
+  R/transmission_groups.R →   _Bridges community 64 → community 6_
+- `make_outbreak()` --calls--> `tibble::as_tibble()`  [EXTRACTED]
+  R/outbreak.R →   _Bridges community 64 → community 1_
 
 ## Import Cycles
 - None detected.
 
-## Communities (63 total, 19 thin omitted)
+## Communities (71 total, 22 thin omitted)
 
 ### Community 0 - "test-make_outbreak.R"
-Cohesion: 0.08
-Nodes (20): available_each_day, C, date, dates, expected, history, labels, model (+12 more)
+Cohesion: 0.15
+Nodes (12): contacts, date, dates, history, labels, model, outbreak, patient_history (+4 more)
 
 ### Community 1 - "make_outbreak"
 Cohesion: 0.11
-Nodes (5): align_contacts(), make_outbreak(), admit_individuals(), check_attributes(), make_population()
+Nodes (5): make_landscape(), collect(), mixing_matrix(), align_contacts(), make_outbreak()
 
 ### Community 2 - "Q: Implement arrivals(data, t) with available in data, and clarify whether update can apply any rule checked at time t."
 Cohesion: 0.40
@@ -107,19 +116,15 @@ Nodes (4): Answer, Outcome, Q: Implement arrivals(data, t) with available in dat
 
 ### Community 3 - "draft.R"
 Cohesion: 0.22
-Nodes (4): outbreak, role_weights, start, ward_weights
+Nodes (4): outbreak, role_multipliers, start, ward_multipliers
 
-### Community 4 - "autoplot.nososim_population"
+### Community 6 - "transmission_groups"
+Cohesion: 0.08
+Nodes (12): count_edges(), add_attributes(), offspring(), sankey_layout(), transmission_groups(), endpoint(), plot_outbreak(), sankey_outbreak() (+4 more)
+
+### Community 8 - "test-plot_sankey.R"
 Cohesion: 0.10
-Nodes (3): autoplot.nososim_outbreak(), autoplot.nososim_population(), population_positions()
-
-### Community 6 - "count_edges"
-Cohesion: 0.17
-Nodes (4): count_edges(), add_attributes(), get_contacts(), pairwise_contacts()
-
-### Community 8 - "test-autoplot.R"
-Cohesion: 0.11
-Nodes (15): offspring(), combined, edges, episodes, landscape, layers, outbreak, plot (+7 more)
+Nodes (19): built, by, drawing, flow, flows, inner, leaves, left (+11 more)
 
 ### Community 14 - "Q: Restore the nested landscape stay plot for autoplot using the current make_population output, keeping code concise."
 Cohesion: 0.40
@@ -127,7 +132,7 @@ Nodes (4): Answer, Outcome, Q: Restore the nested landscape stay plot for autopl
 
 ### Community 15 - "test-get_contacts.R"
 Cohesion: 0.40
-Nodes (4): contacts, data, expected, result
+Nodes (3): contacts, data, expected
 
 ### Community 19 - "Q: Explain the link between reduction and intervention and whether the code can be simplified in tidy R."
 Cohesion: 0.50
@@ -148,10 +153,6 @@ Nodes (5): Add a scenario: block ward A → ward B, Checks and figures, Outputs,
 ### Community 23 - "Q: How should make_population connect before and during make_outbreak with the smallest elegant R API?"
 Cohesion: 0.40
 Nodes (4): Answer, Outcome, Q: How should make_population connect before and during make_outbreak with the smallest elegant R API?, Source Nodes
-
-### Community 24 - "test-count_edges.R"
-Cohesion: 0.20
-Nodes (9): aggregated, columns, daily, date, dates, empty, joint, outbreak (+1 more)
 
 ### Community 27 - "Q: Which existing nososim conventions should guide a landscape API?"
 Cohesion: 0.40
@@ -194,8 +195,8 @@ Cohesion: 0.40
 Nodes (4): Answer, Outcome, Q: How would you construct make_population? Be clear concise and tidy., Source Nodes
 
 ### Community 38 - "test-population.R"
-Cohesion: 0.17
-Nodes (10): arrivals, dates, generated, history, landscape, model, outbreak, population (+2 more)
+Cohesion: 0.20
+Nodes (8): arrivals, dates, generated, history, landscape, outbreak, population, supplied
 
 ### Community 39 - "Q: Generate individuals only when places are available; avoid computing rejected people while keeping user-defined complete records."
 Cohesion: 0.40
@@ -217,9 +218,9 @@ Nodes (4): Answer, Outcome, Q: Review the current vignette and user workflow for
 Cohesion: 0.40
 Nodes (4): Answer, Outcome, Q: Update the vignette and documentation around the agreed clean workflow, clearly separating user inputs from generated population fields., Source Nodes
 
-### Community 46 - "test-get_contacts-weights.R"
-Cohesion: 0.25
-Nodes (6): data, expected, matched, reordered, reversed, weights
+### Community 46 - "test-get_contacts-multipliers.R"
+Cohesion: 0.29
+Nodes (5): data, expected, multipliers, reordered, reversed
 
 ### Community 49 - "Q: Review the suggestions for strictly minimal requirements and provide the final API from A to Z."
 Cohesion: 0.40
@@ -261,39 +262,68 @@ Nodes (4): Answer, Outcome, Q: Can autoplot(outbreak) show ward stays with the t
 Cohesion: 0.40
 Nodes (4): Answer, Outcome, Q: Implement autoplot(outbreak) with individual colours and fixed rows throughout consecutive stays., Source Nodes
 
-### Community 61 - "collect"
-Cohesion: 0.22
-Nodes (3): make_landscape(), collect(), mixing_matrix()
+### Community 61 - "test-autoplot.R"
+Cohesion: 0.14
+Nodes (13): data, edges, labelled, layers, outbreak, plot, points, positions (+5 more)
 
 ### Community 62 - "Q: Why does the transmission overlay look disconnected? Dots should be at infection dates."
 Cohesion: 0.40
 Nodes (4): Answer, Outcome, Q: Why does the transmission overlay look disconnected? Dots should be at infection dates., Source Nodes
 
+### Community 63 - "Q: Audit with agents the codebase and evaluate how easy it is for a new user to understand the code and use the API."
+Cohesion: 0.40
+Nodes (4): Answer, Outcome, Q: Audit with agents the codebase and evaluate how easy it is for a new user to understand the code and use the API., Source Nodes
+
+### Community 64 - "population_positions"
+Cohesion: 0.10
+Nodes (5): population_positions(), get_contacts(), pairwise_contacts(), admit_individuals(), make_population()
+
+### Community 65 - "Q: Akin to plot_tmat(), could we use the same legendry::guide_axis_nested architecture to make a sankey plot?"
+Cohesion: 0.40
+Nodes (4): Answer, Outcome, Q: Akin to plot_tmat(), could we use the same legendry::guide_axis_nested architecture to make a sankey plot?, Source Nodes
+
+### Community 66 - "Q: How should plot_sankey support generic by = c(xxx, yyy, zzz) hierarchies with clear interpretation?"
+Cohesion: 0.40
+Nodes (4): Answer, Outcome, Q: How should plot_sankey support generic by = c(xxx, yyy, zzz) hierarchies with clear interpretation?, Source Nodes
+
+### Community 68 - "autoplot.nososim_outbreak"
+Cohesion: 0.10
+Nodes (3): autoplot.nososim_outbreak(), plot_tmat(), axis()
+
+### Community 69 - "Q: Think of the most elegant approach for autoplot here? Should population be a shape aes and their label a label aes?"
+Cohesion: 0.40
+Nodes (4): Answer, Outcome, Q: Think of the most elegant approach for autoplot here? Should population be a shape aes and their label a label aes?, Source Nodes
+
+### Community 70 - "Q: Keep nodes white, colour timelines, shape nodes, label nodes, and preserve default aes."
+Cohesion: 0.40
+Nodes (4): Answer, Outcome, Q: Keep nodes white, colour timelines, shape nodes, label nodes, and preserve default aes., Source Nodes
+
 ## Knowledge Gaps
 - **4 isolated node(s):** `R-CMD-check workflow`, `R package check`, `Cyril Geismar`, `MIT License`
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 276 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 315 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Work-memory lessons
 
 **Preferred sources** — corroborated by past sessions; start here.
-- `admit_individuals()` (4× useful, score=3.962775373)
-- `update_population()` (3× useful, score=2.947868968)
+- `admit_individuals()` (4× useful, score=3.711720439)
+- `population_positions()` (4× useful, score=3.648438042)
+- `update_population()` (3× useful, score=2.761111713)
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `make_outbreak()` connect `make_outbreak` to `collect`?**
+- **Why does `autoplot.nososim_outbreak()` connect `autoplot.nososim_outbreak` to `population_positions`, `plot_sankey`, `transmission_groups`?**
   _High betweenness centrality (0.033) - this node is a cross-community bridge._
 - **What connects `R-CMD-check workflow`, `R package check`, `Cyril Geismar` to the rest of the system?**
   _4 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `test-make_outbreak.R` be split into smaller, more focused modules?**
-  _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._
-- **Why does `collect()` connect `collect` to `test-autoplot.R`?**
-  _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **Should `make_outbreak` be split into smaller, more focused modules?**
-  _Cohesion score 0.10822510822510822 - nodes in this community are weakly interconnected._
-- **Why does `population_positions()` connect `autoplot.nososim_population` to `make_outbreak`?**
-  _High betweenness centrality (0.023) - this node is a cross-community bridge._
-- **Should `autoplot.nososim_population` be split into smaller, more focused modules?**
-  _Cohesion score 0.09956709956709957 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._
+- **Why does `transmission_groups()` connect `transmission_groups` to `population_positions`?**
+  _High betweenness centrality (0.031) - this node is a cross-community bridge._
+- **Should `transmission_groups` be split into smaller, more focused modules?**
+  _Cohesion score 0.07526881720430108 - nodes in this community are weakly interconnected._
+- **Why does `sankey_outbreak()` connect `transmission_groups` to `test-plot_sankey.R`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+- **Should `test-plot_sankey.R` be split into smaller, more focused modules?**
+  _Cohesion score 0.09523809523809523 - nodes in this community are weakly interconnected._

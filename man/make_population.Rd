@@ -21,7 +21,7 @@ for current occupants, preserving their identities, locations,
 and infection history.}
 }
 \value{
-A \code{nososim_population}.
+A \code{nososim_population} containing the landscape and rules.
 }
 \description{
 Define how agents arrive, their attributes, and how these

@@ -12,6 +12,7 @@ export(make_population)
 export(offspring)
 export(plot_sankey)
 export(plot_tmat)
+export(sample_contacts)
 importFrom(dplyr,
   all_of,
   arrange,

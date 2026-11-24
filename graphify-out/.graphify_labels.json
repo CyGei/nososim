@@ -63,11 +63,13 @@
   "61": "test-autoplot.R",
   "62": "Q: Why does the transmission overlay look disconnected? Dots should be at infection dates.",
   "63": "Q: Audit with agents the codebase and evaluate how easy it is for a new user to understand the code and use the API.",
-  "64": "population_positions",
+  "64": "Q: What would Poisson and multinomial stochastic contact generation mean in this code?",
   "65": "Q: Akin to plot_tmat(), could we use the same legendry::guide_axis_nested architecture to make a sankey plot?",
   "66": "Q: How should plot_sankey support generic by = c(xxx, yyy, zzz) hierarchies with clear interpretation?",
   "67": "ggalluvial",
   "68": "autoplot.nososim_outbreak",
   "69": "Q: Think of the most elegant approach for autoplot here? Should population be a shape aes and their label a label aes?",
-  "70": "Q: Keep nodes white, colour timelines, shape nodes, label nodes, and preserve default aes."
+  "70": "Q: Keep nodes white, colour timelines, shape nodes, label nodes, and preserve default aes.",
+  "71": "test-sample_contacts.R",
+  "72": "sample_contacts"
 }

@@ -1,17 +1,17 @@
-# Graph Report - nososim  (2026-11-19)
+# Graph Report - nososim  (2026-11-24)
 
 ## Corpus Check
-- 71 files · ~25,244 words
+- 74 files · ~25,464 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 23 file(s) not represented in the graph (top: .Rd 12, (none) 8, .Rmd 2)
 
 ## Summary
-- 415 nodes · 372 edges · 71 communities (49 shown, 22 thin omitted)
+- 428 nodes · 382 edges · 73 communities (51 shown, 22 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `93e46130`
+- Built from commit: `be90a789`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -66,12 +66,14 @@
 - test-autoplot.R
 - Q: Why does the transmission overlay look disconnected? Dots should be at infection dates.
 - Q: Audit with agents the codebase and evaluate how easy it is for a new user to understand the code and use the API.
-- population_positions
+- Q: What would Poisson and multinomial stochastic contact generation mean in this code?
 - Q: Akin to plot_tmat(), could we use the same legendry::guide_axis_nested architecture to make a sankey plot?
 - Q: How should plot_sankey support generic by = c(xxx, yyy, zzz) hierarchies with clear interpretation?
 - autoplot.nososim_outbreak
 - Q: Think of the most elegant approach for autoplot here? Should population be a shape aes and their label a label aes?
 - Q: Keep nodes white, colour timelines, shape nodes, label nodes, and preserve default aes.
+- test-sample_contacts.R
+- sample_contacts
 
 ## God Nodes (most connected - your core abstractions)
 1. `autoplot.nososim_outbreak()` - 16 edges
@@ -87,20 +89,20 @@
 
 ## Surprising Connections (you probably didn't know these)
 - `autoplot.nososim_outbreak()` --calls--> `population_positions()`  [EXTRACTED]
-  R/autoplot.R → R/autoplot.R  _Bridges community 68 → community 64_
+  R/autoplot.R → R/autoplot.R  _Bridges community 68 → community 6_
 - `autoplot.nososim_outbreak()` --calls--> `ggplot2::guides()`  [EXTRACTED]
   R/autoplot.R →   _Bridges community 68 → community 4_
-- `autoplot.nososim_outbreak()` --calls--> `stats::setNames()`  [EXTRACTED]
-  R/autoplot.R →   _Bridges community 68 → community 6_
-- `transmission_groups()` --calls--> `dplyr::arrange()`  [EXTRACTED]
-  R/transmission_groups.R →   _Bridges community 64 → community 6_
-- `make_outbreak()` --calls--> `tibble::as_tibble()`  [EXTRACTED]
-  R/outbreak.R →   _Bridges community 64 → community 1_
+- `get_contacts()` --calls--> `tibble::as_tibble()`  [EXTRACTED]
+  R/get_contacts.R →   _Bridges community 6 → community 1_
+- `collect()` --calls--> `tibble::tibble()`  [EXTRACTED]
+  R/landscape.R →   _Bridges community 4 → community 8_
+- `sankey_layout()` --calls--> `tibble::tibble()`  [EXTRACTED]
+  R/sankey_layout.R →   _Bridges community 8 → community 6_
 
 ## Import Cycles
 - None detected.
 
-## Communities (71 total, 22 thin omitted)
+## Communities (73 total, 22 thin omitted)
 
 ### Community 0 - "test-make_outbreak.R"
 Cohesion: 0.15
@@ -108,7 +110,7 @@ Nodes (12): contacts, date, dates, history, labels, model, outbreak, patient_his
 
 ### Community 1 - "make_outbreak"
 Cohesion: 0.11
-Nodes (5): make_landscape(), collect(), mixing_matrix(), align_contacts(), make_outbreak()
+Nodes (4): align_contacts(), make_outbreak(), admit_individuals(), make_population()
 
 ### Community 2 - "Q: Implement arrivals(data, t) with available in data, and clarify whether update can apply any rule checked at time t."
 Cohesion: 0.40
@@ -118,13 +120,17 @@ Nodes (4): Answer, Outcome, Q: Implement arrivals(data, t) with available in dat
 Cohesion: 0.22
 Nodes (4): outbreak, role_multipliers, start, ward_multipliers
 
+### Community 4 - "plot_sankey"
+Cohesion: 0.09
+Nodes (5): make_landscape(), collect(), mixing_matrix(), plot_sankey(), sankey_axis()
+
 ### Community 6 - "transmission_groups"
 Cohesion: 0.08
-Nodes (12): count_edges(), add_attributes(), offspring(), sankey_layout(), transmission_groups(), endpoint(), plot_outbreak(), sankey_outbreak() (+4 more)
+Nodes (8): population_positions(), count_edges(), add_attributes(), get_contacts(), pairwise_contacts(), sankey_layout(), transmission_groups(), endpoint()
 
 ### Community 8 - "test-plot_sankey.R"
-Cohesion: 0.10
-Nodes (19): built, by, drawing, flow, flows, inner, leaves, left (+11 more)
+Cohesion: 0.06
+Nodes (26): offspring(), plot_outbreak(), built, by, drawing, flow, flows, inner (+18 more)
 
 ### Community 14 - "Q: Restore the nested landscape stay plot for autoplot using the current make_population output, keeping code concise."
 Cohesion: 0.40
@@ -274,9 +280,9 @@ Nodes (4): Answer, Outcome, Q: Why does the transmission overlay look disconnect
 Cohesion: 0.40
 Nodes (4): Answer, Outcome, Q: Audit with agents the codebase and evaluate how easy it is for a new user to understand the code and use the API., Source Nodes
 
-### Community 64 - "population_positions"
-Cohesion: 0.10
-Nodes (5): population_positions(), get_contacts(), pairwise_contacts(), admit_individuals(), make_population()
+### Community 64 - "Q: What would Poisson and multinomial stochastic contact generation mean in this code?"
+Cohesion: 0.40
+Nodes (4): Answer, Outcome, Q: What would Poisson and multinomial stochastic contact generation mean in this code?, Source Nodes
 
 ### Community 65 - "Q: Akin to plot_tmat(), could we use the same legendry::guide_axis_nested architecture to make a sankey plot?"
 Cohesion: 0.40
@@ -298,9 +304,13 @@ Nodes (4): Answer, Outcome, Q: Think of the most elegant approach for autoplot h
 Cohesion: 0.40
 Nodes (4): Answer, Outcome, Q: Keep nodes white, colour timelines, shape nodes, label nodes, and preserve default aes., Source Nodes
 
+### Community 71 - "test-sample_contacts.R"
+Cohesion: 0.50
+Nodes (3): average, C, n
+
 ## Knowledge Gaps
 - **4 isolated node(s):** `R-CMD-check workflow`, `R package check`, `Cyril Geismar`, `MIT License`
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 315 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 325 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Work-memory lessons
@@ -313,17 +323,17 @@ Nodes (4): Answer, Outcome, Q: Keep nodes white, colour timelines, shape nodes, 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `autoplot.nososim_outbreak()` connect `autoplot.nososim_outbreak` to `population_positions`, `plot_sankey`, `transmission_groups`?**
-  _High betweenness centrality (0.033) - this node is a cross-community bridge._
+- **Why does `autoplot.nososim_outbreak()` connect `autoplot.nososim_outbreak` to `plot_sankey`, `transmission_groups`?**
+  _High betweenness centrality (0.031) - this node is a cross-community bridge._
 - **What connects `R-CMD-check workflow`, `R package check`, `Cyril Geismar` to the rest of the system?**
   _4 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `make_outbreak` be split into smaller, more focused modules?**
-  _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._
-- **Why does `transmission_groups()` connect `transmission_groups` to `population_positions`?**
-  _High betweenness centrality (0.031) - this node is a cross-community bridge._
+  _Cohesion score 0.11052631578947368 - nodes in this community are weakly interconnected._
+- **Why does `transmission_groups()` connect `transmission_groups` to `test-plot_sankey.R`?**
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
+- **Should `plot_sankey` be split into smaller, more focused modules?**
+  _Cohesion score 0.09057971014492754 - nodes in this community are weakly interconnected._
 - **Should `transmission_groups` be split into smaller, more focused modules?**
-  _Cohesion score 0.07526881720430108 - nodes in this community are weakly interconnected._
-- **Why does `sankey_outbreak()` connect `transmission_groups` to `test-plot_sankey.R`?**
-  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+  _Cohesion score 0.07765151515151515 - nodes in this community are weakly interconnected._
 - **Should `test-plot_sankey.R` be split into smaller, more focused modules?**
-  _Cohesion score 0.09523809523809523 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._

@@ -197,7 +197,8 @@ outbreak <- make_outbreak(
     character()
   },
   contacts = function(data, t) {
-    get_contacts(data, by = contact_rule, multipliers = multipliers)
+    get_contacts(data, by = contact_rule, multipliers = multipliers) |>
+      sample_contacts()
   }
 )
 
@@ -254,7 +255,8 @@ contact_matrices <- list(
   all_weighted = multipliers
 ) |>
   purrr::map(function(w) {
-    get_contacts(present, by = contact_rule, multipliers = w)
+    get_contacts(present, by = contact_rule, multipliers = w) |>
+      sample_contacts()
   })
 
 contact_matrices |>

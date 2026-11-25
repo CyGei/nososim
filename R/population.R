@@ -1,6 +1,6 @@
 #' Define a population model
 #'
-#' Define how agents arrive, their attributes, and how these
+#' Define how individuals arrive, their attributes, and how these
 #' attributes update over time. Rules are evaluated by
 #' [make_outbreak()].
 #'
@@ -17,18 +17,20 @@
 #'
 #' @details
 #' For `arrivals`, `data` is the landscape with an additional `available`
-#' column giving free capacity at time `t`.
+#' column giving free capacity at time `t` (a Date).
 #'
 #' For `attributes`, `data` contains one row per new arrival, with
 #' location attributes but without `capacity` or `available`.
 #' `stay` must be a positive integer or `Inf`; `tau` must be finite
 #' and non-negative. Optional `labels` identify returning individuals.
 #'
-#' For `update`, `data` contains one row per current occupant.
-#' Changes to attributes persist until updated again.
+#' For `update`, `data` contains this model's current occupants after transmission,
+#' including `labels`, `start`, `population`, and `date_infection` alongside
+#' location and custom attributes. Preserve row order and those generated
+#' columns. Changes to other attributes persist until updated again or departure.
 #'
 #' `stay` includes the admission day. Reusing a label across stays
-#' preserves infection history.
+#' preserves infection history; other attributes are assigned afresh on arrival.
 #'
 #' @return A `nososim_population` containing the landscape and rules.
 #' @export

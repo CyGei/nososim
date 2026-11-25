@@ -1,17 +1,17 @@
-# Graph Report - nososim  (2026-11-24)
+# Graph Report - nososim  (2026-11-25)
 
 ## Corpus Check
-- 74 files · ~25,464 words
+- 78 files · ~27,053 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 23 file(s) not represented in the graph (top: .Rd 12, (none) 8, .Rmd 2)
+- Unclassified: 25 file(s) not represented in the graph (top: .Rd 14, (none) 8, .Rmd 2)
 
 ## Summary
-- 428 nodes · 382 edges · 73 communities (51 shown, 22 thin omitted)
+- 456 nodes · 406 edges · 77 communities (54 shown, 23 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `be90a789`
+- Built from commit: `8f69e84a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -74,6 +74,9 @@
 - Q: Keep nodes white, colour timelines, shape nodes, label nodes, and preserve default aes.
 - test-sample_contacts.R
 - sample_contacts
+- test-intervention.R
+- test-get_intervention.R
+- Q: Trace the current nososim and Simulacres contact-to-infection path and plan vaccination, isolation, cohorting and masks using source i and recipient j.
 
 ## God Nodes (most connected - your core abstractions)
 1. `autoplot.nososim_outbreak()` - 16 edges
@@ -95,14 +98,14 @@
 - `get_contacts()` --calls--> `tibble::as_tibble()`  [EXTRACTED]
   R/get_contacts.R →   _Bridges community 6 → community 1_
 - `collect()` --calls--> `tibble::tibble()`  [EXTRACTED]
-  R/landscape.R →   _Bridges community 4 → community 8_
+  R/landscape.R →   _Bridges community 4 → community 61_
 - `sankey_layout()` --calls--> `tibble::tibble()`  [EXTRACTED]
-  R/sankey_layout.R →   _Bridges community 8 → community 6_
+  R/sankey_layout.R →   _Bridges community 61 → community 6_
 
 ## Import Cycles
 - None detected.
 
-## Communities (73 total, 22 thin omitted)
+## Communities (77 total, 23 thin omitted)
 
 ### Community 0 - "test-make_outbreak.R"
 Cohesion: 0.15
@@ -110,7 +113,7 @@ Nodes (12): contacts, date, dates, history, labels, model, outbreak, patient_his
 
 ### Community 1 - "make_outbreak"
 Cohesion: 0.11
-Nodes (4): align_contacts(), make_outbreak(), admit_individuals(), make_population()
+Nodes (4): align_pairwise(), make_outbreak(), admit_individuals(), make_population()
 
 ### Community 2 - "Q: Implement arrivals(data, t) with available in data, and clarify whether update can apply any rule checked at time t."
 Cohesion: 0.40
@@ -129,8 +132,8 @@ Cohesion: 0.08
 Nodes (8): population_positions(), count_edges(), add_attributes(), get_contacts(), pairwise_contacts(), sankey_layout(), transmission_groups(), endpoint()
 
 ### Community 8 - "test-plot_sankey.R"
-Cohesion: 0.06
-Nodes (26): offspring(), plot_outbreak(), built, by, drawing, flow, flows, inner (+18 more)
+Cohesion: 0.10
+Nodes (19): built, by, drawing, flow, flows, inner, leaves, left (+11 more)
 
 ### Community 14 - "Q: Restore the nested landscape stay plot for autoplot using the current make_population output, keeping code concise."
 Cohesion: 0.40
@@ -269,8 +272,8 @@ Cohesion: 0.40
 Nodes (4): Answer, Outcome, Q: Implement autoplot(outbreak) with individual colours and fixed rows throughout consecutive stays., Source Nodes
 
 ### Community 61 - "test-autoplot.R"
-Cohesion: 0.14
-Nodes (13): data, edges, labelled, layers, outbreak, plot, points, positions (+5 more)
+Cohesion: 0.08
+Nodes (20): offspring(), data, edges, labelled, layers, outbreak, plot, plot_outbreak() (+12 more)
 
 ### Community 62 - "Q: Why does the transmission overlay look disconnected? Dots should be at infection dates."
 Cohesion: 0.40
@@ -308,32 +311,44 @@ Nodes (4): Answer, Outcome, Q: Keep nodes white, colour timelines, shape nodes, 
 Cohesion: 0.50
 Nodes (3): average, C, n
 
+### Community 74 - "test-intervention.R"
+Cohesion: 0.14
+Nodes (10): actual, baseline, dates, E, expected, labels, model, neutral (+2 more)
+
+### Community 75 - "test-get_intervention.R"
+Cohesion: 0.29
+Nodes (6): data, effect, expected, multipliers, status, wards
+
+### Community 76 - "Q: Trace the current nososim and Simulacres contact-to-infection path and plan vaccination, isolation, cohorting and masks using source i and recipient j."
+Cohesion: 0.40
+Nodes (4): Answer, Outcome, Q: Trace the current nososim and Simulacres contact-to-infection path and plan vaccination, isolation, cohorting and masks using source i and recipient j., Source Nodes
+
 ## Knowledge Gaps
 - **4 isolated node(s):** `R-CMD-check workflow`, `R package check`, `Cyril Geismar`, `MIT License`
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 325 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 350 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Work-memory lessons
 
 **Preferred sources** — corroborated by past sessions; start here.
-- `admit_individuals()` (4× useful, score=3.711720439)
-- `population_positions()` (4× useful, score=3.648438042)
-- `update_population()` (3× useful, score=2.761111713)
+- `admit_individuals()` (4× useful, score=3.241662426) _(code changed — re-verify)_
+- `population_positions()` (4× useful, score=3.18639421)
+- `update_population()` (3× useful, score=2.411440259) _(code changed — re-verify)_
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `autoplot.nososim_outbreak()` connect `autoplot.nososim_outbreak` to `plot_sankey`, `transmission_groups`?**
-  _High betweenness centrality (0.031) - this node is a cross-community bridge._
+  _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **What connects `R-CMD-check workflow`, `R package check`, `Cyril Geismar` to the rest of the system?**
   _4 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `make_outbreak` be split into smaller, more focused modules?**
   _Cohesion score 0.11052631578947368 - nodes in this community are weakly interconnected._
-- **Why does `transmission_groups()` connect `transmission_groups` to `test-plot_sankey.R`?**
-  _High betweenness centrality (0.029) - this node is a cross-community bridge._
+- **Why does `transmission_groups()` connect `transmission_groups` to `test-autoplot.R`?**
+  _High betweenness centrality (0.026) - this node is a cross-community bridge._
 - **Should `plot_sankey` be split into smaller, more focused modules?**
   _Cohesion score 0.09057971014492754 - nodes in this community are weakly interconnected._
+- **Why does `sankey_outbreak()` connect `test-autoplot.R` to `test-plot_sankey.R`?**
+  _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **Should `transmission_groups` be split into smaller, more focused modules?**
   _Cohesion score 0.07765151515151515 - nodes in this community are weakly interconnected._
-- **Should `test-plot_sankey.R` be split into smaller, more focused modules?**
-  _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._

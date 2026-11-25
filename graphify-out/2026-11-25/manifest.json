@@ -1,0 +1,512 @@
+{
+  ".codex/hooks.json": {
+    "mtime": 1792604167.5079777,
+    "seen": 1792604387.7653708,
+    "ast_hash": "dc4b2409b20a8b257ebbab77d59c6c9f",
+    "semantic_hash": "dc4b2409b20a8b257ebbab77d59c6c9f"
+  },
+  "R/autoplot.R": {
+    "mtime": 1795103448.630336,
+    "seen": 1795532351.079854,
+    "ast_hash": "346b0e6800b7ac38b28c1e7abfe4208d",
+    "semantic_hash": ""
+  },
+  "R/globals.R": {
+    "mtime": 1795103448.631107,
+    "seen": 1795532351.0798569,
+    "ast_hash": "6ecb3ec87d6a918bbe2da092894e5b88",
+    "semantic_hash": ""
+  },
+  "R/nososim-package.R": {
+    "mtime": 1795103448.6315336,
+    "seen": 1795532351.0798578,
+    "ast_hash": "3b77d2a597586c88fb9e9fcd212acae2",
+    "semantic_hash": ""
+  },
+  "dev/draft.R": {
+    "mtime": 1795103448.6339679,
+    "seen": 1795532351.079863,
+    "ast_hash": "f572c88001077545c70da60d6fd36fed",
+    "semantic_hash": ""
+  },
+  "inst/examples/outbreak.R": {
+    "mtime": 1795103448.7001548,
+    "seen": 1795532351.079863,
+    "ast_hash": "4989e86cb96e5e476b487879c0fddacd",
+    "semantic_hash": ""
+  },
+  "tests/testthat.R": {
+    "mtime": 1792597845.9623392,
+    "seen": 1792604387.765377,
+    "ast_hash": "19a0d66ee9268cb98f2071d86b640f30",
+    "semantic_hash": "19a0d66ee9268cb98f2071d86b640f30"
+  },
+  "tests/testthat/test-autoplot.R": {
+    "mtime": 1795103448.7018733,
+    "seen": 1795532351.079865,
+    "ast_hash": "275592436a32b432e333e5cf593b8dca",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-make_outbreak.R": {
+    "mtime": 1795103448.7024963,
+    "seen": 1795532351.079867,
+    "ast_hash": "3e87465a3b09feb4451c800a082b7f4f",
+    "semantic_hash": ""
+  },
+  ".github/workflows/R-CMD-check.yaml": {
+    "mtime": 1792597845.9626887,
+    "seen": 1792604387.7653792,
+    "ast_hash": "e76caab1380510dcff125fd9a4d6c7ef",
+    "semantic_hash": "e76caab1380510dcff125fd9a4d6c7ef"
+  },
+  "AGENTS.md": {
+    "mtime": 1792604167.5077941,
+    "seen": 1792604387.7653801,
+    "ast_hash": "779a7496aaa43bf2e76d3da3ac754544",
+    "semantic_hash": "779a7496aaa43bf2e76d3da3ac754544"
+  },
+  "LICENSE.md": {
+    "mtime": 1792601147.1625445,
+    "seen": 1792604387.7653801,
+    "ast_hash": "5fae70e49e4ea78f63a9afb887d1a55e",
+    "semantic_hash": "5fae70e49e4ea78f63a9afb887d1a55e"
+  },
+  "graphify-out/memory/query_20261021_174241_26ab279b_explain_the_link_between_reduction_and_interventio.md": {
+    "mtime": 1792604561.7017832,
+    "seen": 1792604802.947307,
+    "ast_hash": "6352bc6279c036ab42133c85b31c326b",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1795103448.6333165,
+    "seen": 1795532351.079871,
+    "ast_hash": "d2df3548a77fad15a1d526b789b90e79",
+    "semantic_hash": ""
+  },
+  "man/figures/README-unnamed-chunk-2-1.png": {
+    "mtime": 1792609098.8660183,
+    "seen": 1792609295.862765,
+    "ast_hash": "362b8725dce3660ea11292bc890687a9",
+    "semantic_hash": ""
+  },
+  "man/figures/README-unnamed-chunk-2-2.png": {
+    "mtime": 1792609098.8834329,
+    "seen": 1792609295.862765,
+    "ast_hash": "4399ace00fbd6d4ebdfd07e0c4daf95f",
+    "semantic_hash": ""
+  },
+  "tests/testthat/helper-outbreak.R": {
+    "mtime": 1795545195.8421674,
+    "seen": 1795545349.5275142,
+    "ast_hash": "d8c9af684a88191daba08b9b7cf7e9f7",
+    "semantic_hash": ""
+  },
+  ".github/workflows/pkgdown.yaml": {
+    "mtime": 1792609818.6380696,
+    "seen": 1792609833.002391,
+    "ast_hash": "bc69eb48629602713c31f69ebd708ac1",
+    "semantic_hash": ""
+  },
+  "_pkgdown.yml": {
+    "mtime": 1795605921.481185,
+    "seen": 1795605937.467799,
+    "ast_hash": "151cb8b96129ae612909b2454a28eba8",
+    "semantic_hash": ""
+  },
+  "man/figures/README-first-outbreak-1.png": {
+    "mtime": 1795103448.7005076,
+    "seen": 1795532351.079885,
+    "ast_hash": "2780323150af91db12c692289f31d37b",
+    "semantic_hash": ""
+  },
+  "R/offspring.R": {
+    "mtime": 1795103448.6317089,
+    "seen": 1795532351.079859,
+    "ast_hash": "d05ea41ddf7c1dfb8206d83ed382a17c",
+    "semantic_hash": ""
+  },
+  "dev/nososim_validation.qmd": {
+    "mtime": 1795103448.6342633,
+    "seen": 1795532351.079872,
+    "ast_hash": "9efb4d9511e2b38f1263475072ace245",
+    "semantic_hash": ""
+  },
+  "R/count_edges.R": {
+    "mtime": 1795103448.6305058,
+    "seen": 1795532351.0798562,
+    "ast_hash": "b8404a455e9b8ae6ce66af74f4b85d89",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-count_edges.R": {
+    "mtime": 1795103448.7020452,
+    "seen": 1795532351.079865,
+    "ast_hash": "a874353cf72e5d3b0798628e042a6045",
+    "semantic_hash": ""
+  },
+  "R/data.R": {
+    "mtime": 1795103448.630681,
+    "seen": 1795532351.0798562,
+    "ast_hash": "74e5fe080436774b4e99f83c5b11d295",
+    "semantic_hash": ""
+  },
+  "data-raw/outbreak.R": {
+    "mtime": 1795103448.6336505,
+    "seen": 1795532351.079863,
+    "ast_hash": "ccd56ab806e2e53dcad7e6ac8ceac806",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261105_123434_482bb752_which_existing_nososim_conventions_should_guide_a.md": {
+    "mtime": 1795103448.6959302,
+    "seen": 1795532351.079872,
+    "ast_hash": "4357a0aec8a7147fead1a4471f3907c0",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261105_184608_3c993ec2_how_does_our_current_landscape__timeline_and_popul.md": {
+    "mtime": 1795103448.6960597,
+    "seen": 1795532351.079873,
+    "ast_hash": "5c5cdd1c6ca737707ab326bab46e2183",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_095034_5cee6403_implement_landscape_conditioned_population_generat.md": {
+    "mtime": 1795103448.6963358,
+    "seen": 1795532351.079873,
+    "ast_hash": "b4e9894d18e311bf5141ed260ea0f1ff",
+    "semantic_hash": ""
+  },
+  "R/landscape.R": {
+    "mtime": 1795103448.6312275,
+    "seen": 1795532351.0798578,
+    "ast_hash": "58a8356b198a5c271d4100727da7df50",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-landscape.R": {
+    "mtime": 1795103448.7023678,
+    "seen": 1795532351.0798662,
+    "ast_hash": "43e42a688a28a89f706a72692f56557a",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_100304_bc9c18d5_use_one_concise_consistent_sampler_interface_for_p.md": {
+    "mtime": 1795103448.6964393,
+    "seen": 1795532351.079873,
+    "ast_hash": "1bdb9040a48398fb12300dfdd5bf83fa",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_150101_a8650532_review_the_current_code_against_main_and_suggest_a.md": {
+    "mtime": 1795103448.6965365,
+    "seen": 1795532351.079874,
+    "ast_hash": "1ad1eaaad861a5bf59fd5e98d17ee07b",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_150932_a34601f0_what_is_the_best_architecture_for_generating_peopl.md": {
+    "mtime": 1795103448.6966183,
+    "seen": 1795532351.079874,
+    "ast_hash": "e2d86fc2e87c3b81e7ea2f56e90566aa",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_151916_2aa014f7_focus_only_on_make_landscape_from_the_vignette_nes.md": {
+    "mtime": 1795103448.6967177,
+    "seen": 1795532351.079874,
+    "ast_hash": "77ef45bc33f3a2f3607e53bd5f84fcb8",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_152710_28a24148_use_n_instead_of_capacity__should_admission_rates.md": {
+    "mtime": 1795103448.6968067,
+    "seen": 1795532351.079875,
+    "ast_hash": "88eff202a871678a5242ca20bc88b849",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_153006_c06aacf8_implement_admission_rates_as_location_table_column.md": {
+    "mtime": 1795103448.6968954,
+    "seen": 1795532351.079875,
+    "ast_hash": "50238fdeb5675b8ecc9af4201c5437fd",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_153743_85800311_how_would_you_construct_make_population__be_clear.md": {
+    "mtime": 1795103448.6971486,
+    "seen": 1795532351.079875,
+    "ast_hash": "898792495491ac4b1b0d9bba88ccc539",
+    "semantic_hash": ""
+  },
+  "R/population.R": {
+    "mtime": 1795103448.6323137,
+    "seen": 1795532351.07986,
+    "ast_hash": "fe0ebf3f47043792941aded1fd62795c",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-population.R": {
+    "mtime": 1795103448.7027771,
+    "seen": 1795532351.0798678,
+    "ast_hash": "93632f863021c06006b4083c0878fb59",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_154630_d1a1d3fd_show_an_executable_vignette_example_of_the_propose.md": {
+    "mtime": 1795103448.6972394,
+    "seen": 1795532351.0798762,
+    "ast_hash": "2aacc28b553e5b3b6c26c4ab9528e745",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_161549_585ef38f_insert_the_agreed_make_population_into_the_package.md": {
+    "mtime": 1795103448.6973207,
+    "seen": 1795532351.0798762,
+    "ast_hash": "43f417969edf2ed830b1ed1f7aa977ba",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_163231_ffeb8f19_review_the_current_vignette_and_user_workflow_for.md": {
+    "mtime": 1795103448.697418,
+    "seen": 1795532351.0798762,
+    "ast_hash": "1ff6a6d6dcd45ceeed1aa31d21e9c36c",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261106_164530_fce3fe64_update_the_vignette_and_documentation_around_the_a.md": {
+    "mtime": 1795103448.6975121,
+    "seen": 1795532351.0798771,
+    "ast_hash": "3f0af98c534666dab237ca415c62c380",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261108_140538_3add0663_generate_individuals_only_when_places_are_availabl.md": {
+    "mtime": 1795103448.6976118,
+    "seen": 1795532351.0798771,
+    "ast_hash": "e5a6cf640b8662ef0d29ce62adf22349",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261108_145407_7197d943_restore_the_nested_landscape_stay_plot_for_autoplo.md": {
+    "mtime": 1795103448.6977186,
+    "seen": 1795532351.0798771,
+    "ast_hash": "bd5bacc0886d6c67b3f292371b145b11",
+    "semantic_hash": ""
+  },
+  "R/get_contacts.R": {
+    "mtime": 1795605921.4786499,
+    "seen": 1795605937.4677818,
+    "ast_hash": "febae739240272d69833d01cd74db734",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-get_contacts.R": {
+    "mtime": 1795103448.7022853,
+    "seen": 1795532351.0798662,
+    "ast_hash": "a0d9c5d00dfe4277b74ccb42b66c60bd",
+    "semantic_hash": ""
+  },
+  "R/utils.R": {
+    "mtime": 1795545195.8419313,
+    "seen": 1795545349.527512,
+    "ast_hash": "c06a3c4cc7d969fdcab218fdf8bcc8d0",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261113_123450_9fd9a7ce_can_you_do_a_complete_analysis_of_the_current_code.md": {
+    "mtime": 1795103448.697842,
+    "seen": 1795532351.0798779,
+    "ast_hash": "f8b3da4eeffbe6830608f6d133850108",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261113_125336_542fe962_how_should_make_population_connect_before_and_duri.md": {
+    "mtime": 1795103448.6979454,
+    "seen": 1795532351.0798779,
+    "ast_hash": "2f87b24588425a3f88ae1adf6431364d",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261113_135402_a5180bde_review_the_suggestions_for_strictly_minimal_requir.md": {
+    "mtime": 1795103448.6980424,
+    "seen": 1795532351.0798779,
+    "ast_hash": "e5a7730f0938254d5ef176a53c3b1cdb",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261115_215446_36892160_independently_review_the_minimal_proposed_api_and.md": {
+    "mtime": 1795103448.698132,
+    "seen": 1795532351.0798788,
+    "ast_hash": "447b5813f41502065e246b9042a411ad",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_001912_dac0bf21_why_did_make_outbreak_become_complicated__and_how.md": {
+    "mtime": 1795103448.698223,
+    "seen": 1795532351.0798788,
+    "ast_hash": "06e1a8b9d0e90dc43f7466ae60f82610",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_002324_d5a942f7_can_we_simplify_the_population_and_outbreak_workfl.md": {
+    "mtime": 1795103448.6983109,
+    "seen": 1795532351.0798788,
+    "ast_hash": "c19b6aa90394d5839835556e76d268aa",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_003131_702fa5a7_implement_and_independently_assess_a_simpler_dynam.md": {
+    "mtime": 1795103448.6983967,
+    "seen": 1795532351.07988,
+    "ast_hash": "923b9ff6207066bbc4e46740a9f43c88",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_005122_1447867d_summarise_current_nososim_functions_and_workflow.md": {
+    "mtime": 1795103448.6984887,
+    "seen": 1795532351.07988,
+    "ast_hash": "650bc0e332f3aebac1a16750fbc762b8",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_010927_106afd41_implement_arrivals_data__t__with_available_in_data.md": {
+    "mtime": 1795103448.6985915,
+    "seen": 1795532351.07988,
+    "ast_hash": "691149b57a14b374c2566d49a7516ebf",
+    "semantic_hash": ""
+  },
+  "R/outbreak.R": {
+    "mtime": 1795605631.623846,
+    "seen": 1795605632.90766,
+    "ast_hash": "94303486eb90e275b7688f9db539d91c",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_172712_98a03e42_is_outbreak_r_the_cleanest__simplest__most_readabl.md": {
+    "mtime": 1795103448.698692,
+    "seen": 1795532351.079881,
+    "ast_hash": "6086556c3203717b58b6b204599d968a",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_180555_acd25846_do_you_see_any_similar_improvements_we_could_do_in.md": {
+    "mtime": 1795103448.6989062,
+    "seen": 1795532351.079881,
+    "ast_hash": "beda7daaa1a7f48d1fc0cdee8e0dc314",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_190339_e9f7ea2f_can_autoplot_outbreak__show_ward_stays_with_the_tr.md": {
+    "mtime": 1795103448.6989994,
+    "seen": 1795532351.079881,
+    "ast_hash": "3af418ddba0048001a39995add306304",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_191210_585f67b2_implement_autoplot_outbreak__with_individual_colou.md": {
+    "mtime": 1795103448.6991854,
+    "seen": 1795532351.079882,
+    "ast_hash": "74de74af1f9eae213aff8e1e40d82548",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261116_193018_ab8017c2_why_does_the_transmission_overlay_look_disconnecte.md": {
+    "mtime": 1795103448.6992748,
+    "seen": 1795532351.079882,
+    "ast_hash": "a4fdc3cba7ecb63a91425e6168211ca0",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261117_132228_200a8679_audit_with_agents_the_codebase_and_evaluate_how_ea.md": {
+    "mtime": 1795103448.699441,
+    "seen": 1795532351.079882,
+    "ast_hash": "970a91cfd7a78a5c810ef218785ee5a9",
+    "semantic_hash": ""
+  },
+  "R/plot_tmat.R": {
+    "mtime": 1795605921.65769,
+    "seen": 1795605937.467787,
+    "ast_hash": "56803209aa2c83dbf96fa4a72e2eff92",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-plot_tmat.R": {
+    "mtime": 1795103448.702705,
+    "seen": 1795532351.079867,
+    "ast_hash": "85a918b91badac3875418f0d753b2a1c",
+    "semantic_hash": ""
+  },
+  "tests/testthat/Rplots.pdf": {
+    "mtime": 1795545360.2044964,
+    "seen": 1795595684.441824,
+    "ast_hash": "d5a4c411eacab5d6df3cad75452ae596",
+    "semantic_hash": ""
+  },
+  "R/plot_sankey.R": {
+    "mtime": 1795605921.6662831,
+    "seen": 1795605937.467786,
+    "ast_hash": "937ed469668bc0b84cf2873705e5d0c1",
+    "semantic_hash": ""
+  },
+  "R/transmission_groups.R": {
+    "mtime": 1795103448.632768,
+    "seen": 1795532351.079862,
+    "ast_hash": "e37f53645d7543b9d6e2c41cee2ff25b",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-plot_sankey.R": {
+    "mtime": 1795103448.7026193,
+    "seen": 1795532351.079867,
+    "ast_hash": "df8a2d0e34cd8ad57c65fbdfe72d9993",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261117_163638_d6e711b2_akin_to_plot_tmat____could_we_use_the_same_legendr.md": {
+    "mtime": 1795103448.6995249,
+    "seen": 1795532351.079883,
+    "ast_hash": "2e98ac4d9cfa545135af8fee6d27bf5c",
+    "semantic_hash": ""
+  },
+  "R/sankey_layout.R": {
+    "mtime": 1795103448.6324694,
+    "seen": 1795532351.079862,
+    "ast_hash": "61f8a669dfc12535b096ce047a06c308",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261117_171058_b3a9e714_how_should_plot_sankey_support_generic_by___c_xxx.md": {
+    "mtime": 1795103448.699664,
+    "seen": 1795532351.079883,
+    "ast_hash": "1b3d3a87a1cdf328268fb2d5146f297c",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261119_143332_251d264e_think_of_the_most_elegant_approach_for_autoplot_he.md": {
+    "mtime": 1795103448.699765,
+    "seen": 1795532351.079884,
+    "ast_hash": "9572572d4ba2afcbe14a45b5ebbf0937",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-get_contacts-multipliers.R": {
+    "mtime": 1795103448.702208,
+    "seen": 1795532351.0798662,
+    "ast_hash": "e4533f280cdb283a369e03a281c4431a",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261119_143841_7ec52495_keep_nodes_white__colour_timelines__shape_nodes__l.md": {
+    "mtime": 1795103448.6998742,
+    "seen": 1795532351.079884,
+    "ast_hash": "182c92e987cd2eab6868dd7614684d4e",
+    "semantic_hash": ""
+  },
+  "R/sample_contacts.R": {
+    "mtime": 1795533308.8997722,
+    "seen": 1795545349.5275111,
+    "ast_hash": "c153554f6f37803b9486a53f4f713544",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-sample_contacts.R": {
+    "mtime": 1795532343.9680035,
+    "seen": 1795532351.0798678,
+    "ast_hash": "6da54a519934e1595264bb68a26c414d",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261124_141658_abd14df0_what_would_poisson_and_multinomial_stochastic_cont.md": {
+    "mtime": 1795529818.9381902,
+    "seen": 1795532351.079884,
+    "ast_hash": "9be7da5390ccda6d0bc340683e86a5dc",
+    "semantic_hash": ""
+  },
+  "R/get_intervention.R": {
+    "mtime": 1795605921.4806404,
+    "seen": 1795605937.467783,
+    "ast_hash": "84700185a5ae50a5f31b9019cdf48498",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-get_intervention.R": {
+    "mtime": 1795595678.004026,
+    "seen": 1795595684.441802,
+    "ast_hash": "97b1fedabbd2000fbb986a2856ad4e14",
+    "semantic_hash": ""
+  },
+  "tests/testthat/test-intervention.R": {
+    "mtime": 1795595678.007228,
+    "seen": 1795595684.441803,
+    "ast_hash": "29093e3cb08d046a238363b105d0d69f",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20261124_153935_d8b3d33e_trace_the_current_nososim_and_simulacres_contact_t.md": {
+    "mtime": 1795534775.7727814,
+    "seen": 1795545349.5275378,
+    "ast_hash": "f5f5ec5c8ad7a0256fcc63af78897cb7",
+    "semantic_hash": ""
+  },
+  "R/mixing.R": {
+    "mtime": 1795606521.4326568,
+    "seen": 1795606521.918112,
+    "ast_hash": "7e83408021e8a666e05f39bed6af863b",
+    "semantic_hash": ""
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-19T15:02:24.073439+00:00",
+  "generated_at": "2026-11-25T11:41:42.136050+00:00",
   "nodes": {
     "r_autoplot_r_autoplot_nososim_outbreak": {
       "code_fingerprint": "4e50bacecf0c73330cdd3076943b8b202b877db538d6d5d3b5d7a9a26bbe6375",
@@ -28,7 +28,7 @@
           "q": "Implement autoplot(outbreak) with individual colours and fixed rows throughout consecutive stays."
         }
       ],
-      "score": -0.000354945,
+      "score": -0.000309995,
       "source_file": "R/autoplot.R",
       "status": "contested",
       "uses": 2,
@@ -60,7 +60,7 @@
           "q": "Restore the nested landscape stay plot for autoplot using the current make_population output, keeping code concise."
         }
       ],
-      "score": 3.648438042,
+      "score": 3.18639421,
       "source_file": "R/autoplot.R",
       "status": "preferred",
       "uses": 4
@@ -76,17 +76,27 @@
           "q": "How should plot_sankey support generic by = c(xxx, yyy, zzz) hierarchies with clear interpretation?"
         }
       ],
-      "score": 0.956813527,
+      "score": 0.835641183,
       "source_file": "R/count_edges.R",
       "status": "tentative",
       "uses": 1
     },
     "r_get_contacts_r_get_contacts": {
-      "code_fingerprint": "2a010e47d94ab8d80a13cc96997d9bc6c9f5823f90f8d327b070d905480cc5a8",
+      "code_fingerprint": "94570ca4e858fc98c53fe17cc7d95d0603ead9786dc8cb1cbb93b0e6d588923f",
       "label": "get_contacts()",
-      "last": "2026-11-17T13:22:28.322981+00:00",
+      "last": "2026-11-24T15:39:35.772212+00:00",
       "neg": 1,
       "provenance": [
+        {
+          "date": "2026-11-24T15:39:35.772212+00:00",
+          "outcome": "useful",
+          "q": "Trace the current nososim and Simulacres contact-to-infection path and plan vaccination, isolation, cohorting and masks using source i and recipient j."
+        },
+        {
+          "date": "2026-11-24T14:16:58.937832+00:00",
+          "outcome": "useful",
+          "q": "What would Poisson and multinomial stochastic contact generation mean in this code?"
+        },
         {
           "date": "2026-11-17T13:22:28.322981+00:00",
           "outcome": "useful",
@@ -101,30 +111,25 @@
           "date": "2026-11-16T00:19:12.824575+00:00",
           "outcome": "useful",
           "q": "Why did make_outbreak become complicated, and how can landscape -> population -> outbreak be simplified around a final population on entry?"
-        },
-        {
-          "date": "2026-11-15T21:54:46.158167+00:00",
-          "outcome": "corrected",
-          "q": "Independently review the minimal proposed API and use infection dates from simulate_outbreak_step instead of newly_infected."
-        },
-        {
-          "date": "2026-11-13T13:54:02.264049+00:00",
-          "outcome": "useful",
-          "q": "Review the suggestions for strictly minimal requirements and provide the final API from A to Z."
         }
       ],
-      "score": 3.613908627,
+      "score": 5.116732172,
       "source_file": "R/get_contacts.R",
       "status": "contested",
-      "uses": 5,
+      "uses": 7,
       "verdict": "useful"
     },
     "r_landscape_r_make_landscape": {
       "code_fingerprint": "d2d4c2dd987ecc4804813d90c731c3a78f2908dbddf156db169edd5067602703",
       "label": "make_landscape()",
-      "last": "2026-11-08T14:05:38.940699+00:00",
+      "last": "2026-11-24T15:39:35.772212+00:00",
       "neg": 2,
       "provenance": [
+        {
+          "date": "2026-11-24T15:39:35.772212+00:00",
+          "outcome": "useful",
+          "q": "Trace the current nososim and Simulacres contact-to-infection path and plan vaccination, isolation, cohorting and masks using source i and recipient j."
+        },
         {
           "date": "2026-11-08T14:05:38.940699+00:00",
           "outcome": "corrected",
@@ -144,21 +149,16 @@
           "date": "2026-11-06T16:15:49.777869+00:00",
           "outcome": "useful",
           "q": "Insert the agreed make_population into the package and update the vignette with clean concise generic R code and documentation."
-        },
-        {
-          "date": "2026-11-06T15:46:30.688795+00:00",
-          "outcome": "useful",
-          "q": "Show an executable vignette example of the proposed make_population with user-customizable admissions and explain how individuals are generated."
         }
       ],
-      "score": 5.154361716,
+      "score": 5.482502323,
       "source_file": "R/landscape.R",
       "status": "contested",
-      "uses": 9,
+      "uses": 10,
       "verdict": "useful"
     },
     "r_mixing_r_mixing_matrix": {
-      "code_fingerprint": "4c3d1549e87ac85cf63c444892ce85f29296af01ef400cd596c9638ab367a6bf",
+      "code_fingerprint": "",
       "label": "mixing_matrix()",
       "last": "2026-11-05T12:34:34.269644+00:00",
       "provenance": [
@@ -168,7 +168,7 @@
           "q": "Which existing nososim conventions should guide a landscape API?"
         }
       ],
-      "score": 0.721920232,
+      "score": 0.630495138,
       "source_file": "R/mixing.R",
       "status": "tentative",
       "uses": 1
@@ -184,33 +184,22 @@
           "q": "Summarise current nososim functions and workflow, compare with the previous commit, and recommend the simplest clear maintainable user API."
         }
       ],
-      "score": 0.92037929,
+      "score": 0.803821034,
       "source_file": "R/offspring.R",
       "status": "tentative",
       "uses": 1
     },
-    "r_outbreak_r_align_contacts": {
-      "code_fingerprint": "a2bfae8d3191f3b6280b4a77372285f76cadd0d93b8c18c27578c26aeb40e084",
-      "label": "align_contacts()",
-      "last": "2026-11-16T17:27:12.679897+00:00",
-      "provenance": [
-        {
-          "date": "2026-11-16T17:27:12.679897+00:00",
-          "outcome": "useful",
-          "q": "Is outbreak.R the cleanest, simplest, most readable code with as much pipe use and as few non-tidy operations and intermediate objects as possible?"
-        }
-      ],
-      "score": 0.935203404,
-      "source_file": "R/outbreak.R",
-      "status": "tentative",
-      "uses": 1
-    },
     "r_outbreak_r_make_outbreak": {
-      "code_fingerprint": "a2bfae8d3191f3b6280b4a77372285f76cadd0d93b8c18c27578c26aeb40e084",
+      "code_fingerprint": "584a3dee6208ac25170b1d27acd888314e20d39414386f7b8cbadd69dd575ef1",
       "label": "make_outbreak()",
-      "last": "2026-11-17T13:22:28.322981+00:00",
+      "last": "2026-11-24T15:39:35.772212+00:00",
       "neg": 3,
       "provenance": [
+        {
+          "date": "2026-11-24T15:39:35.772212+00:00",
+          "outcome": "useful",
+          "q": "Trace the current nososim and Simulacres contact-to-infection path and plan vaccination, isolation, cohorting and masks using source i and recipient j."
+        },
         {
           "date": "2026-11-17T13:22:28.322981+00:00",
           "outcome": "useful",
@@ -230,17 +219,12 @@
           "date": "2026-11-16T00:51:22.776201+00:00",
           "outcome": "useful",
           "q": "Summarise current nososim functions and workflow, compare with the previous commit, and recommend the simplest clear maintainable user API."
-        },
-        {
-          "date": "2026-11-16T00:31:31.683934+00:00",
-          "outcome": "useful",
-          "q": "Implement and independently assess a simpler dynamic simulation while retaining the patient and staff vignette as reference."
         }
       ],
-      "score": 7.076455931,
+      "score": 7.161179556,
       "source_file": "R/outbreak.R",
       "status": "contested",
-      "uses": 11,
+      "uses": 12,
       "verdict": "useful"
     },
     "r_package_legendry_function_guide_axis_nested": {
@@ -254,7 +238,7 @@
           "q": "Akin to plot_tmat(), could we use the same legendry::guide_axis_nested architecture to make a sankey plot?"
         }
       ],
-      "score": 0.956286612,
+      "score": 0.835180998,
       "source_file": "",
       "status": "tentative",
       "uses": 1
@@ -270,7 +254,7 @@
           "q": "How should plot_sankey support generic by = c(xxx, yyy, zzz) hierarchies with clear interpretation?"
         }
       ],
-      "score": 0.956813527,
+      "score": 0.835641183,
       "source_file": "R/plot_sankey.R",
       "status": "tentative",
       "uses": 1
@@ -286,7 +270,7 @@
           "q": "Akin to plot_tmat(), could we use the same legendry::guide_axis_nested architecture to make a sankey plot?"
         }
       ],
-      "score": 0.956286612,
+      "score": 0.835180998,
       "source_file": "R/plot_tmat.R",
       "status": "tentative",
       "uses": 1
@@ -317,7 +301,7 @@
           "q": "Implement and independently assess a simpler dynamic simulation while retaining the patient and staff vignette as reference."
         }
       ],
-      "score": 3.711720439,
+      "score": 3.241662426,
       "source_file": "R/population.R",
       "status": "preferred",
       "uses": 4
@@ -325,9 +309,14 @@
     "r_population_r_make_population": {
       "code_fingerprint": "12b85458de6e999ae1c98625a484c9ddc71f2b0add5c4f3ef5d58a4475eaf80b",
       "label": "make_population()",
-      "last": "2026-11-17T13:22:28.322981+00:00",
+      "last": "2026-11-24T15:39:35.772212+00:00",
       "neg": 5,
       "provenance": [
+        {
+          "date": "2026-11-24T15:39:35.772212+00:00",
+          "outcome": "useful",
+          "q": "Trace the current nososim and Simulacres contact-to-infection path and plan vaccination, isolation, cohorting and masks using source i and recipient j."
+        },
         {
           "date": "2026-11-17T13:22:28.322981+00:00",
           "outcome": "useful",
@@ -347,17 +336,12 @@
           "date": "2026-11-16T00:31:31.683934+00:00",
           "outcome": "useful",
           "q": "Implement and independently assess a simpler dynamic simulation while retaining the patient and staff vignette as reference."
-        },
-        {
-          "date": "2026-11-16T00:23:24.697775+00:00",
-          "outcome": "corrected",
-          "q": "Can we simplify the population and outbreak workflow while retaining attributes and stays that change during the outbreak?"
         }
       ],
-      "score": 8.3548362,
+      "score": 8.277663772,
       "source_file": "R/population.R",
       "status": "contested",
-      "uses": 15,
+      "uses": 16,
       "verdict": "useful"
     },
     "r_population_r_update_population": {
@@ -381,10 +365,26 @@
           "q": "Implement and independently assess a simpler dynamic simulation while retaining the patient and staff vignette as reference."
         }
       ],
-      "score": 2.761111713,
+      "score": 2.411440259,
       "source_file": "R/population.R",
       "status": "preferred",
       "uses": 3
+    },
+    "r_sample_contacts_r_sample_contacts": {
+      "code_fingerprint": "31e2f243069525ec466853f1c7eb23bdeeb77997021f8dfff9717cca968c0360",
+      "label": "sample_contacts()",
+      "last": "2026-11-24T15:39:35.772212+00:00",
+      "provenance": [
+        {
+          "date": "2026-11-24T15:39:35.772212+00:00",
+          "outcome": "useful",
+          "q": "Trace the current nososim and Simulacres contact-to-infection path and plan vaccination, isolation, cohorting and masks using source i and recipient j."
+        }
+      ],
+      "score": 0.980896941,
+      "source_file": "R/sample_contacts.R",
+      "status": "tentative",
+      "uses": 1
     },
     "r_sankey_layout_r_sankey_layout": {
       "code_fingerprint": "c47c714722e13cee98145c434379f307f63da897d5e1c4a41ae94163945922ef",
@@ -397,13 +397,13 @@
           "q": "How should plot_sankey support generic by = c(xxx, yyy, zzz) hierarchies with clear interpretation?"
         }
       ],
-      "score": 0.956813527,
+      "score": 0.835641183,
       "source_file": "R/sankey_layout.R",
       "status": "tentative",
       "uses": 1
     },
     "r_utils_r_check_attributes": {
-      "code_fingerprint": "bad55aa88dee4594c2ce3e7b8a5371c3d3024b1946f522b842461f139dcbc9b1",
+      "code_fingerprint": "5a9842d9177675d1d843dffa00ab084d62ef5a68033953eeb89058db593d7b10",
       "label": "check_attributes()",
       "last": "2026-11-16T18:05:55.950299+00:00",
       "provenance": [
@@ -413,7 +413,7 @@
           "q": "Do you see any similar improvements we could do in admit_individuals()?"
         }
       ],
-      "score": 0.935784611,
+      "score": 0.817275402,
       "source_file": "R/utils.R",
       "status": "tentative",
       "uses": 1

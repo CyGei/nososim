@@ -14,11 +14,12 @@ knitr::opts_chunk$set(
 
 ```{r}
 library(nososim)
-devtools::load_all()
 library(tidyverse)
 ```
 
 `nososim` simulates outbreaks with changing populations and contacts.
+
+Define locations and population rules, build contacts and optional interventions, then simulate and explore the results.
 
 ## Landscape
 
@@ -48,12 +49,23 @@ staff_landscape
 
 ## Populations
 
-`make_population()` defines rules; `make_outbreak()` runs them each day.
-Use `arrivals` to choose how many people enter available places, `attributes` to assign their initial attributes, and `update` to apply rules to current occupants at the end of each day.
-All rules use `(data, t)`. For `arrivals`, `data` is the landscape with today's free places in `available`; `capacity` remains the total capacity.
+`make_population()` defines rules; `make_outbreak()` runs them each day. Population and outbreak callbacks receive `(data, t)`, where `t` is the current Date.
+
+| Callback | `data` contains | Return |
+|--------------------|----------------------------------|-------------------|
+| `arrivals()` | One row per location, including `capacity` and today's free places in `available` | One whole count per row, from zero to `available` |
+| `attributes()` | One row per arrival, with location columns but no `capacity` or `available` | The same rows and locations, adding `stay`, `tau`, and any custom attributes |
+| `update()` *(optional)* | This model's current occupants, after transmission | Updated attributes, preserving row order, identities, locations and infection dates |
+
+`stay` must be a whole number or `Inf`; set `tau` to a finite, non-negative per-contact transmission rate.
+
+The package adds `labels` (ID), `start` (admission date), `population` (model name), and `date_infection`. Supply your own `labels` in `attributes()` for returning agents.
+
+Extra landscape columns pass through to `arrivals()` and `attributes()`. Use `mutate(data, ...)` to keep them; custom attributes remain available in later callbacks.
 
 ### Patients
-Here, we define a bed filling probability for each ward and assign attributes such as age, length of stay, and a transmission parameter `tau`. We extend the length of stay once when a patient becomes infected. The occupied bed therefore remains unavailable for new admissions.
+
+Fill each ward probabilistically and assign age, length of stay, and `tau`. When a patient becomes infected, extend their stay by 3 days, keeping their bed occupied for longer.
 
 ```{r}
 patient_landscape <- patient_landscape |>
@@ -94,17 +106,21 @@ patients <- make_population(
 patients
 ```
 
-## Staff
+### Staff
 
-Schedule five one-day shifts per person each week. Reuse `labels` across shifts.
+We create a fixed staff roster for each ward and randomly assign each agent 5 working days per week. Each shift is a one-day stay (`stay = 1`). Staff keep the same `labels` when they return, preserving their history. `arrivals()` counts how many staff attend; `attributes()` identifies who they are.
 
 ```{r}
 dates <- as.Date("2026-01-01") + 0:29
 
-set.seed(123)
-staff_schedule <- staff_landscape |>
+# One permanent identity per staff member.
+staff_roster <- staff_landscape |>
   uncount(capacity) |>
-  mutate(labels = paste0("S_", row_number())) |>
+  mutate(labels = paste0("S_", row_number()))
+
+# Five randomly chosen working days per person each week.
+set.seed(123)
+staff_schedule <- staff_roster |>
   crossing(week = unique(as.Date(cut(dates, "week")))) |>
   reframe(
     t = week + sample(0:6, 5),
@@ -121,6 +137,7 @@ staff_on_duty <- function(t) {
 staff <- make_population(
   staff_landscape,
   arrivals = function(data, t) {
+    # Count today's staff per ward.
     data |>
       left_join(
         count(staff_on_duty(t), level_1, level_2),
@@ -131,7 +148,9 @@ staff <- make_population(
   },
   attributes = function(data, t) {
     data |>
+      # Keep unique location.
       distinct() |>
+      # Add one row per staff member scheduled in that location today.
       left_join(staff_on_duty(t), by = c("level_1", "level_2")) |>
       mutate(role = "staff", stay = 1L, tau = 0.2)
   }
@@ -141,9 +160,11 @@ staff
 
 ## Contacts
 
-`get_contacts()` defaults to matching all location levels. This rule allows
-patient contacts within rooms and staff contacts throughout their hospital.
-Matrix rows are sources, columns are recipients.
+`get_contacts(data, by, multipliers)` returns a contact intensity matrix C, with sources in rows and recipients in columns.
+
+`by` defines which individuals can come into contact. By default, individuals must share all location levels. The example below allows patients to interact within rooms and staff throughout their hospital. Custom rules must return symmetric logical values for each pair of individuals.
+
+`multipliers` is a named list of matrices defining contact intensities between categories of each attribute. Multipliers are combined across attributes.
 
 ```{r}
 contact_rule <- function(i, j) {
@@ -155,7 +176,7 @@ contact_rule <- function(i, j) {
   same_hospital & (either_staff | (same_ward & same_room))
 }
 
-multipliers <- list(
+contact_multipliers <- list(
   level_2 = matrix(
     c(2, 1, 3, 1),
     nrow = 2,
@@ -171,12 +192,42 @@ multipliers <- list(
 )
 ```
 
-Multipliers multiply allowed contacts. General staff to an ICU patient has multiplier `3 * 1 = 3`; the reverse has multiplier `1 * 2 = 2`.
+General staff to an ICU patient has intensity `3 * 1 = 3`; the reverse has intensity `1 * 2 = 2`.
+
+## Interventions
+
+Interventions modify the force of infection (FOI) between individuals. The function `intervention(data, t)` returns a matrix $E$, where each element $E_{ij}$ scales the FOI from individual $i$ to individual $j$: values below 1 reduce transmission, values above 1 increase it, and 1 leaves it unchanged.
+
+`make_outbreak()` applies these multipliers to the contact matrix ($C*E$).
+
+Like `get_contacts()`, `get_intervention()` defines multipliers by attribute and combines their effects. The following example reduces transmission between individuals in the ICU by 30%.
+
+```{r}
+intervention_multipliers <- list(
+  level_2 = matrix(
+    c(0.7, 1, 1, 1),
+    2,
+    byrow = TRUE,
+    dimnames = list(c("ICU", "General"), c("ICU", "General"))
+  )
+)
+```
+
+Interventions can depend on any individual attribute, including infection dates.
 
 ## Simulate
 
-A named list keeps patient and staff capacities separate. `imported()` returns
-susceptible labels to infect; `character()` introduces none.
+A named list keeps patient and staff capacities separate. Person labels must be unique among everyone present, across all models. Reuse a label only for the same person.
+
+| Callback | `data` contains | Return |
+|--------------------|----------------------------------|-------------------|
+| `imported()` | Present people never previously infected | Unique character labels to infect, or `character()` for none |
+| `contacts()` | Everyone present, after imports | Contact matrix `C` |
+| `intervention()` *(optional)* | Everyone present, after imports | Transmission multiplier matrix `E` |
+
+These tables contain location columns, `labels`, `start`, `stay`, `tau`, `population`, `date_infection`, and retained custom attributes. Both matrices must be finite and non-negative, with exactly one row and column per occupant, named by `labels`; their order is aligned automatically. Self-contact is zero.
+
+Each day runs in this order: **arrivals → attributes for new arrivals → imports → contacts → intervention → transmission → updates → departures**. Extending `stay` can prevent that day's departure. Vacated places become available the next day.
 
 ```{r}
 set.seed(123)
@@ -197,18 +248,27 @@ outbreak <- make_outbreak(
     character()
   },
   contacts = function(data, t) {
-    get_contacts(data, by = contact_rule, multipliers = multipliers) |>
+    get_contacts(data, by = contact_rule, multipliers = contact_multipliers) |>
       sample_contacts()
+  },
+  intervention = function(data, t) {
+    if (t < dates[8]) {
+      return(get_intervention(data))
+    }
+    get_intervention(data, multipliers = intervention_multipliers)
   }
 )
 
 outbreak$infections
 ```
 
-
 ## Results
 
-Count secondary infections per person and transmissions between groups.
+`outbreak$population` holds daily population records.
+
+`outbreak$infections` records all infections as `from`, `to`, and `date`; imported cases have `from = NA`.
+
+Count secondary infections per infected person, including zeros, and local transmissions between groups using attributes on the transmission date.
 
 ```{r}
 offspring(outbreak) |>
@@ -216,8 +276,6 @@ offspring(outbreak) |>
   mutate(prob = n / sum(n))
 
 count_edges(outbreak, by = c("role", "level_2"))
-
-plot_tmat(outbreak, by = c("role", "level_2"))
 
 plot_tmat(outbreak, by = c("level_1", "level_2", "role"))
 
@@ -237,11 +295,11 @@ p <- autoplot(
   )
 )
 p
-plotly::ggplotly(p)
 ```
 
+For an interactive timeline, use `plotly::ggplotly(p)` if plotly is installed.
 
-Compare contact multipliers for the same day's occupants.
+Compare expected contact intensities for the same day's occupants.
 
 ```{r contact-comparison, fig.width=10, fig.height=9}
 present <- outbreak$population |>
@@ -250,13 +308,12 @@ present <- outbreak$population |>
 
 contact_matrices <- list(
   unweighted = NULL,
-  role_weighted = multipliers["role"],
-  location_weighted = multipliers["level_2"],
-  all_weighted = multipliers
+  role_weighted = contact_multipliers["role"],
+  location_weighted = contact_multipliers["level_2"],
+  all_weighted = contact_multipliers
 ) |>
   purrr::map(function(w) {
-    get_contacts(present, by = contact_rule, multipliers = w) |>
-      sample_contacts()
+    get_contacts(present, by = contact_rule, multipliers = w)
   })
 
 contact_matrices |>
@@ -280,26 +337,4 @@ contact_matrices |>
     axis.text.y = element_text(size = 5),
     legend.position = "bottom"
   )
-```
-
-```{r}
-outbreak <- make_outbreak(
-  patients,
-  dates,
-  w = c(0, 1, 0),
-  imported = function(data, t) character(),
-  contacts = function(data, t) {
-    matrix(
-      0,
-      nrow = nrow(data),
-      ncol = nrow(data),
-      dimnames = list(data$labels, data$labels)
-    )
-  }
-)
-
-outbreak$infections
-autoplot(outbreak)
-plot_tmat(outbreak, by = "level_1")
-plot_sankey(outbreak, by = "level_1")
 ```

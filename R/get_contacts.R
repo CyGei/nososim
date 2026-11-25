@@ -18,6 +18,8 @@
 #'   labels in columns, and a zero diagonal. Unweighted contacts are symmetric
 #'   0s and 1s; weighted intensities may be asymmetric. Empty input returns a
 #'   0-by-0 matrix.
+#' @seealso [sample_contacts()] to draw daily counts; [get_intervention()] to
+#'   scale transmission through those contacts.
 #' @export
 #' @examples
 #' data <- tibble::tibble(
@@ -61,8 +63,8 @@ get_contacts <- function(
   contacts
 }
 
-pairwise_contacts <- function(present, by) {
-  n <- nrow(present)
+pairwise_contacts <- function(data, by) {
+  n <- nrow(data)
   contacts <- matrix(0L, n, n)
   if (n < 2L) {
     return(contacts)
@@ -70,7 +72,7 @@ pairwise_contacts <- function(present, by) {
 
   # Compare both directions, leaving out self-pairs.
   pairs <- which(row(contacts) != col(contacts), arr.ind = TRUE)
-  matches <- by(present[pairs[, 1], ], present[pairs[, 2], ])
+  matches <- by(data[pairs[, 1], ], data[pairs[, 2], ])
   stopifnot(
     "`by()` must return one logical value per pair." =
       is.logical(matches) && length(matches) == nrow(pairs)

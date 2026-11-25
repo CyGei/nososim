@@ -468,9 +468,9 @@
     "semantic_hash": ""
   },
   "R/sample_contacts.R": {
-    "mtime": 1795532343.952214,
-    "seen": 1795532351.079861,
-    "ast_hash": "1c04def3f45803f731c4ecfa149b5812",
+    "mtime": 1795533301.448411,
+    "seen": 1795533302.7904692,
+    "ast_hash": "c153554f6f37803b9486a53f4f713544",
     "semantic_hash": ""
   },
   "tests/testthat/test-sample_contacts.R": {

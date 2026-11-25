@@ -4,7 +4,7 @@
 \alias{make_outbreak}
 \title{Simulate an outbreak}
 \usage{
-make_outbreak(population, dates, w, imported, contacts)
+make_outbreak(population, dates, w, imported, contacts, intervention = NULL)
 }
 \arguments{
 \item{population}{A \code{\link[=make_population]{make_population()}} model or named list of models with
@@ -18,15 +18,22 @@ weights are normalised and correspond to delays 0, 1, 2, etc.}
 \item{imported}{Function \verb{(data, t)} returning character labels of susceptible
 occupants to infect on date \code{t}. Return \code{character()} for none.}
 
-\item{contacts}{Function \verb{(data, t)} returning a non-negative matrix:
+\item{contacts}{Function \verb{(data, t)} returning a finite, non-negative matrix:
 source labels in rows, recipient labels in columns. Use
 \code{function(data, t) get_contacts(data)} to match all location levels.
-Return a zero matrix for no contacts. Self-contact is set to zero.}
+Optionally use \code{\link[=sample_contacts]{sample_contacts()}} to draw daily counts. Return a zero
+matrix for no contacts. Self-contact is set to zero.}
+
+\item{intervention}{Optional function \verb{(data, t)} returning a transmission
+multiplier matrix \code{E}, named by person labels (rows: sources; columns:
+recipients). \code{NULL} leaves transmission unchanged.
+Values must be finite and non-negative (0: blocked, 1: unchanged,
+\verb{>1}: increased transmission). See \code{\link[=get_intervention]{get_intervention()}}.}
 }
 \value{
 A \code{nososim_outbreak} list with:
 \itemize{
-\item \code{population}: a tibble of daily snapshots before local infections and
+\item \code{population}: a tibble of daily snapshots after imports, before local infections and
 updates, including \code{labels}, \code{t}, and \code{population} (the capacity pool).
 \item \code{infections}: \code{from}, \code{to}, and \code{date}; imported cases have \code{from = NA}.
 \item \code{landscape}: location capacities for each population.
@@ -34,17 +41,24 @@ updates, including \code{labels}, \code{t}, and \code{population} (the capacity 
 }
 }
 \description{
-Each day: admit individuals, introduce infections, simulate transmission,
-update attributes, then process departures.
+Each day: admit individuals, introduce infections, build contacts, apply
+interventions, simulate transmission, update attributes, then process departures.
 }
 \details{
-\code{data} contains current occupants; \code{t} is a Date. Infection history
-persists across absences; each person can be infected once. Contacts multiply
-the source's \code{tau} without normalisation. \code{\link[simulacr:simulate_outbreak_step]{simulacr::simulate_outbreak_step()}}
+\code{t} is a Date. \code{imported()} receives only susceptible occupants;
+\code{contacts()} and \code{intervention()} receive everyone present, after imports.
+Callbacks are skipped when their input is empty. Both matrices must have
+exactly one row and column per occupant; names are aligned automatically.
+
+Transmission uses \code{C * E} element by element, with \code{E = 1} when no
+intervention is supplied. This scales the source's \code{tau} and generation-time
+weight without normalising contacts. Infection history persists across
+absences; each person can be infected once. \code{\link[simulacr:simulate_outbreak_step]{simulacr::simulate_outbreak_step()}}
 records infections on \code{t}; new local cases cannot transmit in the same step.
 
-Updates run after transmission and before departures. Callbacks requiring
-occupants are skipped for empty inputs.
+Updates run after transmission and before departures. They affect the next
+day's transmission, but can extend a stay before today's departure. Vacated
+places become available the following day.
 }
 \examples{
 population <- make_population(

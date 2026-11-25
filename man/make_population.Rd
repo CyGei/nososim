@@ -24,24 +24,26 @@ and infection history.}
 A \code{nososim_population} containing the landscape and rules.
 }
 \description{
-Define how agents arrive, their attributes, and how these
+Define how individuals arrive, their attributes, and how these
 attributes update over time. Rules are evaluated by
 \code{\link[=make_outbreak]{make_outbreak()}}.
 }
 \details{
 For \code{arrivals}, \code{data} is the landscape with an additional \code{available}
-column giving free capacity at time \code{t}.
+column giving free capacity at time \code{t} (a Date).
 
 For \code{attributes}, \code{data} contains one row per new arrival, with
 location attributes but without \code{capacity} or \code{available}.
 \code{stay} must be a positive integer or \code{Inf}; \code{tau} must be finite
 and non-negative. Optional \code{labels} identify returning individuals.
 
-For \code{update}, \code{data} contains one row per current occupant.
-Changes to attributes persist until updated again.
+For \code{update}, \code{data} contains this model's current occupants after transmission,
+including \code{labels}, \code{start}, \code{population}, and \code{date_infection} alongside
+location and custom attributes. Preserve row order and those generated
+columns. Changes to other attributes persist until updated again or departure.
 
 \code{stay} includes the admission day. Reusing a label across stays
-preserves infection history.
+preserves infection history; other attributes are assigned afresh on arrival.
 }
 \examples{
 population <- make_population(

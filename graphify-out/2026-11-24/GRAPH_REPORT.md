@@ -1,12 +1,12 @@
 # Graph Report - nososim  (2026-11-24)
 
 ## Corpus Check
-- 74 files · ~25,473 words
+- 74 files · ~25,464 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 23 file(s) not represented in the graph (top: .Rd 12, (none) 8, .Rmd 2)
 
 ## Summary
-- 427 nodes · 381 edges · 73 communities (51 shown, 22 thin omitted)
+- 428 nodes · 382 edges · 73 communities (51 shown, 22 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
@@ -95,9 +95,9 @@
 - `get_contacts()` --calls--> `tibble::as_tibble()`  [EXTRACTED]
   R/get_contacts.R →   _Bridges community 6 → community 1_
 - `collect()` --calls--> `tibble::tibble()`  [EXTRACTED]
-  R/landscape.R →   _Bridges community 4 → community 61_
+  R/landscape.R →   _Bridges community 4 → community 8_
 - `sankey_layout()` --calls--> `tibble::tibble()`  [EXTRACTED]
-  R/sankey_layout.R →   _Bridges community 61 → community 6_
+  R/sankey_layout.R →   _Bridges community 8 → community 6_
 
 ## Import Cycles
 - None detected.
@@ -129,8 +129,8 @@ Cohesion: 0.08
 Nodes (8): population_positions(), count_edges(), add_attributes(), get_contacts(), pairwise_contacts(), sankey_layout(), transmission_groups(), endpoint()
 
 ### Community 8 - "test-plot_sankey.R"
-Cohesion: 0.10
-Nodes (19): built, by, drawing, flow, flows, inner, leaves, left (+11 more)
+Cohesion: 0.06
+Nodes (26): offspring(), plot_outbreak(), built, by, drawing, flow, flows, inner (+18 more)
 
 ### Community 14 - "Q: Restore the nested landscape stay plot for autoplot using the current make_population output, keeping code concise."
 Cohesion: 0.40
@@ -269,8 +269,8 @@ Cohesion: 0.40
 Nodes (4): Answer, Outcome, Q: Implement autoplot(outbreak) with individual colours and fixed rows throughout consecutive stays., Source Nodes
 
 ### Community 61 - "test-autoplot.R"
-Cohesion: 0.08
-Nodes (20): offspring(), data, edges, labelled, layers, outbreak, plot, plot_outbreak() (+12 more)
+Cohesion: 0.14
+Nodes (13): data, edges, labelled, layers, outbreak, plot, points, positions (+5 more)
 
 ### Community 62 - "Q: Why does the transmission overlay look disconnected? Dots should be at infection dates."
 Cohesion: 0.40
@@ -310,7 +310,7 @@ Nodes (3): average, C, n
 
 ## Knowledge Gaps
 - **4 isolated node(s):** `R-CMD-check workflow`, `R package check`, `Cyril Geismar`, `MIT License`
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 324 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 325 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Work-memory lessons
@@ -329,11 +329,11 @@ _Questions this graph is uniquely positioned to answer:_
   _4 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `make_outbreak` be split into smaller, more focused modules?**
   _Cohesion score 0.11052631578947368 - nodes in this community are weakly interconnected._
-- **Why does `transmission_groups()` connect `transmission_groups` to `test-autoplot.R`?**
-  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+- **Why does `transmission_groups()` connect `transmission_groups` to `test-plot_sankey.R`?**
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
 - **Should `plot_sankey` be split into smaller, more focused modules?**
   _Cohesion score 0.09057971014492754 - nodes in this community are weakly interconnected._
-- **Why does `sankey_outbreak()` connect `test-autoplot.R` to `test-plot_sankey.R`?**
-  _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **Should `transmission_groups` be split into smaller, more focused modules?**
   _Cohesion score 0.07765151515151515 - nodes in this community are weakly interconnected._
+- **Should `test-plot_sankey.R` be split into smaller, more focused modules?**
+  _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._

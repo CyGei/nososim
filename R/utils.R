@@ -29,7 +29,7 @@ check_attributes <- function(data) {
 
 check_matrix <- function(x, labels) {
   stopifnot(
-    "Contacts and multipliers must be finite, non-negative numeric matrices." =
+    "Pairwise matrices must be finite, non-negative numeric matrices." =
       is.matrix(x) && is.numeric(x) && all(is.finite(x) & x >= 0),
     "Matrix names must be unique and cover every supplied label or category." =
       !anyNA(labels) && !anyDuplicated(rownames(x)) &&

@@ -45,3 +45,7 @@ role_multipliers <- matrix(c(1, 2, 1, 1), 2, byrow = TRUE,
 get_contacts(data, by = "level_1",
   multipliers = list(role = role_multipliers))
 }
+\seealso{
+\code{\link[=sample_contacts]{sample_contacts()}} to draw daily counts; \code{\link[=get_intervention]{get_intervention()}} to
+scale transmission through those contacts.
+}

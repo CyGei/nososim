@@ -71,5 +71,9 @@
   "69": "Q: Think of the most elegant approach for autoplot here? Should population be a shape aes and their label a label aes?",
   "70": "Q: Keep nodes white, colour timelines, shape nodes, label nodes, and preserve default aes.",
   "71": "test-sample_contacts.R",
-  "72": "sample_contacts"
+  "72": "sample_contacts",
+  "74": "test-intervention.R",
+  "75": "test-get_intervention.R",
+  "76": "Q: Trace the current nososim and Simulacres contact-to-infection path and plan vaccination, isolation, cohorting and masks using source i and recipient j.",
+  "77": "get_intervention.R"
 }

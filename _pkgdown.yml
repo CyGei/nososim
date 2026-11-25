@@ -35,6 +35,8 @@ reference:
   contents:
   - make_outbreak
   - get_contacts
+  - sample_contacts
+  - get_intervention
 - title: Explore results
   contents:
   - starts_with("autoplot")
